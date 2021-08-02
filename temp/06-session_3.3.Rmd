@@ -1,0 +1,187 @@
+---
+title: "Session 3.3 -- Making messy data tidy"
+author: "Felix Lennert"
+date: "knit on `r lubridate::today()`"
+output: html_document
+csl: ASA.csl
+bibliography: applied-quantitative-methods.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+So what are the most common problems with data sets? The following list is taken from the `tidyr` vignette^[which can be found [here](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) or using `vignette("tidy-data", package = "tidyr")`]:
+
+* Column headers are values, not variable names.    
+* Variables are stored in both rows and columns.  
+* Multiple variables are stored in one column.  
+* Multiple types of observational units are stored in the same table.  
+* A single observational unit is stored in multiple tables.  
+
+I will go across the former three types of problems, because the latter two require some more advanced data wrangling techniques you haven't learned yet (i.e., functions from the `dplyr` package: `select()`, `mutate()`, `left_join()`, among others).
+
+In the following, I will provide you with examples on how this might look like and how you can address the respective problem using functions from the `tidyr` package. This will serve as an introduction to the two most important functions of the `tidyr` package: `pivot_longer()` and its counterpart `pivot_wider()`. Beyond that, `separate()` will be introduced as well. At the beginning of every part, I will build the tibble using functions from the `tibble` package. This should suffice as a quick refresher for and introduction to creating tibbles. 
+
+`tidyr` has some more functions in stock. They do not necessarily relate to transforming messy data sets into tidy ones, but also serve you well for some general cleaning tasks. They will be introduced, too.
+
+## Column headers are values
+
+A data set of this form would look like this:
+
+```{r}
+tibble_value_headers <- tibble(
+  manufacturer = c("Audi", "BMW", "Mercedes", "Opel", "VW"),
+  `3 cyl` = sample(20, 5, replace = TRUE),
+  `4 cyl` = sample(50:100, 5, replace = TRUE),
+  `5 cyl` = sample(10, 5, replace = TRUE),
+  `6 cyl` = sample(30:50, 5, replace = TRUE),
+  `8 cyl` = sample(20:40, 5, replace = TRUE),
+  `10 cyl` = sample(10, 5, replace = TRUE),
+  `12 cyl` = sample(20, 5, replace = TRUE),
+  `16 cyl` = rep(0, 5)
+)
+
+tibble_value_headers
+```
+
+You can create a tibble *by column* using the `tibble` function. Column names need to be specified and linked to vectors of either the same length or length one.  
+
+This data set basically consists of three variables: `German car manufacturer`, `number of cylinders`, and `frequency`. To make the data set tidy, it has to consist of three columns depicting the three respective variables. This operation is called pivoting the non-variable columns into two-column key-value pairs. As the data set will thereafter contain fewer columns and more rows than before, it will have become longer (or taller). Hence, the tidyr function is called `pivot_longer()`.
+
+```{r}
+ger_car_manufacturer_longer <- tibble_value_headers %>% 
+  pivot_longer(-manufacturer, names_to = "cylinders", values_to = "frequency")
+ger_car_manufacturer_longer
+```
+
+In the function call, you need to specify the following: if you were not to use the pipe, the first argument would be the tibble you are manipulating. Then, you look at the column you want to **keep**. Here, it is the car manufacturer. This means that all columns but `manufacturer` will be crammed into two new ones: one will contain the columns' names, the other one their values. How are those new column supposed to be named? That can be specified in the `names_to =` and `values_to =`arguments. Please note that you need to provide them a character vector, hence, surround your parameters with quotation marks. As a rule of thumb for all `tidyverse` packages: If it is a new column name you provide, surround it with quotation marks. If it is one that already exists -- like, here, manufacturer, then you do not need the quotation marks.
+
+## Variables in both rows and columns 
+
+You have this data set:
+
+```{r}
+car_models_fuel <- tribble(~manufacturer, ~model, ~cylinders, ~fuel_consumption_type, ~fuel_consumption_per_100km,
+                      "VW", "Golf", 4, "urban", 5.2,
+                      "VW", "Golf", 4, "extra urban", 4.5,
+                      "Opel", "Adam", 4, "urban", 4.9,
+                      "Opel", "Adam", 4, "extra urban", 4.1)
+car_models_fuel
+```
+
+It was created using the `tribble` function: tibbles can also be created *by row*. First, the column names need to be specified by putting a tilde (`~`) in front of them. Then, you can put in values separated by commas. Please note that the number of values needs to be a multiple of the number of columns. 
+
+In this data set, there are basically five variables: manufacturer, model, cylinders, urban fuel consumption, and extra urban fuel consumption. However, the column `fuel_consumption_type` does not store a variable but the names of two variables. Hence, you need to fix this to make the data set tidy. Because this encompasses reducing the number of rows, the data set becomes wider. The function to achieve this is therefore called `pivot_wider()` and the inverse of `pivot_longer()`.
+
+```{r}
+car_models_fuel_tidy <- car_models_fuel %>% 
+  pivot_wider(names_from = fuel_consumption_type, values_from = fuel_consumption_per_100km)
+car_models_fuel_tidy
+```
+
+Here, you only need to specify the columns you fetch the names and values from. As they both do already exist, you do not need to wrap them in quotation marks.
+
+## Multiple variables in one column
+
+Now, however, there is a problem with the cylinders: their number should be depicted in a numeric vector. We could achieve this by either parsing it to a numeric vector:
+
+```{r}
+parse_number(ger_car_manufacturer_longer$cylinders)
+```
+
+On the other hand, we can also use a handy function from `tidyr` called `separate()` and afterwards drop the unnecessary column:
+
+```{r}
+ger_car_manufacturer_longer_sep_cyl <- ger_car_manufacturer_longer %>% # first, take the tibble
+  separate(cylinders, into = c("cylinders", "drop_it"), sep = " ") %>% # and then split the column "cylinders" into two
+  select(-drop_it) # you will learn about this in the lesson on dplyr  # and then drop one column from the tibble
+```
+
+If there are two (or actually more) relevant values in one column, you can simply let out the dropping process and easily split them into multiple columns. By default, the `sep =` argument divides the content by all non-alphanumeric characters (every character that is not a letter, number, or space) it contains. 
+
+Please note that the new column is still in character format. We can change this using `as.numeric()`:
+
+```{r}
+ger_car_manufacturer_longer_sep_cyl$cylinders <- as.numeric(ger_car_manufacturer_longer_sep_cyl$cylinders)
+```
+
+Furthermore, you might want to sort your data in a different manner. If you want to do this by cylinders, it would look like this:
+
+```{r}
+arrange(ger_car_manufacturer_longer_sep_cyl, cylinders)
+```
+
+### Insertion: the pipe
+
+Have you noticed the ` %>% `? That's the pipe. It's from the `magrittr` package [@bache2014] whose name is based on the Belgian painter who has created this masterpiece:
+
+![](figures/pipe1.png)
+
+Just kidding:
+
+![](figures/pipe2.jpg)
+
+It can be considered a conjunction in coding. Usually, you will use it when working with tibbles. What it does is pretty straight-forward: it takes what is on its left -- the input -- and provides it to the function on its right as the first argument. Hence, the code in the last chunk, which looks like this
+
+```{r}
+arrange(ger_car_manufacturer_longer_sep_cyl, cylinders)
+```
+
+could have also been written like this
+
+```{r}
+ger_car_manufacturer_longer_sep_cyl %>% arrange(cylinders)
+```
+
+because the tibble is the first argument in the function call.
+
+Because `magrittr` really has gained traction in the R community, many functions are now optimized for being used with the pipe. However, there are still some around which are not. A function for fitting a basic linear model with one dependent and one independent variable which are both stored in a tibble looks like this: `lm(formula = dv ~ iv, data = tibble)`. Here, the tibble is not the first argument. To be able to fit a linear model in a "pipeline," you need to employ a little hack: you can use a dot `.` as a placeholder. 
+
+Let's check out the effect the number of cylinders has on the number of models:
+
+```{r}
+ger_car_manufacturer_longer_sep_cyl %>% 
+  lm(frequency ~ cylinders, data = .) %>% 
+  summary()
+```
+
+As ` %>% ` is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.
+
+## Further functionalities
+
+### Splitting and merging cells 
+
+If there are multiple values in one column/cell and you want to split them and put them into two rows instead of columns, `tidyr` offers you the `separate_rows()` function. 
+
+```{r}
+german_cars_vec <- c(Audi = "A1, A3, A4, A5, A6, A7, A8", BMW = "1 Series, 2 Series, 3 Series, 4 Series, 5 Series, 6 Series, 7 Series, 8 Series")
+german_cars_tbl <- enframe(german_cars_vec, name = "brand", value = "model")
+german_cars_tbl
+tidy_german_cars_tbl <- german_cars_tbl %>% 
+  separate_rows(model, sep = ", ")
+```
+
+`enframe()` enables you to create a tibble from a (named) vector. It outputs a tibble with two columns (`name` and `value` by default): `name` contains the names of the elements (if the elements are unnamed, it contains a serial number), `value` the element. Both can be renamed in the function call by providing a character vector.
+
+If you want to achieve the opposite, i.e., merge cells' content, you can use the counterpart, `unite()`. Let's take the following dataframe which consists of the names of the professors of the Institute for Political Science:
+
+```{r}
+professor_names_df <- data.frame(first_name = c("Karlfriedrich", "Martin", "Jerzy", "Stephan", "Melanie"),
+                                 last_name = c("Herb", "Sebaldt", "Maćków", "Bierling", "Walter-Rogg"))
+professor_names_tbl <- professor_names_df %>% 
+  as_tibble() %>% 
+  unite(first_name, last_name, col = "name", sep = " ", remove = TRUE, na.rm = FALSE)
+professor_names_tbl
+```
+
+`unite()` takes the tibble it should be applied to as the first argument (not necessary if you use the pipe). Then, it takes the two or more columns as arguments (actually, this is not necessary if you want to unite all columns). `col =` takes a character vector to specify the name of the resulting, new column. `remove = TRUE` indicates that the columns that are united are removed as well. You can, of course, set it to false, too. `na.rm = FALSE` finally indicates that missing values are not to be removed prior to the uniting process.
+
+Here, the final variant of creating tibbles is introduced as well: you can apply the function `as_tibble()` to a data frame and it will then be transformed into a tibble.
+
+# Further links
+
+* Hadley on [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf)  
+* The two `pivot_*()` functions lie at the heart of `tidyr`. [This article](https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/) from the Northeastern University's School of Journalism explains it in further detail.
+
+# References

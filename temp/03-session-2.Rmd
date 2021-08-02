@@ -1,0 +1,347 @@
+---
+title: "Session 2 -- Coding basics"
+author: "Felix Lennert"
+date: "knit on `r lubridate::today()`"
+output:
+  html_document: default
+  word_document: default
+csl: ASA.csl
+bibliography: applied-quantitative-methods.bib
+---
+
+# An incredibly fancy scientific calculator
+
+I can recall vividly how I started learning R as an undergrad and I told a friend of mine -- a then grad student in education science and SPSS user -- about it. He replied: "R? Isn't that this incredibly fancy scientific calculator?" Well, he was not exactly right -- but not really wrong either.  
+
+Today, you are going to make your first steps with R. In the following, you will learn how to use R as a fancy calculator. This encompasses that you can extend its functionality by installing packages, the possibility to do all kinds of calculations, storing data in objects of several kinds, and accessing them.  
+
+## Installing packages
+
+Being a fancy calculator implies that you can extend it as you want. One of the big upsides of using R is that due to its active community, whose members are permanently striving to make it a bit better, we useRs are basically standing on the shoulders of giants. You can install packages from CRAN by using the `install.packages()` command.
+
+```{r}
+# install.packages("tidyverse") # installs the tidyverse package
+# insert '#' if you want R not to execute the things that stand to its right; pretty useful for annotating code
+```
+
+CRAN packages have to fulfill certain [requirements](https://cran.r-project.org/web/packages/submission_checklist.html) and packages are updated at a certain pace. If you want to use other packages or get development versions, you can also install packages from GitHub using the `devtools` package. 
+
+Before you can use a certain package in a session, you have to load it using the `library()` command. 
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+```
+
+Now you are good to go!
+
+## Basic arithmetic operations
+
+Using R as a calculator looks like this: 
+
+```{r}
+5 + 5
+5 + 5 * 3
+5 + 5^2
+sqrt(9)
+```
+
+The latter, `sqrt()`, is no classic arithmetic operation but a function. It takes a non-negative number as input and returns its square root.  
+
+## Vectors
+
+R is vector-based. That implies that we can store multiple values in vectors and perform operations on them *by element*. This is pretty handy and distinguishes it from other languages like, for instance, C or Python (without NumPy). 
+
+In R, there are two kinds of vectors: atomic vectors and lists. Atomic vectors can only contain values of one type, whereas lists can contain atomic vectors of different types -- and lists as well. It might be hard for you at first to wrap your head around this. However, it will become clear as soon as we fill it with some examples. Vectors can be characterized by two key properties: their type, which can be determined with `typeof()`, and their length which can be assessed using `length()`. `NULL` is the absence of a vector. `NA`, a missing value, is the absence of a value in a vector.
+
+In the following, I first introduce atomic vectors. Afterwards, I describe lists. Finally, augmented vectors are to be introduced: factors, data frames/tibbles, and date/date-times. I will refer to atomic vectors as vectors, and to lists as lists. I will leave out matrices and arrays. We will not work with them in the course, and, honestly, I rarely use them myself.
+
+This tutorial borrows heavily from Hadley Wickham's "R for Data Science" [@wickham2016a], and Richard Cotton's "Learning R" [@cotton2013].  
+
+### Atomic vectors
+
+There exist six different types of atomic vectors: **logical**, **integer**, **double**, **character**, **complex**, and **raw**. The latter two are hardly used, hence I will not include them here. Integer and double are usually summarized under the umbrella term **numeric vectors**. 
+
+We can create a vector using the `c()` function. "c" stands for "concatenate". 
+
+#### Logical vectors
+
+Logical vectors can take three values: `TRUE`, `FALSE`, and `NA`. While you can create them by hand (`logical_vec <- c(TRUE, FALSE, NA)`), they are usually the result of comparisons. In R, you have six comparison operators:
+
+* `<`
+* `>`
+* `<=`
+* `>=`
+* `==` (always use two equal signs)
+* `!=` (not equal)
+
+```{r}
+5 > 6
+```
+
+Sometimes, we want to store the results of what we are doing. Then, we assign our operation's result to a meaningful name:
+
+```{r}
+example_logical_vec <- 5 > 6
+```
+
+You may wonder how you should name your objects. In this case, just consult the [tidyverse style guide](https://style.tidyverse.org/syntax.html#object-names). Here, it says that you should use lowercase letters, numbers, and underscores (called "snake case"). In general, you should stick to the tidyverse style guide. The conventions you can find in there will make your life and the lives of the people who have the honor to read your code a lot easier. And if you find examples in this tutorial where I violate any of the conventions stated there and point it out, I owe you a hot beverage.
+
+Logical vectors can also be used in a numerical context. If so, `TRUE` becomes `1` and `FALSE` `0`. You will see an example when we deal with the conversion of vectors to different types.
+
+You can look at vectors by either typing in the name and then executing it, or by calling `head()`. The latter is especially useful if the vectors are very long, since it only gives back the first 10 values by default. However, you can specify the length of the output by providing a different `n` argument.
+
+```{r}
+example <- c(TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE)
+example # too long
+head(example, n = 5)
+```
+
+#### Numeric vectors
+
+Numbers in R are `double` by default. To make a numeric vector an integer, add `L` to a number, or use `as.integer()`. 
+
+```{r}
+double_vec <- c(1, 2, 3, 4)
+typeof(double_vec)
+integer_vec <- c(1L, 2L, 3L)
+typeof(integer_vec)
+typeof(as.integer(double_vec))
+```
+
+Furthermore, you can create sequences of numbers by using the `:` operator. This will also give you an integer.
+
+```{r}
+new_sequence <- 1:9
+new_sequence
+typeof(new_sequence)
+```
+
+Note that doubles are only approximate, since they represent floating point numbers. In your every-day coding, you should not worry too much about it. However, keep it in mind later on. You can read more about it [here (page 9)](http://www.burns-stat.com/pages/Tutor/R_inferno.pdf).  
+
+Beyond that, Integers only have one special value -- `NA`, implying a missing value. Doubles have four: `NA` -- missing value, `NaN` -- not a number, and `Inf` and `-Inf` -- infinite values. The latter three can be illustrated with the following example:
+
+```{r}
+c(-1, 0, 1) / 0
+```
+
+And, very important: use decimal points instead of decimal commas (especially applicable to Germans).
+
+#### Character vectors
+
+The vectors of type `character` can consist of more or less anything. The only thing that matters is that their inputs are wrapped with either " " or ' ' (which can come in handy if you want to store text):
+
+```{r}
+another_character <- c("hi", "1234", "!!1!", "#+*23$%&/(")
+typeof(another_character)
+text_character <- "I am my mother's child."
+direct_speech <- '"It has never been easy to learn how to code," said my professor'
+```
+
+You cannot really "do" anything with character vectors, except for comparison.  
+
+```{r}
+#text_character + direct_speech # remove '#' if you want to try
+text_character == text_character
+```
+
+### Working with atomic vectors
+
+#### Convert between types
+
+You can either explicitly or implicitly convert a vector to a certain type.   
+
+For explicit conversion, or coercion, you can just call the respective `as.xxx()` function: `as.logical()`, `as.integer()`, `as.double()`, or `as.character()`. However, calling these functions often implies that your vector had the wrong type in first place. Hence, try to avoid it if possible, and, therefore, this is used relatively rarely.  
+
+Implicit conversion happens by using a vector in a context in which a vector of a different type is expected. One example is dealing with logical vectors. As mentioned earlier, `TRUE` is translated to `1`, while `FALSE` becomes `0`. This can come in pretty handy:
+
+```{r}
+x <- sample(1000, 100, replace = TRUE) # draw 100 numbers between 1 and 1000
+y <- x > 500 # whether numbers are greater than 500 
+typeof(y)
+sum(y) # how many are greater than 500
+mean(y) # proportion of numbers which are greater than 500
+```
+
+Also, if you build a vector out of multiple types -- the most complex type always wins. Here, complex means that a vector can take many different values. Character vectors, for instance, can take basically every value:
+
+```{r}
+typeof(c(TRUE, 1L))
+typeof(c(1L, 1.5))
+typeof(c(1.5, "abc"))
+```
+
+#### Naming elements
+
+Elements of vectors can be named. This can either happen during creation:
+
+```{r}
+named_vector <- c(one = 1, two = 2, three = 3, four = 4, five = 5)
+```
+
+Or in hindsight using `set_names()` from the `purrr` package (which is part of the core tidyverse and, therefore, does not need to be loaded explicitly):
+
+```{r}
+named_vector <- set_names(1:5, c("one", "two", "three", "four", "five"))
+```
+
+
+#### Accessing elements
+
+If we want to access a certain element of the vector, we can tell R to do so by using square brackets `[ ]`. This can also be used for some filtering:
+
+```{r}
+named_vector[1] # first element
+named_vector[length(named_vector)] # last element, using a function, again
+named_vector[-3] # all elements but the third
+named_vector[c(1, 3)] # first and third
+named_vector[1:3] # first to third
+named_vector[named_vector == 3] # elements that equal three
+named_vector[named_vector %in% c(1, 2, 3)] # named_vectors that also are in another vector
+named_vector[named_vector > 2] # values that are bigger than 2
+rev(named_vector) # reverse vector -- using a function
+named_vector[c(1, 1, 1, 2, 3, 3, 3)] # first first first second third third third element
+named_vector[c(TRUE, TRUE, TRUE, FALSE, TRUE)] # subsetting with a logical vector -- true = value at the corresponding position is retained, FALSE = value at the corresponding position is dropped
+named_vector[c("one", "three")] # if the vector is named, you can also select the correspondingly named elements with a character vector
+```
+
+As stated in the beginning, atomic vectors can only contain data of one type. If we want to store data of several types in one object, we need to use lists.
+
+### Lists
+
+Lists can contain all types of vectors, including other lists. Due to the latter feature, they are also called "recursive vectors."  
+
+Lists can be created using `list()`. Naming elements works like naming elements of atomic vectors.
+
+```{r}
+new_list <- list(numbers = 1:5, characters = c("Hello", "world", "!"), logical_vec = c(TRUE, FALSE), another_list = list(1:5, 6:10))
+```
+
+In theory, you can, for instance, look at a list calling `head()`:
+
+```{r}
+head(new_list)
+```
+
+Another possibility, which is especially suitable for lists, is `str()`, because it focuses on the structure:
+
+```{r}
+str(new_list)
+```
+
+#### Accessing list elements
+
+Accessing elements of a list is similar to vectors. There are basically three ways:
+
+Using singular square brackets gives you a sub-list:
+
+```{r}
+sublist <- new_list[2]
+sublist
+typeof(sublist)
+
+```
+
+Double square brackets gives you the component:
+
+```{r}
+component_1 <- new_list[[1]]
+component_1
+typeof(component_1)
+```
+
+A bit hard to grasp? I certainly agree! You can find a nice real-world metaphor [here](https://r4ds.had.co.nz/vectors.html#lists-of-condiments).
+
+If the elements are named, you can also extract them using the `$` operator:
+
+```{r}
+vector_of_numbers <- new_list$numbers
+vector_of_numbers
+typeof(vector_of_numbers)
+```
+
+### Augmented vectors
+
+In R, there are also other vector types. They are built upon the basic vectors -- atomic vectors and lists. The most important ones are *factors* (built upon integers), *date*/*date-time* (built upon doubles), and *data frames*/*tibbles* (built upon lists).
+
+#### Factors
+
+Factors are used in R to represent categorical variables. They can only take a limited amount of values. Think for example of something like party affiliation of members of the German parliament. This should be stored as a factor, because you have a limited set of values (i.e., AfD, Buendnis 90/Die Gruenen, CDU, CSU, Die Linke, FDP, SPD, fraktionslos) which apply to multiple politicians. Names, on the other hand, should be stored as characters, since there is (in theory) an infinite number of possible values. 
+
+Factors are built on top of integers. They have an attribute called "levels".
+
+```{r}
+mdbs <- factor(levels = c("AfD", "Buendnis90/Die Gruenen", "CDU", "CSU", "Die Linke", "SPD"))
+levels(mdbs)
+typeof(mdbs)
+
+mdbs
+```
+
+In our daily workflow, we normally convert character vectors to factors using `as.factor()`. We will learn more about factors -- and the `forcats` package which has been dedicated to them -- in the session about data wrangling.
+
+#### Date and date-time
+
+Dates are simply numeric vectors that indicate the number of days that have passed since 1970-01-01. We will work with dates using the `lubridate` package,
+
+```{r}
+library(lubridate)
+date <- as.Date("1970-01-02")
+unclass(date)
+typeof(date)
+```
+
+Date-times work analogously: a numeric vector that represents the number of seconds that have passed since 1970-01-01 00:00:00.
+
+```{r}
+datetime <- ymd_hms("1970-01-01 01:00:00")
+unclass(datetime)
+
+```
+
+If you want to learn more on dates and times, have a look at the `lubridate` package which has been dedicated to them.
+
+#### Data Frames/Tibbles
+
+The data structure in R which is probably the most central for this course -- and for working with the tidyverse in general -- is the data frame (or Tibble, which is used in the context of the tidy packages). In the following, I will only focus on Tibbles. The differences between a Tibble and a data frame can be found [here](https://blog.rstudio.com/2016/03/24/tibble-1-0-0/). It is built upon lists, but there are some crucial differences: Lists can contain everything (including other lists), Tibbles can only contain vectors (including lists) which are of the same length or length 1 (then the value is repeated to make the vector the same length as the others, so-called recycling). These variables need to have a name. For creating tibbles, we need the `tibble` package which comes with the tidyverse. You can give elements names which are invalid variable names in R (e.g., because they contain spaces) by wrapping them with ` `` `. If you want to work with this variable afterwards, you will also have to wrap its name with back ticks.
+
+```{r}
+new_tibble <- tibble(
+ a = 1:5,
+ b = c("Hi", ",", "it's", "me", "!"),
+ `an invalid name` = TRUE
+)
+new_tibble
+
+# View(new_tibble)
+```
+
+You can access a Tibble's columns by their name by either using the `$` operator, or `[["` -- like when you access named elements in a list. This will return the vector:
+
+```{r}
+new_tibble$a
+typeof(new_tibble$a)
+new_tibble[["a"]]
+```
+
+You can also extract by position using `[[`:
+
+```{r}
+new_tibble[[3]]
+```
+
+As it returns a vector, you can extract the vector's value by just adding the expression in single square brackets:
+
+```{r}
+new_tibble[[1]][[2]] # second value of first column
+```
+
+## Further links
+
+* More on factors can be found [here](https://peerj.com/preprints/3163/) [@mcnamara2017].      
+* "The R Inferno" by Patrick Burns (pun probably not intended) is always [nice to come back to](http://www.burns-stat.com/pages/Tutor/R_inferno.pdf) [@burns2011].       
+* read the [tidyverse style guide](https://style.tidyverse.org/index.html) -- and then stick to it.       
+* Probably one of the hardest things in this tutorials to get one's head around are factors. [Here](https://www.gormanalysis.com/blog/r-introduction-to-factors-tutorial/) you can find more about them.       
+* Some [basic tutorials](https://www.tutorialspoint.com/r/r_data_types.htm).         
+* If you want to learn more about data types, click [here](https://www.statmethods.net/input/datatypes.html).
+
+# References
