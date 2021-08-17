@@ -1,0 +1,328 @@
+# Visualizations with `ggplot2` {#visualization}
+
+> "The purpoose of visualization is insight, not pictures." -- Ben A. Shneiderman
+
+In R, the dominant package for visualizing data is `ggplot2` which belongs to the tidyverse.
+
+## The "layered grammar of graphics"
+
+`ggplot2` works with tibbles and the data needs to be in a tidy format. It builds graphics using "the layered grammar of graphics." [@wickham2010] 
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+
+publishers <- read_excel("data/publishers_with_places.xlsx", sheet = "publishers_a-l") %>% 
+  bind_rows(read_excel("data/publishers_with_places.xlsx", sheet = "publishers_m-z")) %>% 
+  separate(city, into = c("city", "state"), sep = ",") %>% 
+  select(publisher, city) 
+  
+publishers_filtered <- publishers %>% 
+  group_by(city) %>% 
+  filter(n() > 5) %>% 
+  drop_na()
+```
+
+This implies that you start with a base layer -- the initial `ggplot2` call.
+
+```{r}
+ggplot(data = publishers_filtered)
+```
+
+The initial call produces an empty coordinate system. It can be filled with additional layers.
+
+```{r}
+ggplot(data = publishers_filtered) +
+  geom_bar(aes(x = city)) 
+```
+
+Unlike the remainder of the tidyverse, `ggplot2` uses a `+` instead of the pipe ` %>% `. If you use the pipe by accident, it will not work and an (informative) error message will appear.
+
+```{r}
+# ggplot(data = publishers_filtered) %>% 
+#   geom_bar(aes(x = city)) 
+```
+
+### The layers
+
+In general, a call looks like this:
+
+```{r eval=FALSE, include=TRUE}
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+As you might have seen above, I provided the data in the initial `ggplot` call. Then, when I added the layer -- the `geom_bar()` for a bar plot -- I had to provide the mapping -- which variables I wanted to plot -- using `aes()`. This is referred to as the `aesthetics`. In my case, I wanted the cities to be projected to the x-axis. Since I was using `geom_bar` to create a bar plot, the number of occurrences of the respective cities were automatically counted and depicted on the y-axis. There are more `geom_*` functions and they all create different plots. Whether you can use them or not depends on the data you have at hand and/or the number of variables you want to plot. In the following, I will give you a brief overview of the most important geoms.
+
+#### One variable
+
+If you only want to display one variable, the x- or y-axis, as you choose, will depict the variable's value. The counterpart will display the frequency or density of those values.
+
+##### One variable -- discrete
+
+Here, the only possible kind of visualization is a bar plot as shown above. If the visualization should look more fancy, e.g., with colored bars, you have several arguments at hand. If they should not be different for different kinds of data, they need to be specified outside the `aes()`. There are always different arguments and you can look them up using `?<GEOM_FUNCTION>` and then looking at the Aesthetics section. Apart from that, you can also look at the [`ggplot2` cheatsheet](https://rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf).
+
+```{r}
+ggplot(data = publishers_filtered) +
+  geom_bar(aes(x = city), fill = "blue") 
+```
+
+##### One variable -- continuous
+
+If you want to display a continuous variable's distribution of values, you can use a histogram. Its `geom_*` function is `geom_histogram()`:
+
+```{r}
+load("data/billboard.rda")
+
+song_tbl <- billboard %>% 
+  distinct(artist, track) %>% 
+  mutate(song_id = row_number())
+
+rank_tbl <- billboard %>% 
+  pivot_longer(cols = starts_with("wk"), 
+               names_to = "week", 
+               names_prefix = "wk", 
+               values_to = "rank") %>% 
+  mutate(week = as.numeric(week),
+         date = date.entered + (week-1) * 7) %>% 
+  drop_na() %>% 
+  left_join(song_tbl, by = c("artist", "track")) %>% 
+  select(song_id, date, week, rank)
+```
+
+How does the distribution of songs over the weeks look like?
+
+```{r}
+ggplot(data = rank_tbl) +
+  geom_histogram(aes(x = week))
+```
+
+A smoothed histogram is `geom_density()`:
+
+```{r}
+ggplot(data = rank_tbl) +
+  geom_density(aes(x = week))
+```
+
+#### Two variables
+
+In the majority of cases, you will want to display the relationship between two variables, one on the x- and the other one on the y-axis.
+
+##### Both continuous
+
+```{r}
+county_data_midwest <- socviz::county_data %>% 
+  filter(census_region == "Midwest") %>% 
+  drop_na()
+```
+
+If both variables are continuous, the easiest option is to use a scatterplot. 
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_point(aes(x = per_dem_2016, y = per_gop_2016))
+```
+
+Here, it might make sense to color the points according to a categorical variable (state, in this case). If so, a legend is added which maps the colors to their respective values.
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state))
+```
+
+Since I look at the relationship between votes for the Republicans and the Democrats, and the U.S. is a two-party system, there is a fairly clear relationship between them both. This can also be depicted using `geom_smooth()`:
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_smooth(aes(x = per_dem_2016, y = per_gop_2016, color = state))
+```
+
+Here, `color = state` has a different effect: each dimension of the categorical variable gets its own line. 
+
+If you do not want it to be smoothed, just use `geom_line()`.
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_line(aes(x = per_dem_2016, y = per_gop_2016), color = "grey")
+```
+
+##### Discrete X, continuous Y
+
+In this case, different categories of data will be put on the x-axis and some of their properties will be displayed on the y-axis. The probably most prominent example for this type of plot is a box plot:
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_boxplot(aes(x = state, y = per_gop_2016))
+```
+
+##### Both discrete
+
+It is rarely the case that you want to depict two categorical variables in one plot. If so, you can use `geom_jitter()`. It is related to `geom_point()`. The difference is that with `geom_jitter()`, a little bit of noise is added to the dots, making them appear distinct.
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_jitter(aes(x = state, y = winner))
+```
+
+As opposed to:
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_point(aes(x = state, y = winner))
+```
+
+### Making them "publishable"
+
+So far, I have only added one layer to the plot. This suffices for the most basic visualizations. The good thing about R and RMarkdown is, however, that you can write entire publications only using their means. Hence, the plots need to look awesome. This section is dedicated to how you can achieve this. First, I will touch upon how you can make them look good using `scales`. `labs()` allow you to add titles, captions, and axis labels. Finally, `facet_*` allows you to plot multiple plots into one.
+
+#### Scales
+
+Scales can be used to take control of how the data's values are mapped to the aesthetic's visual values. You can find a more exhaustive tutorial on them [here](https://www3.nd.edu/~steve/computing_with_data/12_Scales_themes/scales_themes.html).
+
+* `scale_*_continuous` -- for dealing with continuous values. (you can find an exhaustive list of colors in R [here](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf))
+
+```{r}
+ggplot(data = county_data_midwest) +
+  geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = white)) +
+  scale_x_continuous(limits = c(0, 1)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  scale_color_gradient(low = "green",
+                       high = "red")
+```
+
+* `scale_*_discrete` -- for dealing with discrete values
+
+* `scale_*_manual` -- manually mapping discrete values to visual values
+
+```{r}
+socviz::county_data %>% 
+  filter(state %in% c("IA", "IL", "IN", "KS")) %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
+    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+                       name = "State",
+                       breaks = waiver(),
+                       labels = c("Iowa", "Illinois", "Indiana", "Kansas")) 
+```
+
+#### Adding titles, captions, etc.
+
+Now you have modified the scales and colors -- there is a lot more to be modified if you want to -- but you have not added a meaningful title, a nice caption (where were the data obtained?), and the axes do not have proper names, too. This can be achieved using `labs()` (which is the abbreviation for labels).
+
+```{r}
+socviz::county_data %>% 
+  filter(state %in% c("IA", "IL", "IN", "KS")) %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
+    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+                      name = "State",
+                      breaks = waiver(),
+                      labels = c("Iowa", "Illinois", "Indiana", "Kansas")) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    ggtitle("Relationship between percentages of votes for Democrats and Republicans in selected states in the Midwest") +
+    xlab("Percentage of votes for the Democrats in 2016") +
+    ylab("Percentage of votes for the Republicans in 2016") 
+```
+
+Well, that doesn't look good, the title is too long. Inserting `\n` -- for new line -- will do the  trick.
+
+```{r}
+socviz::county_data %>% 
+  filter(state %in% c("IA", "IL", "IN", "KS")) %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
+    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+                      name = "State",
+                      breaks = waiver(),
+                      labels = c("Iowa", "Illinois", "Indiana", "Kansas")) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    ggtitle("Relationship between percentages of votes for Democrats \nand Republicans in selected states in the Midwest") +
+    xlab("Percentage of votes for the Democrats in 2016") +
+    ylab("Percentage of votes for the Republicans in 2016") 
+```
+
+However, providing it with three different layers just for labeling is pretty tedious. This is where `labs()` comes in handy.
+
+```{r}
+socviz::county_data %>% 
+  filter(state %in% c("IA", "IL", "IN", "KS")) %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = state)) +
+    scale_color_manual(values = c("IA" = "blue", "IL" = "green", "IN" = "red", "KS" = "purple"),
+                      name = "State",
+                      breaks = waiver(),
+                      labels = c("Iowa", "Illinois", "Indiana", "Kansas")) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    labs(title = "Relationship between percentages of votes for Democrats \nand Republicans in selected states in the Midwest",
+         caption = "Data obtained from the socviz R package",
+         x = "Percentage of votes for the Democrats in 2016",
+         y = "Percentage of votes for the Republicans in 2016") 
+```
+
+#### Facets
+
+The original dataset consists of four different census regions. If I were to compare them, I could color them accordingly. 
+
+```{r}
+socviz::county_data %>% 
+  drop_na() %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = census_region)) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    scale_color_discrete()
+```
+
+Despite the coloring according to the different states, it is still hard to assess whether there really are differences. Apart from that, I would like to assess the impact the percentage of white people in the population has. This would be easier if I put them into individual graphs. I can achieve this using so-called facets. Facets enable me to divide the plot into subplots based on categorical variables. `facet_wrap()` puts them into a rectangular layout. The categorical variable needs to be provided prefixed with a tilde `~`, `nrow` determines the number of rows.
+
+```{r}
+socviz::county_data %>% 
+  drop_na() %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = white)) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    scale_color_gradient(low = "green",
+                         high = "red") +
+    facet_wrap(~census_region,
+               nrow = 2)
+```
+
+Apart from that, I can also spread it out using two different variables. Here, I will look at differences in the distribution of males and females in the counties split up by who won in 2016 and 2012. This can be achieved using `facet_grid(categorical_variable_1~categorical_variable_2)`. The former one will be out into rows, the latter into columns.
+
+```{r}
+socviz::county_data %>% 
+  drop_na() %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = white)) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    scale_color_gradient(low = "green",
+                         high = "red") +
+    facet_grid(winner~winner12)
+```
+
+If you want to facet using only one variable, put a dot at where the other variable would stand otherwise…
+
+```{r}
+socviz::county_data %>% 
+  drop_na() %>% 
+  ggplot() +
+    geom_point(aes(x = per_dem_2016, y = per_gop_2016, color = white)) +
+    scale_x_continuous(limits = c(0, 1)) +
+    scale_y_continuous(limits = c(0, 1)) +
+    scale_color_gradient(low = "green",
+                         high = "red") +
+    facet_grid(.~winner)
+```
+
+… or just use `facet_wrap()`.
+
+## Further readings
+
+* [ggplot2 -- the book.](https://ggplot2-book.org)
+* The [graphic cookbook for R](http://www.cookbook-r.com/Graphs/).
+* Another [tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).

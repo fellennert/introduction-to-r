@@ -1,0 +1,168 @@
+# Factors with `forcats` {#workwithfactors}
+
+A common example for textual data is categorical data. An example for this would be the survey question about a person's marital status (which might take "married", "widowed", "separated", "divorced", "single"), hence a variable which can take a limited number of values. 
+
+In R, so-called factors are used to represent categorical data. In the following, I will briefly introduce you to the `forcats` package (nice anagram, Hadley!). Factors are augmented vectors which build upon integers. If you want to learn more about them, consider reading [this paper](https://peerj.com/preprints/3163/).
+
+## Creating a factor
+
+You can create a factor in two manners.
+
+1. Take a character vector and coerce it to a factor
+
+```{r}
+parties <- c("AfD", "CDU", "CSU", "FDP", "Greens", "Leftists", "SPD")
+parties_fct <- as_factor(parties)
+
+typeof(parties_fct)
+```
+
+2. Create it from scratch by providing levels and a vector respectively
+
+```{r}
+party_sample <- c(sample(parties, 49, replace = TRUE), "CUD")
+factor(party_sample, levels = parties)
+```
+
+If you want to access the levels, use `levels()`
+
+```{r}
+levels(parties_fct)
+```
+
+## Some basic operations
+
+I will have a further look into factors using data on the presidential elections in the U.S.
+
+```{r}
+election_data <- read_csv("data/pres16results.csv") %>% 
+  drop_na() %>% 
+  glimpse()
+```
+
+Which variables should be converted to factors? -- `county`, `cand`, `st`, `lead`.
+
+```{r}
+election_data_w_fct <- election_data %>% 
+  mutate(county = as_factor(county),
+         candidate = as_factor(cand),
+         state = as_factor(st),
+         lead = as_factor(lead)) %>% 
+  select(county, candidate, state, pct_report:pct, lead)
+```
+
+### Reordering factors
+
+Sometimes you want to reorder factors -- for instance, when you want to create plots. (Note: you will learn more on plots in the next session on data visualization)
+
+```{r}
+election_data_w_fct %>% 
+  group_by(state) %>% 
+  summarize(sum_votes = sum(votes)) %>% 
+ggplot(aes(x = sum_votes, y = state)) +
+  geom_point()
+```
+
+Two orders would make sense: alphabetical and according to their number of votes. `fct_reorder()` takes another variable and orders the factor according to it.
+
+```{r}
+election_data_w_fct %>%
+  group_by(state) %>% 
+  summarize(sum_votes = sum(votes)) %>% 
+  mutate(state = fct_reorder(state, sum_votes)) %>% 
+  ggplot(aes(x = sum_votes, y = state)) +
+    geom_point()
+```
+
+If you want to have it ordered the other way round, multiply the ordering variable with -1:
+
+```{r}
+election_data_w_fct %>% 
+  group_by(state) %>% 
+  summarize(sum_votes = sum(votes)) %>% 
+  mutate(state = fct_reorder(state, sum_votes*(-1))) %>% 
+  ggplot(aes(x = sum_votes, y = state)) +
+    geom_point()
+```
+
+You could also achieve this by calling `fct_rev()` afterwards: it reverses the order of the factor.
+
+```{r}
+election_data_w_fct %>% 
+  group_by(state) %>% 
+  summarize(sum_votes = sum(votes)) %>% 
+  mutate(state = fct_reorder(state, sum_votes),
+         state = fct_rev(state)) %>% 
+ggplot(aes(x = sum_votes, y = state)) +
+  geom_point()
+```
+
+If you want to do bar plots, which you can use to depict the frequency of a value, you can order them according to the frequency they appear in using `fct_infreq()`:
+
+```{r}
+election_data_w_fct %>% 
+  mutate(lead = lead %>% fct_infreq() %>% fct_rev()) %>% 
+  ggplot(aes(x = lead)) +
+    geom_bar()
+```
+
+### Modifying levels
+
+Remember the first factor? You need to put some graphs together and decide that you would rather like to use the original German names for the parties. Go for `fct_recode()`.
+
+```{r}
+parties_fct_ger <- fct_recode(parties_fct,
+  "Buendnis90/Die Gruenen" = "Greens", 
+  "Die Linke" = "Leftists"
+)
+```
+
+Damn, now the levels are not in alphabetical order anymore.
+
+```{r}
+levels(parties_fct_ger)
+```
+
+In this case, this can be done pretty quickly. Just copy the levels and manipulate the order:
+
+```{r}
+parties_fct_ger_alphabetical <- fct_relevel(parties_fct_ger, 
+                                            c("AfD", 
+                                              "Buendnis90/Die Gruenen", 
+                                              "CDU", 
+                                              "CSU",
+                                              "Die Linke",
+                                              "FDP",
+                                              "SPD"))
+levels(parties_fct_ger_alphabetical)
+```
+
+Now you need to write something for someone who is not particular familiar with the political landscape in Germany and rather wants "left," "center," and "right" instead of the party's names. Give `fct_collapse()` a shot -- and feel free to change it if you disagree with my classification.
+
+```{r}
+lcr_ger <- fct_collapse(parties_fct,
+                        left = c("Leftists", "Greens", "SPD"),
+                        centre = c("CDU", "CSU", "FDP"),
+                        right = c("AfD")
+                        )
+```
+
+Another thing you could do -- and this is handy for the election data set -- is collapsing things together according to their frequency of appearance. In the case of the election data set, this might be handy to lump together the candidates into three groups: Donald Trump, Hillary Clinton, and other.
+
+```{r}
+election_data_w_fct %>% 
+  mutate(candidate = fct_lump(candidate, n = 2))
+```
+
+The problem here is that Gary Johnson appears as often as the two other candidates (have you ever heard of him?). Hence, `fct_lump()` cannot decide which levels to lump together. However, it has saved me a couple lines of code:
+
+```{r}
+election_data_w_fct %>% 
+  mutate(candidate = fct_lump(candidate, n = 2) %>% fct_recode("Other" = "Gary Johnson"))
+```
+
+## Further links
+
+* The chapter in [R4DS](https://r4ds.had.co.nz/factors.html)
+* If you want to learn more about factors, consider reading [this paper](https://peerj.com/preprints/3163/)
+* Another [tutorial](https://www.r-bloggers.com/2020/06/working-with-factors-in-r-tutorial-forcats-package/)

@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Manipulation with dplyr | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Manipulation with dplyr | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Manipulation with dplyr | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="workingwithdata.html"/>
+<link rel="next" href="stringregex.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.3</b> Further links</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.4</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.6</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intror.html"><a href="intror.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intror.html"><a href="intror.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intror.html"><a href="intror.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intror.html"><a href="intror.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intror.html"><a href="intror.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intror.html"><a href="intror.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intror.html"><a href="intror.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intror.html"><a href="intror.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intror.html"><a href="intror.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="workingwithdata.html"><a href="workingwithdata.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="workingwithdata.html"><a href="workingwithdata.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workingwithdata.html"><a href="workingwithdata.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="workingwithdata.html"><a href="workingwithdata.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="workingwithdata.html"><a href="workingwithdata.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="workingwithdata.html"><a href="workingwithdata.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="workingwithdata.html"><a href="workingwithdata.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workingwithdata.html"><a href="workingwithdata.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="workingwithdata.html"><a href="workingwithdata.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="workingwithdata.html"><a href="workingwithdata.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="workingwithdata.html"><a href="workingwithdata.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workingwithdata.html"><a href="workingwithdata.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="workingwithdata.html"><a href="workingwithdata.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="wrangling.html"><a href="wrangling.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="wrangling.html"><a href="wrangling.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="wrangling.html"><a href="wrangling.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="wrangling.html"><a href="wrangling.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="wrangling.html"><a href="wrangling.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="wrangling.html"><a href="wrangling.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="wrangling.html"><a href="wrangling.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="wrangling.html"><a href="wrangling.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="wrangling.html"><a href="wrangling.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="wrangling.html"><a href="wrangling.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="wrangling.html"><a href="wrangling.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="wrangling.html"><a href="wrangling.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="wrangling.html"><a href="wrangling.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="wrangling.html"><a href="wrangling.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="wrangling.html"><a href="wrangling.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="wrangling.html"><a href="wrangling.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stringregex.html"><a href="stringregex.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="stringregex.html"><a href="stringregex.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="stringregex.html"><a href="stringregex.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stringregex.html"><a href="stringregex.html#literal-characters"><i class="fa fa-check"></i><b>6.2.1</b> Literal characters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stringregex.html"><a href="stringregex.html#metacharacters"><i class="fa fa-check"></i><b>6.2.2</b> Metacharacters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stringregex.html"><a href="stringregex.html#more-advanced-string-manipulation"><i class="fa fa-check"></i><b>6.3</b> More advanced string manipulation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="stringregex.html"><a href="stringregex.html#detect-matches"><i class="fa fa-check"></i><b>6.3.1</b> Detect matches</a></li>
+<li class="chapter" data-level="6.3.2" data-path="stringregex.html"><a href="stringregex.html#mutating-strings"><i class="fa fa-check"></i><b>6.3.2</b> Mutating strings</a></li>
+<li class="chapter" data-level="6.3.3" data-path="stringregex.html"><a href="stringregex.html#extracting-text"><i class="fa fa-check"></i><b>6.3.3</b> Extracting text</a></li>
+<li class="chapter" data-level="6.3.4" data-path="stringregex.html"><a href="stringregex.html#split-vectors"><i class="fa fa-check"></i><b>6.3.4</b> Split vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="stringregex.html"><a href="stringregex.html#further-links-5"><i class="fa fa-check"></i><b>6.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="workwithfactors.html"><a href="workwithfactors.html"><i class="fa fa-check"></i><b>7</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workwithfactors.html"><a href="workwithfactors.html#creating-a-factor"><i class="fa fa-check"></i><b>7.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2" data-path="workwithfactors.html"><a href="workwithfactors.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2</b> Some basic operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workwithfactors.html"><a href="workwithfactors.html#reordering-factors"><i class="fa fa-check"></i><b>7.2.1</b> Reordering factors</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workwithfactors.html"><a href="workwithfactors.html#modifying-levels"><i class="fa fa-check"></i><b>7.2.2</b> Modifying levels</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="workwithfactors.html"><a href="workwithfactors.html#further-links-6"><i class="fa fa-check"></i><b>7.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="descriptives.html"><a href="descriptives.html"><i class="fa fa-check"></i><b>8</b> Describing data sets</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="descriptives.html"><a href="descriptives.html#basic-descriptives"><i class="fa fa-check"></i><b>8.1</b> Basic descriptives</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="descriptives.html"><a href="descriptives.html#grouped-descriptives"><i class="fa fa-check"></i><b>8.1.1</b> Grouped descriptives</a></li>
+<li class="chapter" data-level="8.1.2" data-path="descriptives.html"><a href="descriptives.html#modifying-the-skim-output"><i class="fa fa-check"></i><b>8.1.2</b> Modifying the <code>skim()</code> output</a></li>
+<li class="chapter" data-level="8.1.3" data-path="descriptives.html"><a href="descriptives.html#further-descriptives"><i class="fa fa-check"></i><b>8.1.3</b> Further descriptives</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="descriptives.html"><a href="descriptives.html#communicating-results"><i class="fa fa-check"></i><b>8.2</b> Communicating results</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="descriptives.html"><a href="descriptives.html#tables-with-knitrkable-and-kableextra"><i class="fa fa-check"></i><b>8.2.1</b> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></a></li>
+<li class="chapter" data-level="8.2.2" data-path="descriptives.html"><a href="descriptives.html#use-case-reporting-skimr-results"><i class="fa fa-check"></i><b>8.2.2</b> Use case: reporting <code>skimr</code> results</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="descriptives.html"><a href="descriptives.html#further-links-7"><i class="fa fa-check"></i><b>8.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>9</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualization.html"><a href="visualization.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>9.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
+<li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.2</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="markdown.html"><a href="markdown.html#introduction"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="markdown.html"><a href="markdown.html#further-resources"><i class="fa fa-check"></i><b>10.2</b> Further resources</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functionalprogramming.html"><a href="functionalprogramming.html"><i class="fa fa-check"></i><b>11</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#flow-control"><i class="fa fa-check"></i><b>11.1</b> Flow control</a></li>
+<li class="chapter" data-level="11.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functions"><i class="fa fa-check"></i><b>11.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#writing-your-own-functions"><i class="fa fa-check"></i><b>11.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="11.2.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#an-example-roulette"><i class="fa fa-check"></i><b>11.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="11.2.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>11.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="11.2.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-readings-2"><i class="fa fa-check"></i><b>11.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#iteration"><i class="fa fa-check"></i><b>11.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
+<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="exercises.html"><a href="exercises.html#chapter-2"><i class="fa fa-check"></i><b>13.1</b> Chapter 2</a></li>
+<li class="chapter" data-level="13.2" data-path="exercises.html"><a href="exercises.html#chapter-3"><i class="fa fa-check"></i><b>13.2</b> Chapter 3</a></li>
+<li class="chapter" data-level="13.3" data-path="exercises.html"><a href="exercises.html#chapter-4"><i class="fa fa-check"></i><b>13.3</b> Chapter 4</a></li>
+<li class="chapter" data-level="13.4" data-path="exercises.html"><a href="exercises.html#chapter-5"><i class="fa fa-check"></i><b>13.4</b> Chapter 5</a></li>
+<li class="chapter" data-level="13.5" data-path="exercises.html"><a href="exercises.html#chapter-6"><i class="fa fa-check"></i><b>13.5</b> Chapter 6</a></li>
+<li class="chapter" data-level="13.6" data-path="exercises.html"><a href="exercises.html#chapter-7"><i class="fa fa-check"></i><b>13.6</b> Chapter 7</a></li>
+<li class="chapter" data-level="13.7" data-path="exercises.html"><a href="exercises.html#chapter-8"><i class="fa fa-check"></i><b>13.7</b> Chapter 8</a></li>
+<li class="chapter" data-level="13.8" data-path="exercises.html"><a href="exercises.html#chapter-9"><i class="fa fa-check"></i><b>13.8</b> Chapter 9</a></li>
+<li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
+<li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="exercises-functions.html"><a href="exercises-functions.html"><i class="fa fa-check"></i><b>14</b> Exercises functions</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="wrangling" class="section level1" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Manipulation with <code>dplyr</code></h1>
+<p>The last sessions (3.1–3.3) showed you four things: how you get datasets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (<code>%&gt;%</code>), and an introduction to tidy data and how to make datasets tidy using the <code>tidyr</code> package <span class="citation">(<a href="#ref-wickham2020b" role="doc-biblioref">Wickham 2020b</a>)</span>.
+What you haven’t learned was how you can actually manipulate the data itself. In the <code>tidyverse</code> framework <span class="citation">(<a href="#ref-wickham2019d" role="doc-biblioref">Wickham, Averick, et al. 2019</a>)</span>, the package which enables you to accomplish those tasks is <code>dplyr</code> <span class="citation">(<a href="#ref-wickham2020" role="doc-biblioref">Wickham 2020a</a>)</span>.</p>
+<p><code>dplyr</code> joined the party in 2014, building upon the <code>plyr</code> package. The d in <code>dplyr</code> stands for data set and <code>dplyr</code> works with tibbles (or data frames) only.</p>
+<p>It consists of five main functions, the “verbs”:</p>
+<ul>
+<li><code>arrange()</code> – sort values</li>
+<li><code>filter()</code> – pick observations</li>
+<li><code>mutate()</code> – create new variables (columns)</li>
+<li><code>select()</code> – select variables</li>
+<li><code>summarize()</code> – create summaries from multiple values</li>
+</ul>
+<p>They are joined by <code>group_by()</code>, a function that changes the scope on which entities the functions are applied to.</p>
+<p>Furthermore, diverse <code>bind_</code> functions and <code>_join</code>s enable you to combine multiple tibbles into one. They will be introduced later</p>
+<div id="working-with-the-main-verbs" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Working with the main “verbs”</h2>
+<p>In the following, I will guide you through how you can use the verbs to accomplish whatever goals which require data wrangling you might have.</p>
+<p>The data set I will use here consists of the 1,000 most popular movies on IMDb which were published between 2006 and 2016 and some data on them. It was created by PromptCloud and DataStock and published on Kaggle, more information can be found <a href="https://www.kaggle.com/PromptCloudHQ/imdb-data">here</a>.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="wrangling.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb197-2"><a href="wrangling.html#cb197-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb197-3"><a href="wrangling.html#cb197-3" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/imdb2006-2016.csv&quot;</span>)</span></code></pre></div>
+<p>The data set hasn’t been modified by me before. I will show you how I would go across it using a couple of <code>dplyr</code> functions.</p>
+<div id="select" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> <code>select()</code></h3>
+<p><code>select</code> enables you to <em>select</em> columns. Since we are dealing with tidy data, every variable has its own column.</p>
+<p><code>glimpse()</code> provides you with an overview of the data set and its columns.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="wrangling.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(imdb_raw)</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 12
+## $ Rank                 &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15…
+## $ Title                &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;,…
+## $ Genre                &lt;chr&gt; &quot;Action,Adventure,Sci-Fi&quot;, &quot;Adventure,Mystery,Sci…
+## $ Description          &lt;chr&gt; &quot;A group of intergalactic criminals are forced to…
+## $ Director             &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan…
+## $ Actors               &lt;chr&gt; &quot;Chris Pratt, Vin Diesel, Bradley Cooper, Zoe Sal…
+## $ Year                 &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2…
+## $ `Runtime (Minutes)`  &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, …
+## $ Rating               &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0,…
+## $ Votes                &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258…
+## $ `Revenue (Millions)` &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 15…
+## $ Metascore            &lt;dbl&gt; 76, 65, 62, 59, 40, 42, 93, 71, 78, 41, 66, 74, 6…</code></pre>
+<p>The columns I want to keep are: <code>Title</code>, <code>Director</code>, <code>Year</code>, <code>Runtime (Minutes)</code>, <code>Rating</code>, <code>Votes</code>, and <code>Revenue (Millions)</code>. Furthermore, I want to rename the columns: every column’s name should be in lowercase and a regular name that does not need to be surrounded by back ticks – i.e., a name that only consists of characters, numbers, underscores, or dots.</p>
+<p>This can be achieved in a couple of ways:</p>
+<p>First, by choosing the columns column by column and subsequently renaming them:</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="wrangling.html#cb200-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb200-2"><a href="wrangling.html#cb200-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Title, Director, Year, <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, Rating, Votes, <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb200-3"><a href="wrangling.html#cb200-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> Title, <span class="at">director =</span> Director, <span class="at">year =</span> Year, <span class="at">runtime =</span> <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, <span class="at">rating =</span> Rating, <span class="at">votes =</span> Votes, <span class="at">revenue_million =</span> <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb200-4"><a href="wrangling.html#cb200-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p>Second, the columns can also be chosen vice versa: unnecessary columns can be dropped using a minus:</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="wrangling.html#cb202-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb202-2"><a href="wrangling.html#cb202-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Rank, <span class="sc">-</span>Genre, <span class="sc">-</span>Description, <span class="sc">-</span>Actors, <span class="sc">-</span>Metascore) <span class="sc">%&gt;%</span> </span>
+<span id="cb202-3"><a href="wrangling.html#cb202-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> Title, <span class="at">director =</span> Director, <span class="at">year =</span> Year, <span class="at">runtime =</span> <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, <span class="at">rating =</span> Rating, <span class="at">votes =</span> Votes, <span class="at">revenue_million =</span> <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb202-4"><a href="wrangling.html#cb202-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p>Columns can also be renamed in the selecting process:</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="wrangling.html#cb204-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb204-2"><a href="wrangling.html#cb204-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">title =</span> Title, <span class="at">director =</span> Director, <span class="at">year =</span> Year, <span class="at">runtime =</span> <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, <span class="at">rating =</span> Rating, <span class="at">votes =</span> Votes, <span class="at">revenue_million =</span> <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb204-3"><a href="wrangling.html#cb204-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p>You can also make your expressions shorter by using a couple of hacks:</p>
+<p><code>:</code> can be used to select all columns between two:</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="wrangling.html#cb206-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb206-2"><a href="wrangling.html#cb206-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Title, Director, Year<span class="sc">:</span><span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb206-3"><a href="wrangling.html#cb206-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> Title, <span class="at">director =</span> Director, <span class="at">year =</span> Year, <span class="at">runtime =</span> <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, <span class="at">rating =</span> Rating, <span class="at">votes =</span> Votes, <span class="at">revenue_million =</span> <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb206-4"><a href="wrangling.html#cb206-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p><code>starts_with()</code> select columns whose names start with the same character string:</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="wrangling.html#cb208-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="ot">&lt;-</span> imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb208-2"><a href="wrangling.html#cb208-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Title, Director, Votes, Year, <span class="fu">starts_with</span>(<span class="st">&quot;R&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb208-3"><a href="wrangling.html#cb208-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Rank) <span class="sc">%&gt;%</span> </span>
+<span id="cb208-4"><a href="wrangling.html#cb208-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">title =</span> Title, <span class="at">director =</span> Director, <span class="at">year =</span> Year, <span class="at">runtime =</span> <span class="st">`</span><span class="at">Runtime (Minutes)</span><span class="st">`</span>, <span class="at">rating =</span> Rating, <span class="at">votes =</span> Votes, <span class="at">revenue_million =</span> <span class="st">`</span><span class="at">Revenue (Millions)</span><span class="st">`</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb208-5"><a href="wrangling.html#cb208-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p>As you may have noticed, the order in the <code>select()</code> matters: columns will be ordered in the same order as they are chosen.</p>
+<p>A couple of further shortcuts for <code>select()</code> do exist. An overview can be found in the <a href="https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf"><code>dplyr</code> cheatsheet</a>.</p>
+</div>
+<div id="filter" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> <code>filter()</code></h3>
+<p>Whereas <code>select()</code> enables you to choose variables (i.e., columns), <code>filter()</code> lets you choose observations (i.e., rows).</p>
+<p>In this case, I only want movies with a revenue above $100,000,000:</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="wrangling.html#cb210-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb210-2"><a href="wrangling.html#cb210-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(revenue_million <span class="sc">&gt;</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb210-3"><a href="wrangling.html#cb210-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 250
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 258682, 192177,…
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 128, 116, 133, 127, 133, 107,…
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 8.3, 7.0, 7.5, 7.8, 7.9, 7.7,…
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 151.06, 100.01…</code></pre>
+<p>Besides, I am especially interested in the director Christopher Nolan. Therefore, I want to look at movies that were directed by him and made more than $100,000,000:</p>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="wrangling.html#cb212-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb212-2"><a href="wrangling.html#cb212-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(revenue_million <span class="sc">&gt;</span> <span class="dv">100</span> <span class="sc">&amp;</span> director <span class="sc">==</span> <span class="st">&quot;Christopher Nolan&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb212-3"><a href="wrangling.html#cb212-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 4
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Interstellar&quot;, &quot;The Dark Knight&quot;, &quot;Inception&quot;, &quot;The D…
+## $ director        &lt;chr&gt; &quot;Christopher Nolan&quot;, &quot;Christopher Nolan&quot;, &quot;Christopher…
+## $ votes           &lt;dbl&gt; 1047747, 1791916, 1583625, 1222645
+## $ year            &lt;dbl&gt; 2014, 2008, 2010, 2012
+## $ runtime         &lt;dbl&gt; 169, 152, 148, 164
+## $ rating          &lt;dbl&gt; 8.6, 9.0, 8.8, 8.5
+## $ revenue_million &lt;dbl&gt; 187.99, 533.32, 292.57, 448.13</code></pre>
+<p>The following overview is taken from the <a href="https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf"><code>dplyr</code> cheatsheet</a> and shows the operators you can use in <code>filter()</code>:</p>
+<div class="figure">
+<img src="figures/operators.png" alt="" />
+<p class="caption">Overview of comparison operators</p>
+</div>
+<div id="exemplary-application" class="section level4" number="5.1.2.1">
+<h4><span class="header-section-number">5.1.2.1</span> Exemplary application</h4>
+<p>To demonstrate how a real-world application of this stuff could look like, I will now provide you a brief insight into my private life and how I organize movie nights. JK. You could definitely try this at home and surprise your loved ones with such hot applications. If you are brave and surprise your latest Tinder match with an .RDS file containing suggestions for Netflix&amp;Chill, please let me know what their response looked like.</p>
+<p>Tonight, I will hang out with a real nerd. Probably because they (nerds have all kinds of genders) know about my faible for R, they have sent me a vector containing a couple of movies we could watch tonight:</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="wrangling.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># guarantees that movie_vec will always be the same thing</span></span>
+<span id="cb214-2"><a href="wrangling.html#cb214-2" aria-hidden="true" tabindex="-1"></a>movie_vec <span class="ot">&lt;-</span> imdb_raw<span class="sc">$</span>Title[<span class="fu">sample</span>(<span class="dv">1000</span>, <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)]</span>
+<span id="cb214-3"><a href="wrangling.html#cb214-3" aria-hidden="true" tabindex="-1"></a>movie_vec</span></code></pre></div>
+<pre><code>##  [1] &quot;Mechanic: Resurrection&quot; &quot;Denial&quot;                 &quot;The Conjuring 2&quot;       
+##  [4] &quot;Birth of the Dragon&quot;    &quot;Warrior&quot;                &quot;Super&quot;                 
+##  [7] &quot;127 Hours&quot;              &quot;Dangal&quot;                 &quot;The Infiltrator&quot;       
+## [10] &quot;Maleficent&quot;</code></pre>
+<p>However, I want to make a more informed decision and decide to obtain some more information on the movies from my IMDb data set:</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="wrangling.html#cb216-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb216-2"><a href="wrangling.html#cb216-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(title <span class="sc">%in%</span> movie_vec) <span class="sc">%&gt;%</span> </span>
+<span id="cb216-3"><a href="wrangling.html#cb216-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 10
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Dangal&quot;, &quot;The Conjuring 2&quot;, &quot;Warrior&quot;, &quot;Maleficent&quot;, …
+## $ director        &lt;chr&gt; &quot;Nitesh Tiwari&quot;, &quot;James Wan&quot;, &quot;Gavin O&#39;Connor&quot;, &quot;Rober…
+## $ votes           &lt;dbl&gt; 48969, 137203, 355722, 268877, 43929, 48161, 8229, 552…
+## $ year            &lt;dbl&gt; 2016, 2016, 2011, 2014, 2016, 2016, 2016, 2016, 2010, …
+## $ runtime         &lt;dbl&gt; 161, 134, 140, 97, 127, 98, 109, 103, 94, 96
+## $ rating          &lt;dbl&gt; 8.8, 7.4, 8.2, 7.0, 7.1, 5.6, 6.6, 3.9, 7.6, 6.8
+## $ revenue_million &lt;dbl&gt; 11.15, 102.46, 13.65, 241.41, 15.43, 21.20, 4.07, 93.0…</code></pre>
+<p>I have convinced them to watch either one of the movies they have suggested or one directed by Christopher Nolan or one with a rating greater or equal to 8.5 and send them back this data set:</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="wrangling.html#cb218-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb218-2"><a href="wrangling.html#cb218-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(title <span class="sc">%in%</span> movie_vec <span class="sc">|</span> director <span class="sc">==</span> <span class="st">&quot;Christopher Nolan&quot;</span> <span class="sc">|</span> rating <span class="sc">&gt;=</span> <span class="fl">8.5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb218-3"><a href="wrangling.html#cb218-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 21
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Interstellar&quot;, &quot;The Dark Knight&quot;, &quot;The Prestige&quot;, &quot;In…
+## $ director        &lt;chr&gt; &quot;Christopher Nolan&quot;, &quot;Christopher Nolan&quot;, &quot;Christopher…
+## $ votes           &lt;dbl&gt; 1047747, 1791916, 913152, 1583625, 34110, 937414, 4896…
+## $ year            &lt;dbl&gt; 2014, 2008, 2006, 2010, 2016, 2006, 2016, 2012, 2014, …
+## $ runtime         &lt;dbl&gt; 169, 152, 130, 148, 106, 151, 161, 164, 107, 134, 140,…
+## $ rating          &lt;dbl&gt; 8.6, 9.0, 8.5, 8.8, 8.6, 8.5, 8.8, 8.5, 8.5, 7.4, 8.2,…
+## $ revenue_million &lt;dbl&gt; 187.99, 533.32, 53.08, 292.57, 4.68, 132.37, 11.15, 44…</code></pre>
+<p>“I deteste ‘Interstellar,’” is the response. “All right,” I say to myself, “I can easily exclude it.”</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="wrangling.html#cb220-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb220-2"><a href="wrangling.html#cb220-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(title <span class="sc">%in%</span> movie_vec <span class="sc">|</span> director <span class="sc">==</span> <span class="st">&quot;Christopher Nolan&quot;</span> <span class="sc">|</span> rating <span class="sc">&gt;=</span> <span class="fl">8.5</span> <span class="sc">&amp;</span> title <span class="sc">!=</span> <span class="st">&quot;Interstellar&quot;</span>) <span class="sc">%&gt;%</span> <span class="co"># if you want to negate something, put the ! in front of it</span></span>
+<span id="cb220-3"><a href="wrangling.html#cb220-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 21
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Interstellar&quot;, &quot;The Dark Knight&quot;, &quot;The Prestige&quot;, &quot;In…
+## $ director        &lt;chr&gt; &quot;Christopher Nolan&quot;, &quot;Christopher Nolan&quot;, &quot;Christopher…
+## $ votes           &lt;dbl&gt; 1047747, 1791916, 913152, 1583625, 34110, 937414, 4896…
+## $ year            &lt;dbl&gt; 2014, 2008, 2006, 2010, 2016, 2006, 2016, 2012, 2014, …
+## $ runtime         &lt;dbl&gt; 169, 152, 130, 148, 106, 151, 161, 164, 107, 134, 140,…
+## $ rating          &lt;dbl&gt; 8.6, 9.0, 8.5, 8.8, 8.6, 8.5, 8.8, 8.5, 8.5, 7.4, 8.2,…
+## $ revenue_million &lt;dbl&gt; 187.99, 533.32, 53.08, 292.57, 4.68, 132.37, 11.15, 44…</code></pre>
+<p>Oh, that did not work. I should wrap them in columns:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="wrangling.html#cb222-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb222-2"><a href="wrangling.html#cb222-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((title <span class="sc">%in%</span> movie_vec <span class="sc">|</span> director <span class="sc">==</span> <span class="st">&quot;Christopher Nolan&quot;</span> <span class="sc">|</span> rating <span class="sc">&gt;=</span> <span class="fl">8.5</span>) <span class="sc">&amp;</span> title <span class="sc">!=</span> <span class="st">&quot;Interstellar&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb222-3"><a href="wrangling.html#cb222-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 20
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;The Dark Knight&quot;, &quot;The Prestige&quot;, &quot;Inception&quot;, &quot;Kimi …
+## $ director        &lt;chr&gt; &quot;Christopher Nolan&quot;, &quot;Christopher Nolan&quot;, &quot;Christopher…
+## $ votes           &lt;dbl&gt; 1791916, 913152, 1583625, 34110, 937414, 48969, 122264…
+## $ year            &lt;dbl&gt; 2008, 2006, 2010, 2016, 2006, 2016, 2012, 2014, 2016, …
+## $ runtime         &lt;dbl&gt; 152, 130, 148, 106, 151, 161, 164, 107, 134, 140, 97, …
+## $ rating          &lt;dbl&gt; 9.0, 8.5, 8.8, 8.6, 8.5, 8.8, 8.5, 8.5, 7.4, 8.2, 7.0,…
+## $ revenue_million &lt;dbl&gt; 533.32, 53.08, 292.57, 4.68, 132.37, 11.15, 448.13, 13…</code></pre>
+<p>They come up with a new idea: we have a Scottish evening with a movie directed by the Scottish director Gillies MacKinnon:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="wrangling.html#cb224-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb224-2"><a href="wrangling.html#cb224-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(director <span class="sc">==</span> <span class="st">&quot;Gillies MacKinnon&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb224-3"><a href="wrangling.html#cb224-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Whisky Galore&quot;
+## $ director        &lt;chr&gt; &quot;Gillies MacKinnon&quot;
+## $ votes           &lt;dbl&gt; 102
+## $ year            &lt;dbl&gt; 2016
+## $ runtime         &lt;dbl&gt; 98
+## $ rating          &lt;dbl&gt; 5
+## $ revenue_million &lt;dbl&gt; NA</code></pre>
+<p>“Well, apparently there is a problem in the data set,” I notice. “There is an NA in the revenue column. I should probably have a further look at this.”</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="wrangling.html#cb226-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb226-2"><a href="wrangling.html#cb226-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">is.na</span>(revenue_million)) <span class="sc">%&gt;%</span> </span>
+<span id="cb226-3"><a href="wrangling.html#cb226-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 128
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Mindhorn&quot;, &quot;Hounds of Love&quot;, &quot;Paris pieds nus&quot;, &quot;5- 2…
+## $ director        &lt;chr&gt; &quot;Sean Foley&quot;, &quot;Ben Young&quot;, &quot;Dominique Abel&quot;, &quot;Patrick …
+## $ votes           &lt;dbl&gt; 2490, 1115, 222, 241, 496, 5103, 987, 35870, 149791, 7…
+## $ year            &lt;dbl&gt; 2016, 2016, 2016, 2007, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 89, 108, 83, 113, 73, 91, 130, 86, 133, 106, 105, 118,…
+## $ rating          &lt;dbl&gt; 6.4, 6.7, 6.8, 7.1, 2.7, 5.6, 3.7, 6.8, 5.9, 7.9, 5.8,…
+## $ revenue_million &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</code></pre>
+<p>Well, that’s quite a significant number of NAs. I will need to exclude these cases:</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="wrangling.html#cb228-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb228-2"><a href="wrangling.html#cb228-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(revenue_million)) <span class="sc">%&gt;%</span> </span>
+<span id="cb228-3"><a href="wrangling.html#cb228-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 872
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 141, 116, 133, 127,…
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 7.1, 7.0, 7.5, 7.8,…
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+</div>
+<div id="other-possibilities-to-subset-observations" class="section level4" number="5.1.2.2">
+<h4><span class="header-section-number">5.1.2.2</span> Other possibilities to subset observations</h4>
+<p><code>slice()</code> selects rows by positions:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="wrangling.html#cb230-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb230-2"><a href="wrangling.html#cb230-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb230-3"><a href="wrangling.html#cb230-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 10
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p><code>distinct</code> removes duplicate rows:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="wrangling.html#cb232-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb232-2"><a href="wrangling.html#cb232-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(director) <span class="sc">%&gt;%</span> </span>
+<span id="cb232-3"><a href="wrangling.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 644
+## Columns: 1
+## $ director &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;Christop…</code></pre>
+<p>By default, it will remove all other columns apart from the one(s) you have specified. You can avoid that by setting <code>.keep_all = TRUE</code>:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="wrangling.html#cb234-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb234-2"><a href="wrangling.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(title, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb234-3"><a href="wrangling.html#cb234-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 999
+## Columns: 7
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…</code></pre>
+<p>Oh, interesting, there is apparently one movie which is in there twice. How could we find this movie? (Exercise 1)</p>
+</div>
+</div>
+<div id="mutate" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> <code>mutate()</code></h3>
+<p>My data set looks pretty nice already, but one flaw catches the eye: the column <code>revenue_million</code> should probably be converted to <code>revenue</code>. Hence, I need to create a new variable which contains the values from <code>revenue_million</code> multiplied by 1,000,000 and drop the now obsolete <code>revenue_million</code>.</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="wrangling.html#cb236-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb236-2"><a href="wrangling.html#cb236-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">revenue =</span> revenue_million <span class="sc">*</span> <span class="dv">1000000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb236-3"><a href="wrangling.html#cb236-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>revenue_million) <span class="sc">%&gt;%</span> </span>
+<span id="cb236-4"><a href="wrangling.html#cb236-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 7
+## $ title    &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sing&quot;, &quot;Su…
+## $ director &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;Christop…
+## $ votes    &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, 2490, 7…
+## $ year     &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, 2016, 2…
+## $ runtime  &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, 127, 13…
+## $ rating   &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5, 7.8, 7…
+## $ revenue  &lt;dbl&gt; 333130000, 126460000, 138120000, 270320000, 325020000, 451300…</code></pre>
+<p>The structure of the <code>mutate()</code> call looks like this: first, you need to provide the name of the new variable. If the variable exists already, it will be replaced. Second, the equal sign tells R what the new variable should contain. Third, a function that outputs a vector which is as long as the tibble has rows or 1.</p>
+<p>If we want to drop all other columns and just keep the new one: <code>transmute()</code> drops all the original columns.</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="wrangling.html#cb238-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb238-2"><a href="wrangling.html#cb238-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">revenue =</span> revenue_million <span class="sc">*</span> <span class="dv">1000000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb238-3"><a href="wrangling.html#cb238-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 1
+## $ revenue &lt;dbl&gt; 333130000, 126460000, 138120000, 270320000, 325020000, 4513000…</code></pre>
+<p><code>mutate()</code> uses so-called <em>window functions</em>. They take one vector of values and return another vector of values. An overview – again, from the cheatsheet:</p>
+<div class="figure">
+<img src="figures/window%20functions.png" alt="" />
+<p class="caption">Window functions</p>
+</div>
+<p>Another feature of <code>dplyr</code>, which is useful in combination with mutate, is <code>case_when()</code>.</p>
+<p><code>case_when()</code> can for instance be used to create binary indicator variables. In this example I want it to be 0 if the movie was made before 2010 and 1 if not.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="wrangling.html#cb240-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb240-2"><a href="wrangling.html#cb240-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">indicator =</span> <span class="fu">case_when</span>(year <span class="sc">&lt;</span> <span class="dv">2010</span> <span class="sc">~</span> <span class="dv">0</span>,</span>
+<span id="cb240-3"><a href="wrangling.html#cb240-3" aria-hidden="true" tabindex="-1"></a>                               year <span class="sc">&gt;=</span> <span class="dv">2010</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb240-4"><a href="wrangling.html#cb240-4" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb240-5"><a href="wrangling.html#cb240-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 1,000
+## Columns: 8
+## $ title           &lt;chr&gt; &quot;Guardians of the Galaxy&quot;, &quot;Prometheus&quot;, &quot;Split&quot;, &quot;Sin…
+## $ director        &lt;chr&gt; &quot;James Gunn&quot;, &quot;Ridley Scott&quot;, &quot;M. Night Shyamalan&quot;, &quot;C…
+## $ votes           &lt;dbl&gt; 757074, 485820, 157606, 60545, 393727, 56036, 258682, …
+## $ year            &lt;dbl&gt; 2014, 2012, 2016, 2016, 2016, 2016, 2016, 2016, 2016, …
+## $ runtime         &lt;dbl&gt; 121, 124, 117, 108, 123, 103, 128, 89, 141, 116, 133, …
+## $ rating          &lt;dbl&gt; 8.1, 7.0, 7.3, 7.2, 6.2, 6.1, 8.3, 6.4, 7.1, 7.0, 7.5,…
+## $ revenue_million &lt;dbl&gt; 333.13, 126.46, 138.12, 270.32, 325.02, 45.13, 151.06,…
+## $ indicator       &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …</code></pre>
+<p>Keep in mind that you can throw any function into <code>mutate()</code> as long as it is vectorized and the output has the same length as the tibble or 1.</p>
+</div>
+<div id="summarize-and-group_by" class="section level3" number="5.1.4">
+<h3><span class="header-section-number">5.1.4</span> <code>summarize()</code> and <code>group_by</code></h3>
+<p>When you analyze data, you often want to compare entities according to some sort of summary statistic. This means that you, first, need to split up your data set into certain groups which share one or more characteristics, and, second, collapse the columns together into single-row summaries. The former challenge is accomplished using <code>group_by()</code> whose argument is one or more variables, the latter requires the <code>summarize()</code> function. This function works similar to <code>mutate()</code> but uses <em>summary functions</em> – which take a vector of multiple values and return a single value – instead of window functions – which return a vector of the same length as the input.</p>
+<p>Let me provide you an example.</p>
+<p>I am interested in the director’s average ratings:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="wrangling.html#cb242-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb242-2"><a href="wrangling.html#cb242-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(director) <span class="sc">%&gt;%</span> </span>
+<span id="cb242-3"><a href="wrangling.html#cb242-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_rating =</span> <span class="fu">mean</span>(rating))</span></code></pre></div>
+<pre><code>## # A tibble: 644 × 2
+##    director            avg_rating
+##    &lt;chr&gt;                    &lt;dbl&gt;
+##  1 Aamir Khan                 8.5
+##  2 Abdellatif Kechiche        7.8
+##  3 Adam Leon                  6.5
+##  4 Adam McKay                 7  
+##  5 Adam Shankman              6.3
+##  6 Adam Wingard               5.9
+##  7 Afonso Poyart              6.4
+##  8 Aisling Walsh              7.8
+##  9 Akan Satayev               6.3
+## 10 Akiva Schaffer             6.7
+## # … with 634 more rows</code></pre>
+<p>In general, <code>summarize()</code> always works like this: first, you change the scope from the entire tibble to different groups. Then, you calculate your summary. If you then want to further manipulate your date or calculate something else based on the new summary, you need to call <code>ungroup()</code>.</p>
+<p>You can see the summary functions below:</p>
+<div class="figure">
+<img src="figures/summary%20functions.png" alt="" />
+<p class="caption">Summary functions in R</p>
+</div>
+<p>Another handy function akin to this is <code>count()</code>. It counts all occurrences of a singular value in the tibble.</p>
+<p>If I were interested in how many movies of the different directors have made it into the data set, I could use this code:</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="wrangling.html#cb244-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb244-2"><a href="wrangling.html#cb244-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(director)</span></code></pre></div>
+<pre><code>## # A tibble: 644 × 2
+##    director                n
+##    &lt;chr&gt;               &lt;int&gt;
+##  1 Aamir Khan              1
+##  2 Abdellatif Kechiche     1
+##  3 Adam Leon               1
+##  4 Adam McKay              4
+##  5 Adam Shankman           2
+##  6 Adam Wingard            2
+##  7 Afonso Poyart           1
+##  8 Aisling Walsh           1
+##  9 Akan Satayev            1
+## 10 Akiva Schaffer          1
+## # … with 634 more rows</code></pre>
+<p>Beyond that, you can also use <code>group_by()</code> with mutate. If you do so, the rows will not be collapsed together as in <code>summarize()</code>.</p>
+</div>
+<div id="arrange" class="section level3" number="5.1.5">
+<h3><span class="header-section-number">5.1.5</span> <code>arrange()</code></h3>
+<p>Finally, you can also sort values using <code>arrange()</code>. In the last section, I was interested in directors’ respective average ratings. The values were ordered according to their name (hence, “Aamir Khan” was first). In this case, the order dos not make too much sense, because the first name does not say too much about the director’s ratings. Therefore, I want to sort them according to their average ratings:</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="wrangling.html#cb246-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb246-2"><a href="wrangling.html#cb246-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(director) <span class="sc">%&gt;%</span> </span>
+<span id="cb246-3"><a href="wrangling.html#cb246-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_rating =</span> <span class="fu">mean</span>(rating)) <span class="sc">%&gt;%</span> </span>
+<span id="cb246-4"><a href="wrangling.html#cb246-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(avg_rating)</span></code></pre></div>
+<pre><code>## # A tibble: 644 × 2
+##    director           avg_rating
+##    &lt;chr&gt;                   &lt;dbl&gt;
+##  1 Jason Friedberg           1.9
+##  2 James Wong                2.7
+##  3 Shawn Burkett             2.7
+##  4 Jonathan Holbrook         3.2
+##  5 Femi Oyeniran             3.5
+##  6 Micheal Bafaro            3.5
+##  7 Jeffrey G. Hunt           3.7
+##  8 Rolfe Kanefsky            3.9
+##  9 Joey Curtis               4  
+## 10 Sam Taylor-Johnson        4.1
+## # … with 634 more rows</code></pre>
+<p>All right, Jason Friedberg is apparently the director of the worst rated movie in my data set. But it would be more handy, if they were arranged in descending order. I can use <code>desc()</code> for this:</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="wrangling.html#cb248-1" aria-hidden="true" tabindex="-1"></a>imdb_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb248-2"><a href="wrangling.html#cb248-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(director) <span class="sc">%&gt;%</span> </span>
+<span id="cb248-3"><a href="wrangling.html#cb248-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">avg_rating =</span> <span class="fu">mean</span>(rating)) <span class="sc">%&gt;%</span> </span>
+<span id="cb248-4"><a href="wrangling.html#cb248-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>avg_rating)</span></code></pre></div>
+<pre><code>## # A tibble: 644 × 2
+##    director                         avg_rating
+##    &lt;chr&gt;                                 &lt;dbl&gt;
+##  1 Nitesh Tiwari                          8.8 
+##  2 Christopher Nolan                      8.68
+##  3 Makoto Shinkai                         8.6 
+##  4 Olivier Nakache                        8.6 
+##  5 Aamir Khan                             8.5 
+##  6 Florian Henckel von Donnersmarck       8.5 
+##  7 Damien Chazelle                        8.4 
+##  8 Naoko Yamada                           8.4 
+##  9 Amber Tamblyn                          8.3 
+## 10 Lee Unkrich                            8.3 
+## # … with 634 more rows</code></pre>
+<p>Chapeau, Nitesh Tiwari!</p>
+</div>
+</div>
+<div id="introducing-joins" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Introducing <code>joins</code></h2>
+<p>The last session showed you three things: how you get data sets into R, a couple of ways to create tibbles, and an introduction to tidy data and how to make data sets tidy using the <code>tidyr</code> package. As you may recall from the last session, it was not able to solve the last two problems with only the tools <code>tidyr</code> offers. In particular, the problems were:</p>
+<ul>
+<li>Multiple types of observational units are stored in the same table.</li>
+<li>A single observational unit is stored in multiple tables.</li>
+</ul>
+<p>Both problems need some different kind of tools: joins. Joins can be used to merge tibbles together. This tutorial, again, builds heavy on the R for Data Science book <span class="citation">(<a href="#ref-wickham2016a" role="doc-biblioref">Wickham and Grolemund 2016</a>)</span></p>
+<div id="multiple-types-of-units-are-in-the-same-table" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Multiple types of units are in the same table</h3>
+<p>Let’s look at the following data set. It contains the billboard charts in 2000 and was obtained from the <a href="https://github.com/tidyverse/tidyr/blob/master/data/billboard.rda"><code>tidyr</code> GitHub repo</a>. The example below is taken from the <code>tidyr</code> vignette which can be loaded using <code>vignette("tidy-data", package = "tidyr")</code>.</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="wrangling.html#cb250-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb250-2"><a href="wrangling.html#cb250-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb250-3"><a href="wrangling.html#cb250-3" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/billboard.rda&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="wrangling.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(billboard)</span></code></pre></div>
+<pre><code>## Rows: 317
+## Columns: 79
+## $ artist       &lt;chr&gt; &quot;2 Pac&quot;, &quot;2Ge+her&quot;, &quot;3 Doors Down&quot;, &quot;3 Doors Down&quot;, &quot;504 …
+## $ track        &lt;chr&gt; &quot;Baby Don&#39;t Cry (Keep...&quot;, &quot;The Hardest Part Of ...&quot;, &quot;Kr…
+## $ date.entered &lt;date&gt; 2000-02-26, 2000-09-02, 2000-04-08, 2000-10-21, 2000-04-…
+## $ wk1          &lt;dbl&gt; 87, 91, 81, 76, 57, 51, 97, 84, 59, 76, 84, 57, 50, 71, 7…
+## $ wk2          &lt;dbl&gt; 82, 87, 70, 76, 34, 39, 97, 62, 53, 76, 84, 47, 39, 51, 6…
+## $ wk3          &lt;dbl&gt; 72, 92, 68, 72, 25, 34, 96, 51, 38, 74, 75, 45, 30, 28, 5…
+## $ wk4          &lt;dbl&gt; 77, NA, 67, 69, 17, 26, 95, 41, 28, 69, 73, 29, 28, 18, 4…
+## $ wk5          &lt;dbl&gt; 87, NA, 66, 67, 17, 26, 100, 38, 21, 68, 73, 23, 21, 13, …
+## $ wk6          &lt;dbl&gt; 94, NA, 57, 65, 31, 19, NA, 35, 18, 67, 69, 18, 19, 13, 3…
+## $ wk7          &lt;dbl&gt; 99, NA, 54, 55, 36, 2, NA, 35, 16, 61, 68, 11, 20, 11, 34…
+## $ wk8          &lt;dbl&gt; NA, NA, 53, 59, 49, 2, NA, 38, 14, 58, 65, 9, 17, 1, 29, …
+## $ wk9          &lt;dbl&gt; NA, NA, 51, 62, 53, 3, NA, 38, 12, 57, 73, 9, 17, 1, 27, …
+## $ wk10         &lt;dbl&gt; NA, NA, 51, 61, 57, 6, NA, 36, 10, 59, 83, 11, 17, 2, 30,…
+## $ wk11         &lt;dbl&gt; NA, NA, 51, 61, 64, 7, NA, 37, 9, 66, 92, 1, 17, 2, 36, N…
+## $ wk12         &lt;dbl&gt; NA, NA, 51, 59, 70, 22, NA, 37, 8, 68, NA, 1, 3, 3, 37, N…
+## $ wk13         &lt;dbl&gt; NA, NA, 47, 61, 75, 29, NA, 38, 6, 61, NA, 1, 3, 3, 39, N…
+## $ wk14         &lt;dbl&gt; NA, NA, 44, 66, 76, 36, NA, 49, 1, 67, NA, 1, 7, 4, 49, N…
+## $ wk15         &lt;dbl&gt; NA, NA, 38, 72, 78, 47, NA, 61, 2, 59, NA, 4, 10, 12, 57,…
+## $ wk16         &lt;dbl&gt; NA, NA, 28, 76, 85, 67, NA, 63, 2, 63, NA, 8, 17, 11, 63,…
+## $ wk17         &lt;dbl&gt; NA, NA, 22, 75, 92, 66, NA, 62, 2, 67, NA, 12, 25, 13, 65…
+## $ wk18         &lt;dbl&gt; NA, NA, 18, 67, 96, 84, NA, 67, 2, 71, NA, 22, 29, 15, 68…
+## $ wk19         &lt;dbl&gt; NA, NA, 18, 73, NA, 93, NA, 83, 3, 79, NA, 23, 29, 18, 79…
+## $ wk20         &lt;dbl&gt; NA, NA, 14, 70, NA, 94, NA, 86, 4, 89, NA, 43, 40, 20, 86…
+## $ wk21         &lt;dbl&gt; NA, NA, 12, NA, NA, NA, NA, NA, 5, NA, NA, 44, 43, 30, NA…
+## $ wk22         &lt;dbl&gt; NA, NA, 7, NA, NA, NA, NA, NA, 5, NA, NA, NA, 50, 40, NA,…
+## $ wk23         &lt;dbl&gt; NA, NA, 6, NA, NA, NA, NA, NA, 6, NA, NA, NA, NA, 39, NA,…
+## $ wk24         &lt;dbl&gt; NA, NA, 6, NA, NA, NA, NA, NA, 9, NA, NA, NA, NA, 44, NA,…
+## $ wk25         &lt;dbl&gt; NA, NA, 6, NA, NA, NA, NA, NA, 13, NA, NA, NA, NA, NA, NA…
+## $ wk26         &lt;dbl&gt; NA, NA, 5, NA, NA, NA, NA, NA, 14, NA, NA, NA, NA, NA, NA…
+## $ wk27         &lt;dbl&gt; NA, NA, 5, NA, NA, NA, NA, NA, 16, NA, NA, NA, NA, NA, NA…
+## $ wk28         &lt;dbl&gt; NA, NA, 4, NA, NA, NA, NA, NA, 23, NA, NA, NA, NA, NA, NA…
+## $ wk29         &lt;dbl&gt; NA, NA, 4, NA, NA, NA, NA, NA, 22, NA, NA, NA, NA, NA, NA…
+## $ wk30         &lt;dbl&gt; NA, NA, 4, NA, NA, NA, NA, NA, 33, NA, NA, NA, NA, NA, NA…
+## $ wk31         &lt;dbl&gt; NA, NA, 4, NA, NA, NA, NA, NA, 36, NA, NA, NA, NA, NA, NA…
+## $ wk32         &lt;dbl&gt; NA, NA, 3, NA, NA, NA, NA, NA, 43, NA, NA, NA, NA, NA, NA…
+## $ wk33         &lt;dbl&gt; NA, NA, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk34         &lt;dbl&gt; NA, NA, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk35         &lt;dbl&gt; NA, NA, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk36         &lt;dbl&gt; NA, NA, 5, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk37         &lt;dbl&gt; NA, NA, 5, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk38         &lt;dbl&gt; NA, NA, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk39         &lt;dbl&gt; NA, NA, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…
+## $ wk40         &lt;dbl&gt; NA, NA, 15, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk41         &lt;dbl&gt; NA, NA, 14, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk42         &lt;dbl&gt; NA, NA, 13, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk43         &lt;dbl&gt; NA, NA, 14, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk44         &lt;dbl&gt; NA, NA, 16, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk45         &lt;dbl&gt; NA, NA, 17, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk46         &lt;dbl&gt; NA, NA, 21, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk47         &lt;dbl&gt; NA, NA, 22, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk48         &lt;dbl&gt; NA, NA, 24, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk49         &lt;dbl&gt; NA, NA, 28, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk50         &lt;dbl&gt; NA, NA, 33, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk51         &lt;dbl&gt; NA, NA, 42, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk52         &lt;dbl&gt; NA, NA, 42, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk53         &lt;dbl&gt; NA, NA, 49, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk54         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk55         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk56         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk57         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk58         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk59         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk60         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk61         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk62         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk63         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk64         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk65         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk66         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk67         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk68         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk69         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk70         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk71         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk72         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk73         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk74         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk75         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ wk76         &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</code></pre>
+<p>Here, you can immediately see the problem: it contains two types of observations: songs and ranks. Hence, the data set needs to be split up. However, there should be a pointer from the rank data set to the song data set. First, I add an ID column to <code>song_tbl</code>. Then, I can add it to <code>rank_tbl</code> and drop the unnecessary columns which contain the name of the artist and the track.</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="wrangling.html#cb253-1" aria-hidden="true" tabindex="-1"></a>song_tbl <span class="ot">&lt;-</span> billboard <span class="sc">%&gt;%</span> </span>
+<span id="cb253-2"><a href="wrangling.html#cb253-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(artist, track) <span class="sc">%&gt;%</span> </span>
+<span id="cb253-3"><a href="wrangling.html#cb253-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">song_id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb253-4"><a href="wrangling.html#cb253-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb253-5"><a href="wrangling.html#cb253-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(song_tbl)</span></code></pre></div>
+<pre><code>## Rows: 317
+## Columns: 3
+## $ artist  &lt;chr&gt; &quot;2 Pac&quot;, &quot;2Ge+her&quot;, &quot;3 Doors Down&quot;, &quot;3 Doors Down&quot;, &quot;504 Boyz&quot;…
+## $ track   &lt;chr&gt; &quot;Baby Don&#39;t Cry (Keep...&quot;, &quot;The Hardest Part Of ...&quot;, &quot;Krypton…
+## $ song_id &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,…</code></pre>
+<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="wrangling.html#cb255-1" aria-hidden="true" tabindex="-1"></a>rank_tbl <span class="ot">&lt;-</span> billboard <span class="sc">%&gt;%</span> </span>
+<span id="cb255-2"><a href="wrangling.html#cb255-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;wk&quot;</span>), </span>
+<span id="cb255-3"><a href="wrangling.html#cb255-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;week&quot;</span>, </span>
+<span id="cb255-4"><a href="wrangling.html#cb255-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">&quot;wk&quot;</span>, </span>
+<span id="cb255-5"><a href="wrangling.html#cb255-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;rank&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb255-6"><a href="wrangling.html#cb255-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">week =</span> <span class="fu">as.numeric</span>(week),</span>
+<span id="cb255-7"><a href="wrangling.html#cb255-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> date.entered <span class="sc">+</span> (week<span class="dv">-1</span>) <span class="sc">*</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb255-8"><a href="wrangling.html#cb255-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb255-9"><a href="wrangling.html#cb255-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(song_tbl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;artist&quot;</span>, <span class="st">&quot;track&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb255-10"><a href="wrangling.html#cb255-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(song_id, date, week, rank)</span>
+<span id="cb255-11"><a href="wrangling.html#cb255-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb255-12"><a href="wrangling.html#cb255-12" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(rank_tbl)</span></code></pre></div>
+<pre><code>## Rows: 5,307
+## Columns: 4
+## $ song_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…
+## $ date    &lt;date&gt; 2000-02-26, 2000-03-04, 2000-03-11, 2000-03-18, 2000-03-25, 2…
+## $ week    &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1…
+## $ rank    &lt;dbl&gt; 87, 82, 72, 77, 87, 94, 99, 91, 87, 92, 81, 70, 68, 67, 66, 57…</code></pre>
+</div>
+<div id="one-unit-is-in-multiple-tables" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> One unit is in multiple tables</h3>
+<p>For this example, I have split up a data set from the <code>socviz</code> package containing data on the 2016 elections in the U.S. according to census region and stored them in a folder. I can scrape the file names in the folder and read it into a list in an automated manner. You will learn this when we touch upon iteration.</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="wrangling.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fs)</span>
+<span id="cb257-2"><a href="wrangling.html#cb257-2" aria-hidden="true" tabindex="-1"></a>file_list <span class="ot">&lt;-</span> <span class="fu">dir_ls</span>(<span class="at">path =</span> <span class="st">&quot;data/socviz_us&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb257-3"><a href="wrangling.html#cb257-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(read_csv,</span>
+<span id="cb257-4"><a href="wrangling.html#cb257-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb257-5"><a href="wrangling.html#cb257-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">id =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-6"><a href="wrangling.html#cb257-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-7"><a href="wrangling.html#cb257-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">state =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-8"><a href="wrangling.html#cb257-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">census_region =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-9"><a href="wrangling.html#cb257-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">pop_dens =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-10"><a href="wrangling.html#cb257-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">pop_dens4 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-11"><a href="wrangling.html#cb257-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">pop_dens6 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-12"><a href="wrangling.html#cb257-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">pct_black =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-13"><a href="wrangling.html#cb257-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">pop =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-14"><a href="wrangling.html#cb257-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">female =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-15"><a href="wrangling.html#cb257-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">white =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-16"><a href="wrangling.html#cb257-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">black =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-17"><a href="wrangling.html#cb257-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">travel_time =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-18"><a href="wrangling.html#cb257-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">land_area =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-19"><a href="wrangling.html#cb257-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">hh_income =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-20"><a href="wrangling.html#cb257-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">su_gun4 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-21"><a href="wrangling.html#cb257-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">su_gun6 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-22"><a href="wrangling.html#cb257-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">fips =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-23"><a href="wrangling.html#cb257-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">votes_dem_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-24"><a href="wrangling.html#cb257-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">votes_gop_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-25"><a href="wrangling.html#cb257-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">total_votes_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-26"><a href="wrangling.html#cb257-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">per_dem_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-27"><a href="wrangling.html#cb257-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">per_gop_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-28"><a href="wrangling.html#cb257-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">diff_2016 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-29"><a href="wrangling.html#cb257-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">per_dem_2012 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-30"><a href="wrangling.html#cb257-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">per_gop_2012 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-31"><a href="wrangling.html#cb257-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">diff_2012 =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb257-32"><a href="wrangling.html#cb257-32" aria-hidden="true" tabindex="-1"></a>        <span class="at">winner =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-33"><a href="wrangling.html#cb257-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">partywinner16 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-34"><a href="wrangling.html#cb257-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">winner12 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-35"><a href="wrangling.html#cb257-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">partywinner12 =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb257-36"><a href="wrangling.html#cb257-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">flipped =</span> <span class="fu">col_character</span>()</span>
+<span id="cb257-37"><a href="wrangling.html#cb257-37" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<p>The list now consists of four tibbles which need to be bound together. You can achieve this using <code>bind_rows()</code>. Its counterpart is <code>bind_cols()</code> which binds columns together. It matches rows by position.</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="wrangling.html#cb258-1" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">&lt;-</span> file_list <span class="sc">%&gt;%</span> <span class="fu">bind_rows</span>()</span>
+<span id="cb258-2"><a href="wrangling.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(election_data)</span></code></pre></div>
+<pre><code>## Rows: 3,141
+## Columns: 32
+## $ id               &lt;dbl&gt; 17001, 17003, 17005, 17007, 17009, 17011, 17013, 1701…
+## $ name             &lt;chr&gt; &quot;Adams County&quot;, &quot;Alexander County&quot;, &quot;Bond County&quot;, &quot;B…
+## $ state            &lt;chr&gt; &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;,…
+## $ census_region    &lt;chr&gt; &quot;Midwest&quot;, &quot;Midwest&quot;, &quot;Midwest&quot;, &quot;Midwest&quot;, &quot;Midwest&quot;…
+## $ pop_dens         &lt;chr&gt; &quot;[   50,  100)&quot;, &quot;[   10,   50)&quot;, &quot;[   10,   50)&quot;, &quot;[…
+## $ pop_dens4        &lt;chr&gt; &quot;[ 45,  118)&quot;, &quot;[ 17,   45)&quot;, &quot;[ 45,  118)&quot;, &quot;[118,71…
+## $ pop_dens6        &lt;chr&gt; &quot;[ 45,   82)&quot;, &quot;[ 25,   45)&quot;, &quot;[ 45,   82)&quot;, &quot;[ 82,  …
+## $ pct_black        &lt;chr&gt; &quot;[ 2.0, 5.0)&quot;, &quot;[25.0,50.0)&quot;, &quot;[ 5.0,10.0)&quot;, &quot;[ 2.0, …
+## $ pop              &lt;dbl&gt; 66988, 7492, 17269, 53869, 6832, 33840, 4956, 14715, …
+## $ female           &lt;dbl&gt; 51.3, 49.5, 47.5, 50.2, 35.5, 51.0, 49.7, 50.1, 49.1,…
+## $ white            &lt;dbl&gt; 93.7, 60.6, 90.9, 93.2, 78.6, 96.8, 98.8, 96.7, 93.2,…
+## $ black            &lt;dbl&gt; 3.7, 36.1, 6.5, 2.6, 19.1, 0.8, 0.3, 1.1, 4.4, 12.8, …
+## $ travel_time      &lt;dbl&gt; 16.6, 25.6, 23.6, 30.1, 18.9, 20.4, 39.6, 23.8, 22.2,…
+## $ land_area        &lt;dbl&gt; 855.20, 235.51, 380.28, 280.72, 305.61, 869.03, 253.8…
+## $ hh_income        &lt;dbl&gt; 45073, 26972, 48163, 60893, 42194, 48977, 50436, 4798…
+## $ su_gun4          &lt;chr&gt; &quot;[ 0, 5)&quot;, &quot;[ 5, 8)&quot;, &quot;[ 0, 5)&quot;, &quot;[ 0, 5)&quot;, &quot;[ 0, 5)&quot;…
+## $ su_gun6          &lt;chr&gt; &quot;[ 4, 7)&quot;, &quot;[ 7, 8)&quot;, &quot;[ 4, 7)&quot;, &quot;[ 0, 4)&quot;, &quot;[ 0, 4)&quot;…
+## $ fips             &lt;dbl&gt; 17001, 17003, 17005, 17007, 17009, 17011, 17013, 1701…
+## $ votes_dem_2016   &lt;dbl&gt; 7633, 1262, 2066, 8952, 475, 6010, 739, 2437, 1617, 4…
+## $ votes_gop_2016   &lt;dbl&gt; 22732, 1496, 4884, 12261, 1776, 9264, 1719, 4428, 321…
+## $ total_votes_2016 &lt;dbl&gt; 31770, 2820, 7462, 22604, 2336, 16303, 2556, 7354, 50…
+## $ per_dem_2016     &lt;dbl&gt; 0.2402581, 0.4475177, 0.2768695, 0.3960361, 0.2033390…
+## $ per_gop_2016     &lt;dbl&gt; 0.7155178, 0.5304965, 0.6545162, 0.5424261, 0.7602740…
+## $ diff_2016        &lt;dbl&gt; 15099, 234, 2818, 3309, 1301, 3254, 980, 1991, 1599, …
+## $ per_dem_2012     &lt;dbl&gt; 0.3152466, 0.5610873, 0.4122471, 0.4625697, 0.3331922…
+## $ per_gop_2012     &lt;dbl&gt; 0.6670705, 0.4248927, 0.5591853, 0.5195706, 0.6397121…
+## $ diff_2012        &lt;dbl&gt; 10744, 476, 1075, 1216, 724, 33, 360, 107, 657, 5292,…
+## $ winner           &lt;chr&gt; &quot;Trump&quot;, &quot;Trump&quot;, &quot;Trump&quot;, &quot;Trump&quot;, &quot;Trump&quot;, &quot;Trump&quot;,…
+## $ partywinner16    &lt;chr&gt; &quot;Republican&quot;, &quot;Republican&quot;, &quot;Republican&quot;, &quot;Republican…
+## $ winner12         &lt;chr&gt; &quot;Romney&quot;, &quot;Obama&quot;, &quot;Romney&quot;, &quot;Romney&quot;, &quot;Romney&quot;, &quot;Rom…
+## $ partywinner12    &lt;chr&gt; &quot;Republican&quot;, &quot;Democrat&quot;, &quot;Republican&quot;, &quot;Republican&quot;,…
+## $ flipped          &lt;chr&gt; &quot;No&quot;, &quot;Yes&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;No&quot;, &quot;Yes&quot;, &quot;No…</code></pre>
+<p>Now, the data set is ready for cleaning and tidying. Feel free to do this is as a take-home exercise.</p>
+<p>However, the topic of this script is different joins. The <code>dplyr</code> package offers six different joins: <code>left_join()</code>, <code>right_join()</code>, <code>inner_join()</code>, <code>full_join()</code>, <code>semi_join()</code>, and <code>anti_join()</code>. The former four are mutating joins, they add columns. The latter two can be used to filter rows in a data set. Below is an overview from the <code>dplyr</code> cheatsheet:</p>
+<div class="figure">
+<img src="figures/joins.png" alt="" />
+<p class="caption">Overview of the different joins</p>
+</div>
+<p>In the following, I will illustrate this using the election data. I split up the data set into three: data on the elections 2016 and 2012, and demographic data. The column they have in common is the county’s respective name.</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="wrangling.html#cb260-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="ot">&lt;-</span> election_data <span class="sc">%&gt;%</span> </span>
+<span id="cb260-2"><a href="wrangling.html#cb260-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, state, votes_dem_2016<span class="sc">:</span>diff_2016, winner, partywinner16)</span>
+<span id="cb260-3"><a href="wrangling.html#cb260-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-4"><a href="wrangling.html#cb260-4" aria-hidden="true" tabindex="-1"></a>election_data12 <span class="ot">&lt;-</span> election_data <span class="sc">%&gt;%</span> </span>
+<span id="cb260-5"><a href="wrangling.html#cb260-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, state, per_dem_2012<span class="sc">:</span>partywinner12)</span>
+<span id="cb260-6"><a href="wrangling.html#cb260-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-7"><a href="wrangling.html#cb260-7" aria-hidden="true" tabindex="-1"></a>demographic_data <span class="ot">&lt;-</span> election_data <span class="sc">%&gt;%</span> </span>
+<span id="cb260-8"><a href="wrangling.html#cb260-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, state, pop<span class="sc">:</span>hh_income) <span class="sc">%&gt;%</span> </span>
+<span id="cb260-9"><a href="wrangling.html#cb260-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>)</span></code></pre></div>
+</div>
+<div id="left_join-and-right_join" class="section level3" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> <code>left_join()</code> and <code>right_join()</code></h3>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="wrangling.html#cb261-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb261-2"><a href="wrangling.html#cb261-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(demographic_data)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;name&quot;, &quot;state&quot;)</code></pre>
+<pre><code>## # A tibble: 3,141 × 17
+##    name             state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams County     IL              7633          22732            31770        0.240
+##  2 Alexander County IL              1262           1496             2820        0.448
+##  3 Bond County      IL              2066           4884             7462        0.277
+##  4 Boone County     IL              8952          12261            22604        0.396
+##  5 Brown County     IL               475           1776             2336        0.203
+##  6 Bureau County    IL              6010           9264            16303        0.369
+##  7 Calhoun County   IL               739           1719             2556        0.289
+##  8 Carroll County   IL              2437           4428             7354        0.331
+##  9 Cass County      IL              1617           3216             5054        0.320
+## 10 Champaign County IL             49694          33235            89196        0.557
+## # … with 3,131 more rows, and 11 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;, pop &lt;dbl&gt;,
+## #   female &lt;dbl&gt;, white &lt;dbl&gt;, black &lt;dbl&gt;, travel_time &lt;dbl&gt;, land_area &lt;dbl&gt;,
+## #   hh_income &lt;dbl&gt;</code></pre>
+<p>If the column that both data sets have in common has the same name, there’s no need to provide it. If this is not the case, you need to provide it in a character vector:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="wrangling.html#cb264-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb264-2"><a href="wrangling.html#cb264-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">county =</span> name) <span class="sc">%&gt;%</span> </span>
+<span id="cb264-3"><a href="wrangling.html#cb264-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(demographic_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;county&quot;</span> <span class="ot">=</span> <span class="st">&quot;name&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 10,348 × 18
+##    county    state.x votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams Co… IL                7633          22732            31770        0.240
+##  2 Adams Co… IL                7633          22732            31770        0.240
+##  3 Adams Co… IL                7633          22732            31770        0.240
+##  4 Adams Co… IL                7633          22732            31770        0.240
+##  5 Adams Co… IL                7633          22732            31770        0.240
+##  6 Adams Co… IL                7633          22732            31770        0.240
+##  7 Adams Co… IL                7633          22732            31770        0.240
+##  8 Adams Co… IL                7633          22732            31770        0.240
+##  9 Adams Co… IL                7633          22732            31770        0.240
+## 10 Alexande… IL                1262           1496             2820        0.448
+## # … with 10,338 more rows, and 12 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;, state.y &lt;chr&gt;,
+## #   pop &lt;dbl&gt;, female &lt;dbl&gt;, white &lt;dbl&gt;, black &lt;dbl&gt;, travel_time &lt;dbl&gt;,
+## #   land_area &lt;dbl&gt;, hh_income &lt;dbl&gt;</code></pre>
+<p>Here, the problem is that the same counties exist in different states. Therefore, all combinations are returned. Hence, I need to specify two arguments: the county’s name and state.</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="wrangling.html#cb266-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb266-2"><a href="wrangling.html#cb266-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">county =</span> name) <span class="sc">%&gt;%</span> </span>
+<span id="cb266-3"><a href="wrangling.html#cb266-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(demographic_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;county&quot;</span> <span class="ot">=</span> <span class="st">&quot;name&quot;</span>, <span class="st">&quot;state&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2,000 × 17
+##    county           state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams County     IL              7633          22732            31770        0.240
+##  2 Alexander County IL              1262           1496             2820        0.448
+##  3 Bond County      IL              2066           4884             7462        0.277
+##  4 Boone County     IL              8952          12261            22604        0.396
+##  5 Brown County     IL               475           1776             2336        0.203
+##  6 Bureau County    IL              6010           9264            16303        0.369
+##  7 Calhoun County   IL               739           1719             2556        0.289
+##  8 Carroll County   IL              2437           4428             7354        0.331
+##  9 Cass County      IL              1617           3216             5054        0.320
+## 10 Champaign County IL             49694          33235            89196        0.557
+## # … with 1,990 more rows, and 11 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;, pop &lt;dbl&gt;,
+## #   female &lt;dbl&gt;, white &lt;dbl&gt;, black &lt;dbl&gt;, travel_time &lt;dbl&gt;, land_area &lt;dbl&gt;,
+## #   hh_income &lt;dbl&gt;</code></pre>
+<p>Left joins return all rows which are in <code>x</code>. If a column is in <code>x</code> but not in <code>y</code>, an <code>NA</code> will be included at this position. Right joins work vice versa.</p>
+</div>
+<div id="inner_join" class="section level3" number="5.2.4">
+<h3><span class="header-section-number">5.2.4</span> <code>inner_join()</code></h3>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="wrangling.html#cb268-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb268-2"><a href="wrangling.html#cb268-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(demographic_data)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;name&quot;, &quot;state&quot;)</code></pre>
+<pre><code>## # A tibble: 2,000 × 17
+##    name             state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams County     IL              7633          22732            31770        0.240
+##  2 Alexander County IL              1262           1496             2820        0.448
+##  3 Bond County      IL              2066           4884             7462        0.277
+##  4 Boone County     IL              8952          12261            22604        0.396
+##  5 Brown County     IL               475           1776             2336        0.203
+##  6 Bureau County    IL              6010           9264            16303        0.369
+##  7 Calhoun County   IL               739           1719             2556        0.289
+##  8 Carroll County   IL              2437           4428             7354        0.331
+##  9 Cass County      IL              1617           3216             5054        0.320
+## 10 Champaign County IL             49694          33235            89196        0.557
+## # … with 1,990 more rows, and 11 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;, pop &lt;dbl&gt;,
+## #   female &lt;dbl&gt;, white &lt;dbl&gt;, black &lt;dbl&gt;, travel_time &lt;dbl&gt;, land_area &lt;dbl&gt;,
+## #   hh_income &lt;dbl&gt;</code></pre>
+<p>An <code>inner_join()</code> returns all rows which are in <code>x</code> and <code>y</code>.</p>
+</div>
+<div id="full_join" class="section level3" number="5.2.5">
+<h3><span class="header-section-number">5.2.5</span> <code>full_join()</code></h3>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="wrangling.html#cb271-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb271-2"><a href="wrangling.html#cb271-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">full_join</span>(demographic_data)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;name&quot;, &quot;state&quot;)</code></pre>
+<pre><code>## # A tibble: 3,141 × 17
+##    name             state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams County     IL              7633          22732            31770        0.240
+##  2 Alexander County IL              1262           1496             2820        0.448
+##  3 Bond County      IL              2066           4884             7462        0.277
+##  4 Boone County     IL              8952          12261            22604        0.396
+##  5 Brown County     IL               475           1776             2336        0.203
+##  6 Bureau County    IL              6010           9264            16303        0.369
+##  7 Calhoun County   IL               739           1719             2556        0.289
+##  8 Carroll County   IL              2437           4428             7354        0.331
+##  9 Cass County      IL              1617           3216             5054        0.320
+## 10 Champaign County IL             49694          33235            89196        0.557
+## # … with 3,131 more rows, and 11 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;, pop &lt;dbl&gt;,
+## #   female &lt;dbl&gt;, white &lt;dbl&gt;, black &lt;dbl&gt;, travel_time &lt;dbl&gt;, land_area &lt;dbl&gt;,
+## #   hh_income &lt;dbl&gt;</code></pre>
+<p>A <code>full_join()</code> returns rows and columns from both <code>x</code> and <code>y</code>.</p>
+</div>
+<div id="semi_join" class="section level3" number="5.2.6">
+<h3><span class="header-section-number">5.2.6</span> <code>semi_join()</code></h3>
+<p>Filtering joins only keep the cases from <code>x</code>, no data set is added.</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="wrangling.html#cb274-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb274-2"><a href="wrangling.html#cb274-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">semi_join</span>(demographic_data)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;name&quot;, &quot;state&quot;)</code></pre>
+<pre><code>## # A tibble: 2,000 × 10
+##    name             state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;            &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Adams County     IL              7633          22732            31770        0.240
+##  2 Alexander County IL              1262           1496             2820        0.448
+##  3 Bond County      IL              2066           4884             7462        0.277
+##  4 Boone County     IL              8952          12261            22604        0.396
+##  5 Brown County     IL               475           1776             2336        0.203
+##  6 Bureau County    IL              6010           9264            16303        0.369
+##  7 Calhoun County   IL               739           1719             2556        0.289
+##  8 Carroll County   IL              2437           4428             7354        0.331
+##  9 Cass County      IL              1617           3216             5054        0.320
+## 10 Champaign County IL             49694          33235            89196        0.557
+## # … with 1,990 more rows, and 4 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;</code></pre>
+<p>The <code>semi_join()</code> returns all rows from <code>x</code> with matching values in <code>y</code>. You can compare it to a <code>right_join()</code> but without adding the columns of <code>y</code>.</p>
+</div>
+<div id="anti_join" class="section level3" number="5.2.7">
+<h3><span class="header-section-number">5.2.7</span> <code>anti_join()</code></h3>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="wrangling.html#cb277-1" aria-hidden="true" tabindex="-1"></a>election_data16 <span class="sc">%&gt;%</span> </span>
+<span id="cb277-2"><a href="wrangling.html#cb277-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(demographic_data)</span></code></pre></div>
+<pre><code>## Joining, by = c(&quot;name&quot;, &quot;state&quot;)</code></pre>
+<pre><code>## # A tibble: 1,141 × 10
+##    name              state votes_dem_2016 votes_gop_2016 total_votes_2016 per_dem_2016
+##    &lt;chr&gt;             &lt;chr&gt;          &lt;dbl&gt;          &lt;dbl&gt;            &lt;dbl&gt;        &lt;dbl&gt;
+##  1 Onslow County     NC             17156          36342            55364        0.310
+##  2 Orange County     NC             59105          18373            79830        0.740
+##  3 Pamlico County    NC              2427           4225             6772        0.358
+##  4 Pasquotank County NC              8455           8082            16964        0.498
+##  5 Pender County     NC              9086          17317            27072        0.336
+##  6 Perquimans County NC              2291           4143             6595        0.347
+##  7 Person County     NC              7772          11116            19303        0.403
+##  8 Pitt County       NC             40967          35191            78264        0.523
+##  9 Polk County       NC              3715           6738            10723        0.346
+## 10 Randolph County   NC             13074          49156            63615        0.206
+## # … with 1,131 more rows, and 4 more variables: per_gop_2016 &lt;dbl&gt;,
+## #   diff_2016 &lt;dbl&gt;, winner &lt;chr&gt;, partywinner16 &lt;chr&gt;</code></pre>
+<p><code>anti_join()</code> returns all rows from <code>x</code> with no matching rows in <code>y</code>.</p>
+</div>
+</div>
+<div id="further-links-4" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Further links</h2>
+<ul>
+<li><a href="https://r4ds.had.co.nz/transform.html">Chapter in R4DS</a></li>
+<li>More on window functions in the vignette: <code>vignette("window-functions")</code></li>
+<li>Again, <a href="https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf">the cheatsheet</a></li>
+<li>A <a href="https://www.youtube.com/watch?v=jWjqLW-u3hc">tutorial on YouTube</a></li>
+<li>Another introduction can be found <a href="https://stat545.com/join-cheatsheet.html">here</a>.</li>
+<li>The <a href="https://r4ds.had.co.nz/relational-data.html">chapter in R4DS</a> has some nice diagrams.</li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wickham2020" class="csl-entry">
+———. 2020a. <span>“Dplyr: <span>A Grammar</span> of <span>Data Manipulation</span>.”</span>
+</div>
+<div id="ref-wickham2020b" class="csl-entry">
+———. 2020b. <span>“Tidyr: <span>Tidy Messy Data</span>.”</span>
+</div>
+<div id="ref-wickham2019d" class="csl-entry">
+Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy McGowan, Romain François, Garrett Grolemund, et al. 2019. <span>“Welcome to the <span>Tidyverse</span>.”</span> <em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.
+</div>
+<div id="ref-wickham2016a" class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. First edition. <span>Sebastopol, CA</span>: <span>O’Reilly</span>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="workingwithdata.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="stringregex.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

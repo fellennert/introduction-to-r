@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Functional programming and iterations | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Functional programming and iterations | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Functional programming and iterations | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="markdown.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.3</b> Further links</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.4</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.6</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intror.html"><a href="intror.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intror.html"><a href="intror.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intror.html"><a href="intror.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intror.html"><a href="intror.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intror.html"><a href="intror.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intror.html"><a href="intror.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intror.html"><a href="intror.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intror.html"><a href="intror.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intror.html"><a href="intror.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="workingwithdata.html"><a href="workingwithdata.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="workingwithdata.html"><a href="workingwithdata.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workingwithdata.html"><a href="workingwithdata.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="workingwithdata.html"><a href="workingwithdata.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="workingwithdata.html"><a href="workingwithdata.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="workingwithdata.html"><a href="workingwithdata.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="workingwithdata.html"><a href="workingwithdata.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workingwithdata.html"><a href="workingwithdata.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="workingwithdata.html"><a href="workingwithdata.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="workingwithdata.html"><a href="workingwithdata.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="workingwithdata.html"><a href="workingwithdata.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workingwithdata.html"><a href="workingwithdata.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="workingwithdata.html"><a href="workingwithdata.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="wrangling.html"><a href="wrangling.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="wrangling.html"><a href="wrangling.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="wrangling.html"><a href="wrangling.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="wrangling.html"><a href="wrangling.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="wrangling.html"><a href="wrangling.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="wrangling.html"><a href="wrangling.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="wrangling.html"><a href="wrangling.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="wrangling.html"><a href="wrangling.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="wrangling.html"><a href="wrangling.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="wrangling.html"><a href="wrangling.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="wrangling.html"><a href="wrangling.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="wrangling.html"><a href="wrangling.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="wrangling.html"><a href="wrangling.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="wrangling.html"><a href="wrangling.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="wrangling.html"><a href="wrangling.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="wrangling.html"><a href="wrangling.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stringregex.html"><a href="stringregex.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="stringregex.html"><a href="stringregex.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="stringregex.html"><a href="stringregex.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stringregex.html"><a href="stringregex.html#literal-characters"><i class="fa fa-check"></i><b>6.2.1</b> Literal characters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stringregex.html"><a href="stringregex.html#metacharacters"><i class="fa fa-check"></i><b>6.2.2</b> Metacharacters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stringregex.html"><a href="stringregex.html#more-advanced-string-manipulation"><i class="fa fa-check"></i><b>6.3</b> More advanced string manipulation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="stringregex.html"><a href="stringregex.html#detect-matches"><i class="fa fa-check"></i><b>6.3.1</b> Detect matches</a></li>
+<li class="chapter" data-level="6.3.2" data-path="stringregex.html"><a href="stringregex.html#mutating-strings"><i class="fa fa-check"></i><b>6.3.2</b> Mutating strings</a></li>
+<li class="chapter" data-level="6.3.3" data-path="stringregex.html"><a href="stringregex.html#extracting-text"><i class="fa fa-check"></i><b>6.3.3</b> Extracting text</a></li>
+<li class="chapter" data-level="6.3.4" data-path="stringregex.html"><a href="stringregex.html#split-vectors"><i class="fa fa-check"></i><b>6.3.4</b> Split vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="stringregex.html"><a href="stringregex.html#further-links-5"><i class="fa fa-check"></i><b>6.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="workwithfactors.html"><a href="workwithfactors.html"><i class="fa fa-check"></i><b>7</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workwithfactors.html"><a href="workwithfactors.html#creating-a-factor"><i class="fa fa-check"></i><b>7.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2" data-path="workwithfactors.html"><a href="workwithfactors.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2</b> Some basic operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workwithfactors.html"><a href="workwithfactors.html#reordering-factors"><i class="fa fa-check"></i><b>7.2.1</b> Reordering factors</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workwithfactors.html"><a href="workwithfactors.html#modifying-levels"><i class="fa fa-check"></i><b>7.2.2</b> Modifying levels</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="workwithfactors.html"><a href="workwithfactors.html#further-links-6"><i class="fa fa-check"></i><b>7.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="descriptives.html"><a href="descriptives.html"><i class="fa fa-check"></i><b>8</b> Describing data sets</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="descriptives.html"><a href="descriptives.html#basic-descriptives"><i class="fa fa-check"></i><b>8.1</b> Basic descriptives</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="descriptives.html"><a href="descriptives.html#grouped-descriptives"><i class="fa fa-check"></i><b>8.1.1</b> Grouped descriptives</a></li>
+<li class="chapter" data-level="8.1.2" data-path="descriptives.html"><a href="descriptives.html#modifying-the-skim-output"><i class="fa fa-check"></i><b>8.1.2</b> Modifying the <code>skim()</code> output</a></li>
+<li class="chapter" data-level="8.1.3" data-path="descriptives.html"><a href="descriptives.html#further-descriptives"><i class="fa fa-check"></i><b>8.1.3</b> Further descriptives</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="descriptives.html"><a href="descriptives.html#communicating-results"><i class="fa fa-check"></i><b>8.2</b> Communicating results</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="descriptives.html"><a href="descriptives.html#tables-with-knitrkable-and-kableextra"><i class="fa fa-check"></i><b>8.2.1</b> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></a></li>
+<li class="chapter" data-level="8.2.2" data-path="descriptives.html"><a href="descriptives.html#use-case-reporting-skimr-results"><i class="fa fa-check"></i><b>8.2.2</b> Use case: reporting <code>skimr</code> results</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="descriptives.html"><a href="descriptives.html#further-links-7"><i class="fa fa-check"></i><b>8.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>9</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualization.html"><a href="visualization.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>9.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
+<li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.2</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="markdown.html"><a href="markdown.html#introduction"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="markdown.html"><a href="markdown.html#further-resources"><i class="fa fa-check"></i><b>10.2</b> Further resources</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functionalprogramming.html"><a href="functionalprogramming.html"><i class="fa fa-check"></i><b>11</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#flow-control"><i class="fa fa-check"></i><b>11.1</b> Flow control</a></li>
+<li class="chapter" data-level="11.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functions"><i class="fa fa-check"></i><b>11.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#writing-your-own-functions"><i class="fa fa-check"></i><b>11.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="11.2.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#an-example-roulette"><i class="fa fa-check"></i><b>11.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="11.2.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>11.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="11.2.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-readings-2"><i class="fa fa-check"></i><b>11.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#iteration"><i class="fa fa-check"></i><b>11.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
+<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="exercises.html"><a href="exercises.html#chapter-2"><i class="fa fa-check"></i><b>13.1</b> Chapter 2</a></li>
+<li class="chapter" data-level="13.2" data-path="exercises.html"><a href="exercises.html#chapter-3"><i class="fa fa-check"></i><b>13.2</b> Chapter 3</a></li>
+<li class="chapter" data-level="13.3" data-path="exercises.html"><a href="exercises.html#chapter-4"><i class="fa fa-check"></i><b>13.3</b> Chapter 4</a></li>
+<li class="chapter" data-level="13.4" data-path="exercises.html"><a href="exercises.html#chapter-5"><i class="fa fa-check"></i><b>13.4</b> Chapter 5</a></li>
+<li class="chapter" data-level="13.5" data-path="exercises.html"><a href="exercises.html#chapter-6"><i class="fa fa-check"></i><b>13.5</b> Chapter 6</a></li>
+<li class="chapter" data-level="13.6" data-path="exercises.html"><a href="exercises.html#chapter-7"><i class="fa fa-check"></i><b>13.6</b> Chapter 7</a></li>
+<li class="chapter" data-level="13.7" data-path="exercises.html"><a href="exercises.html#chapter-8"><i class="fa fa-check"></i><b>13.7</b> Chapter 8</a></li>
+<li class="chapter" data-level="13.8" data-path="exercises.html"><a href="exercises.html#chapter-9"><i class="fa fa-check"></i><b>13.8</b> Chapter 9</a></li>
+<li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
+<li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="exercises-functions.html"><a href="exercises-functions.html"><i class="fa fa-check"></i><b>14</b> Exercises functions</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="functionalprogramming" class="section level1" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Functional programming and iterations</h1>
+<p>So far, you have learned heaps of data wrangling and analyses, but no real customization of R. This will change now, as you will be introduced to functions. Furthermore, the operations have only been applied to one singular object (read vector or data.frame/tibble). Iteration means that you perform the same operation on multiple objects/data sets/you name it.</p>
+<p>Today’s session will all be about following the DRY principle. DRY stands for Don’t Repeat Yourself. “Why not?,” you may ask. Well, the problem with copy-and-pasting code is that you have to change all the variable names in every instance of your code. RStudio has a nice Search-and-Replace function which might facilitate that, but this practice still bears the danger of writing code that contains errors. This is where you will need to make use of the tools that R offers to iterate over a couple of elements, perform operations on them, and return the results. An example:</p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="functionalprogramming.html#cb468-1" aria-hidden="true" tabindex="-1"></a>example_strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;this&quot;</span>, <span class="st">&quot;is&quot;</span>, <span class="st">&quot;how&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;for&quot;</span>, <span class="st">&quot;loop&quot;</span>, <span class="st">&quot;works&quot;</span>)</span>
+<span id="cb468-2"><a href="functionalprogramming.html#cb468-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-3"><a href="functionalprogramming.html#cb468-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(example_strings)) {</span>
+<span id="cb468-4"><a href="functionalprogramming.html#cb468-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(example_strings[[i]])</span>
+<span id="cb468-5"><a href="functionalprogramming.html#cb468-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;
+## [1] &quot;is&quot;
+## [1] &quot;how&quot;
+## [1] &quot;a&quot;
+## [1] &quot;for&quot;
+## [1] &quot;loop&quot;
+## [1] &quot;works&quot;</code></pre>
+<p>Another option – from the tidyverse – is the <code>purrr</code> package:</p>
+<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb470-1"><a href="functionalprogramming.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb470-2"><a href="functionalprogramming.html#cb470-2" aria-hidden="true" tabindex="-1"></a><span class="fu">walk</span>(example_strings, print)</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;
+## [1] &quot;is&quot;
+## [1] &quot;how&quot;
+## [1] &quot;a&quot;
+## [1] &quot;for&quot;
+## [1] &quot;loop&quot;
+## [1] &quot;works&quot;</code></pre>
+<p>So, what has this code done? In both cases, it has taken the function <code>print()</code> and applied it to every value of our vector. Copying-and-pasting would have looked like this:</p>
+<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb472-1"><a href="functionalprogramming.html#cb472-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">1</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;</code></pre>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="functionalprogramming.html#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">2</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;is&quot;</code></pre>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="functionalprogramming.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">3</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;how&quot;</code></pre>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="functionalprogramming.html#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">4</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot;</code></pre>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="functionalprogramming.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">5</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;for&quot;</code></pre>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="functionalprogramming.html#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">6</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;loop&quot;</code></pre>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="functionalprogramming.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">7</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;works&quot;</code></pre>
+<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="functionalprogramming.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">7</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;works&quot;</code></pre>
+<p>Damn, I pasted the last instance twice. In this case, the mistake is obvious, but oftentimes it is not.</p>
+<p>In the following, I will provide you a more extensive introduction into conditional statements, functions, loops, and the <code>purrr</code> package.</p>
+<div id="flow-control" class="section level2" number="11.1">
+<h2><span class="header-section-number">11.1</span> Flow control</h2>
+<p>Sometimes you want your code to only run in specific cases. For <code>mutate()</code>, I have already showed you conditional imputation of values with <code>case_when()</code>. A more generalized approach for conditionally running code in R are <code>if</code> statements. They look as follows:</p>
+<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="functionalprogramming.html#cb488-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (conditional_statement evaluates to <span class="cn">TRUE</span>) {</span>
+<span id="cb488-2"><a href="functionalprogramming.html#cb488-2" aria-hidden="true" tabindex="-1"></a>  do_something</span>
+<span id="cb488-3"><a href="functionalprogramming.html#cb488-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>They also have an extension – <code>if…else</code>:</p>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="functionalprogramming.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (conditional_statement evaluates to <span class="cn">TRUE</span>) {</span>
+<span id="cb489-2"><a href="functionalprogramming.html#cb489-2" aria-hidden="true" tabindex="-1"></a>  do_something</span>
+<span id="cb489-3"><a href="functionalprogramming.html#cb489-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb489-4"><a href="functionalprogramming.html#cb489-4" aria-hidden="true" tabindex="-1"></a>  do_something_else</span>
+<span id="cb489-5"><a href="functionalprogramming.html#cb489-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Imagine that I want R to tell me whether a number it draws is smaller than or equal to five:</p>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="functionalprogramming.html#cb490-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb490-2"><a href="functionalprogramming.html#cb490-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb490-3"><a href="functionalprogramming.html#cb490-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb490-4"><a href="functionalprogramming.html#cb490-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&lt;=</span> <span class="dv">5</span>) {</span>
+<span id="cb490-5"><a href="functionalprogramming.html#cb490-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;x is smaller than or equals 5&quot;</span>)</span>
+<span id="cb490-6"><a href="functionalprogramming.html#cb490-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;x is smaller than or equals 5&quot;</code></pre>
+<p>In this case, x is 3, so the if statement returns something. If this is not the case, nothing happens:</p>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="functionalprogramming.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb492-2"><a href="functionalprogramming.html#cb492-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb492-3"><a href="functionalprogramming.html#cb492-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb492-4"><a href="functionalprogramming.html#cb492-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&lt;=</span> <span class="dv">5</span>) {</span>
+<span id="cb492-5"><a href="functionalprogramming.html#cb492-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;x is smaller than or equals 5&quot;</span>)</span>
+<span id="cb492-6"><a href="functionalprogramming.html#cb492-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Now I could extend it by another <code>if</code> statement:</p>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="functionalprogramming.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&gt;</span> <span class="dv">5</span>) {</span>
+<span id="cb493-2"><a href="functionalprogramming.html#cb493-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;x is greater than 5&quot;</span>)</span>
+<span id="cb493-3"><a href="functionalprogramming.html#cb493-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;x is greater than 5&quot;</code></pre>
+<p>But <code>else</code> allows me to take a shortcut</p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="functionalprogramming.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (x <span class="sc">&lt;=</span> <span class="dv">5</span>) {</span>
+<span id="cb495-2"><a href="functionalprogramming.html#cb495-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;x is smaller than or equals 5&quot;</span>)</span>
+<span id="cb495-3"><a href="functionalprogramming.html#cb495-3" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb495-4"><a href="functionalprogramming.html#cb495-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;x is greater than 5&quot;</span>)</span>
+<span id="cb495-5"><a href="functionalprogramming.html#cb495-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;x is greater than 5&quot;</code></pre>
+<p>Please note that the condition inside the if statement needs to be a vector of type logical (hence, either <code>TRUE</code> or <code>FALSE</code>). Apart from that, only the first value will be used:</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="functionalprogramming.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)) {</span>
+<span id="cb497-2"><a href="functionalprogramming.html#cb497-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="st">&quot;example&quot;</span>)</span>
+<span id="cb497-3"><a href="functionalprogramming.html#cb497-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## Warning in if (c(TRUE, FALSE, TRUE)) {: the condition has length &gt; 1 and only
+## the first element will be used</code></pre>
+<pre><code>## [1] &quot;example&quot;</code></pre>
+</div>
+<div id="functions" class="section level2" number="11.2">
+<h2><span class="header-section-number">11.2</span> Functions</h2>
+<p>So far, every call you have made within R contained a function. Even the most basic operations, such as <code>c()</code> for building vectors, rely on functions. Functions are the verbs of R, they <em>do</em> something to your objects. Hence, you as someone who obeys the principles of DRY can make good use of them. Whenever you need to copy code to perform certain tasks to an object, you can also put those tasks into a function and just provide the function with the objects.</p>
+<p>Imagine you want to rescale some variables in a tibble (an example I took from R4DS <span class="citation">(<a href="#ref-wickham2016a" role="doc-biblioref">Wickham and Grolemund 2016</a>)</span>):</p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="functionalprogramming.html#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="functionalprogramming.html#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb501-2"><a href="functionalprogramming.html#cb501-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-3"><a href="functionalprogramming.html#cb501-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb501-4"><a href="functionalprogramming.html#cb501-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb501-5"><a href="functionalprogramming.html#cb501-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb501-6"><a href="functionalprogramming.html#cb501-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">c =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb501-7"><a href="functionalprogramming.html#cb501-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb501-8"><a href="functionalprogramming.html#cb501-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb501-9"><a href="functionalprogramming.html#cb501-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-10"><a href="functionalprogramming.html#cb501-10" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>a <span class="ot">&lt;-</span> (df<span class="sc">$</span>a <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>a, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> </span>
+<span id="cb501-11"><a href="functionalprogramming.html#cb501-11" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">max</span>(df<span class="sc">$</span>a, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>a, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb501-12"><a href="functionalprogramming.html#cb501-12" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>b <span class="ot">&lt;-</span> (df<span class="sc">$</span>b <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>b, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> </span>
+<span id="cb501-13"><a href="functionalprogramming.html#cb501-13" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">max</span>(df<span class="sc">$</span>b, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>b, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb501-14"><a href="functionalprogramming.html#cb501-14" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>c <span class="ot">&lt;-</span> (df<span class="sc">$</span>c <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>c, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> </span>
+<span id="cb501-15"><a href="functionalprogramming.html#cb501-15" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">max</span>(df<span class="sc">$</span>c, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>c, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb501-16"><a href="functionalprogramming.html#cb501-16" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>d <span class="ot">&lt;-</span> (df<span class="sc">$</span>d <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>d, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> </span>
+<span id="cb501-17"><a href="functionalprogramming.html#cb501-17" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">max</span>(df<span class="sc">$</span>d, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(df<span class="sc">$</span>d, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<p>Given that you now know how to loop over the tibble, you can certainly reduce the amount of copy-pasting here.</p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="functionalprogramming.html#cb502-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb502-2"><a href="functionalprogramming.html#cb502-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb502-3"><a href="functionalprogramming.html#cb502-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb502-4"><a href="functionalprogramming.html#cb502-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">c =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>),</span>
+<span id="cb502-5"><a href="functionalprogramming.html#cb502-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb502-6"><a href="functionalprogramming.html#cb502-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb502-7"><a href="functionalprogramming.html#cb502-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb502-8"><a href="functionalprogramming.html#cb502-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(df)) {</span>
+<span id="cb502-9"><a href="functionalprogramming.html#cb502-9" aria-hidden="true" tabindex="-1"></a>  df[[i]] <span class="ot">&lt;-</span> (df[[i]] <span class="sc">-</span> <span class="fu">min</span>(df[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">/</span> </span>
+<span id="cb502-10"><a href="functionalprogramming.html#cb502-10" aria-hidden="true" tabindex="-1"></a>  (<span class="fu">max</span>(df[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">-</span> <span class="fu">min</span>(df[[i]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb502-11"><a href="functionalprogramming.html#cb502-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>However, the operation within the loop is generalizable: it always only takes a vector of numeric values as input, performs some actions on them and returns another vector of the same length, but rescaled into a range from 0 to 1. Hence, the operation fulfills the requirements for putting it into a function.</p>
+<p>Doing so has some advantages:</p>
+<ul>
+<li>If an error occurs, you can simply change the function in one place – when you define it – instead of changing all the occurrences in your code</li>
+<li>It will certainly make your code easier to read – <code>rescale0to1</code> is a more concise description than <code>(x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x. na.rm = TRUE))</code> (–&gt; you see what I did here? I already replaced the arguments with a generic variable. You can use it to write the function yourself (Exercise 1).)</li>
+</ul>
+<div id="writing-your-own-functions" class="section level3" number="11.2.1">
+<h3><span class="header-section-number">11.2.1</span> Writing your own functions</h3>
+<p>When you define functions in R, you need to follow a certain structure:</p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="functionalprogramming.html#cb503-1" aria-hidden="true" tabindex="-1"></a>function_name <span class="ot">&lt;-</span> <span class="cf">function</span>(argument_1, argument_2, argument_n) {</span>
+<span id="cb503-2"><a href="functionalprogramming.html#cb503-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span> body</span>
+<span id="cb503-3"><a href="functionalprogramming.html#cb503-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<ul>
+<li>The <code>function_name</code> is the thing you will call (e.g., <code>mean()</code>). In general, it should be a verb, it should be concise, and it should be in_snakecase.</li>
+<li>The <code>argument</code>s are what you need to provide the function with (e.g., <code>mean(</code><em>1:10</em><code>)</code>).</li>
+<li>The <code>function body</code> contains the operations which are performed to the arguments. It can contain other functions as well – which need to be defined beforehand (e.g., <code>sum(1:10) / length(1:10)</code>)). It is advisable to split up the function body into as little pieces as you can.</li>
+</ul>
+</div>
+<div id="an-example-roulette" class="section level3" number="11.2.2">
+<h3><span class="header-section-number">11.2.2</span> An example: Roulette</h3>
+<p>In the following, I will guide you through a quick example on how you could use functions to play an extremely basic game of Roulette with R. You provide it with two values (how much you bet and which number you choose) and R takes care of the rest.</p>
+<p>So what does the function need to do? First, it needs to draw a number between 0 and 36. Second, it needs to compare the bet and its corresponding number. Third, it needs to return the respective result.</p>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="functionalprogramming.html#cb504-1" aria-hidden="true" tabindex="-1"></a>play_roulette <span class="ot">&lt;-</span> <span class="cf">function</span>(bet, number) {</span>
+<span id="cb504-2"><a href="functionalprogramming.html#cb504-2" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">36</span>, <span class="dv">1</span>)</span>
+<span id="cb504-3"><a href="functionalprogramming.html#cb504-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb504-4"><a href="functionalprogramming.html#cb504-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_number =</span> draw,</span>
+<span id="cb504-5"><a href="functionalprogramming.html#cb504-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_number =</span> number,</span>
+<span id="cb504-6"><a href="functionalprogramming.html#cb504-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_bet =</span> bet,</span>
+<span id="cb504-7"><a href="functionalprogramming.html#cb504-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_return =</span> <span class="cf">if</span> (number <span class="sc">==</span> draw) {</span>
+<span id="cb504-8"><a href="functionalprogramming.html#cb504-8" aria-hidden="true" tabindex="-1"></a>      bet <span class="sc">*</span> <span class="dv">36</span></span>
+<span id="cb504-9"><a href="functionalprogramming.html#cb504-9" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb504-10"><a href="functionalprogramming.html#cb504-10" aria-hidden="true" tabindex="-1"></a>      <span class="dv">0</span></span>
+<span id="cb504-11"><a href="functionalprogramming.html#cb504-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb504-12"><a href="functionalprogramming.html#cb504-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb504-13"><a href="functionalprogramming.html#cb504-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb504-14"><a href="functionalprogramming.html#cb504-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb504-15"><a href="functionalprogramming.html#cb504-15" aria-hidden="true" tabindex="-1"></a><span class="fu">play_roulette</span>(<span class="at">bet =</span> <span class="dv">1</span>, <span class="at">number =</span> <span class="dv">35</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 4
+##   winning_number your_number your_bet your_return
+##            &lt;int&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1             15          35        1           0</code></pre>
+<p>But how to make sure that I do not bet on a number which I cannot bet on (i.e., numbers greater than 36)? Or, put differently, how to forbid values? Use <code>stop()</code>. Besides, how to set default values for the arguments? Just use <code>argument = default</code>.</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="functionalprogramming.html#cb506-1" aria-hidden="true" tabindex="-1"></a>play_roulette_restricted <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">bet =</span> <span class="dv">1</span>, number) {</span>
+<span id="cb506-2"><a href="functionalprogramming.html#cb506-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (number <span class="sc">&gt;</span> <span class="dv">36</span>) <span class="fu">stop</span>(<span class="st">&quot;You can only bet on numbers between 0 and 36.&quot;</span>)</span>
+<span id="cb506-3"><a href="functionalprogramming.html#cb506-3" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">36</span>, <span class="dv">1</span>)</span>
+<span id="cb506-4"><a href="functionalprogramming.html#cb506-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(</span>
+<span id="cb506-5"><a href="functionalprogramming.html#cb506-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">winning_number =</span> draw,</span>
+<span id="cb506-6"><a href="functionalprogramming.html#cb506-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_number =</span> number,</span>
+<span id="cb506-7"><a href="functionalprogramming.html#cb506-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_bet =</span> bet,</span>
+<span id="cb506-8"><a href="functionalprogramming.html#cb506-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">your_return =</span> <span class="cf">if</span> (number <span class="sc">==</span> draw) {</span>
+<span id="cb506-9"><a href="functionalprogramming.html#cb506-9" aria-hidden="true" tabindex="-1"></a>      bet <span class="sc">*</span> <span class="dv">36</span></span>
+<span id="cb506-10"><a href="functionalprogramming.html#cb506-10" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb506-11"><a href="functionalprogramming.html#cb506-11" aria-hidden="true" tabindex="-1"></a>      <span class="dv">0</span></span>
+<span id="cb506-12"><a href="functionalprogramming.html#cb506-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb506-13"><a href="functionalprogramming.html#cb506-13" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb506-14"><a href="functionalprogramming.html#cb506-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return(tbl_return)</span></span>
+<span id="cb506-15"><a href="functionalprogramming.html#cb506-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb506-16"><a href="functionalprogramming.html#cb506-16" aria-hidden="true" tabindex="-1"></a><span class="fu">play_roulette_restricted</span>(<span class="at">number =</span> <span class="dv">35</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 4
+##   winning_number your_number your_bet your_return
+##            &lt;int&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1              1          35        1           0</code></pre>
+<p>The function returns the results of the last call, i.e., the tibble. If you want to be more concrete about what it should return, use <code>return()</code>:</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="functionalprogramming.html#cb508-1" aria-hidden="true" tabindex="-1"></a>play_roulette_basic <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">bet =</span> <span class="dv">1</span>, number) {</span>
+<span id="cb508-2"><a href="functionalprogramming.html#cb508-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (number <span class="sc">&gt;</span> <span class="dv">36</span>) <span class="fu">stop</span>(<span class="st">&quot;You can only bet on numbers between 0 and 36.&quot;</span>)</span>
+<span id="cb508-3"><a href="functionalprogramming.html#cb508-3" aria-hidden="true" tabindex="-1"></a>  draw <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">36</span>, <span class="dv">1</span>)</span>
+<span id="cb508-4"><a href="functionalprogramming.html#cb508-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (number <span class="sc">==</span> draw) {</span>
+<span id="cb508-5"><a href="functionalprogramming.html#cb508-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">paste</span>(<span class="st">&quot;Nice, you won&quot;</span>, <span class="fu">as.character</span>(bet <span class="sc">*</span> <span class="dv">36</span>), <span class="st">&quot;Dollars&quot;</span>), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb508-6"><a href="functionalprogramming.html#cb508-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb508-7"><a href="functionalprogramming.html#cb508-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="st">&quot;I&#39;m sorry, you lost.&quot;</span>)</span>
+<span id="cb508-8"><a href="functionalprogramming.html#cb508-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb508-9"><a href="functionalprogramming.html#cb508-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb508-10"><a href="functionalprogramming.html#cb508-10" aria-hidden="true" tabindex="-1"></a><span class="fu">play_roulette_basic</span>(<span class="at">number =</span> <span class="dv">35</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;I&#39;m sorry, you lost.&quot;</code></pre>
+</div>
+<div id="functional-programming-with-tidyverse-functions" class="section level3" number="11.2.3">
+<h3><span class="header-section-number">11.2.3</span> Functional programming with <code>tidyverse</code> functions</h3>
+<p>The majority of<code>dplyr</code> verbs uses so-called tidy evaluation which is a framework for controlling how expressions and variables in your code are evaluated by the tidyverse functions. The two main things here are <strong>data masking</strong> and <strong>tidy selection</strong>. The former facilitates computing on values within the data set and refers to functions such as <code>filter()</code>, where you can just type in variable names instead of tediously typing <code>name_of_df$var_name</code>. The latter aims to facilitate working with the columns in the data set. It is provided by the <code>tidyselect</code> package and allows you, for instance, to work with code such as <code>tbl %&gt;% select(starts_with("a"))</code>. More examples can be acquired using <code>?dplyr_tidy_select</code>.</p>
+<p>I will not go into detail here but rather stick to what implications this has to you. If you are interested in the theoretical underpinnings, read the chapter on “Metaprogramming” in <a href="http://adv-r.had.co.nz">Advanced R by Hadley Wickham</a>.</p>
+<div id="providing-the-variable-in-the-function-call" class="section level4" number="11.2.3.1">
+<h4><span class="header-section-number">11.2.3.1</span> Providing the variable in the function call</h4>
+<p>If your function takes a user-supplied variable as an argument, you need to consider this arguments in the pipeline. For instance, the following function calculates the mean, median, and standard deviation of a variable.</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="functionalprogramming.html#cb510-1" aria-hidden="true" tabindex="-1"></a>my_summary <span class="ot">&lt;-</span> <span class="cf">function</span>(tbl, var) {</span>
+<span id="cb510-2"><a href="functionalprogramming.html#cb510-2" aria-hidden="true" tabindex="-1"></a>  tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb510-3"><a href="functionalprogramming.html#cb510-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb510-4"><a href="functionalprogramming.html#cb510-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">mean =</span> <span class="fu">mean</span>({{ var }}),</span>
+<span id="cb510-5"><a href="functionalprogramming.html#cb510-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">median =</span> <span class="fu">median</span>({{ var }}),</span>
+<span id="cb510-6"><a href="functionalprogramming.html#cb510-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> <span class="fu">sd</span>({{ var }})</span>
+<span id="cb510-7"><a href="functionalprogramming.html#cb510-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb510-8"><a href="functionalprogramming.html#cb510-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb510-9"><a href="functionalprogramming.html#cb510-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb510-10"><a href="functionalprogramming.html#cb510-10" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> <span class="fu">my_summary</span>(cyl) </span></code></pre></div>
+<pre><code>##     mean median       sd
+## 1 6.1875      6 1.785922</code></pre>
+<p>If the variable names are supplied in a character vector, you need <code>all_of()</code>:</p>
+<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb512-1"><a href="functionalprogramming.html#cb512-1" aria-hidden="true" tabindex="-1"></a>summarize_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(data, vars) {</span>
+<span id="cb512-2"><a href="functionalprogramming.html#cb512-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="fu">across</span>({{ vars }}, mean))</span>
+<span id="cb512-3"><a href="functionalprogramming.html#cb512-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb512-4"><a href="functionalprogramming.html#cb512-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb512-5"><a href="functionalprogramming.html#cb512-5" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb512-6"><a href="functionalprogramming.html#cb512-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb512-7"><a href="functionalprogramming.html#cb512-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize_mean</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">&quot;hp&quot;</span>, <span class="st">&quot;mpg&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb512-8"><a href="functionalprogramming.html#cb512-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 3
+## Columns: 4
+## $ cyl &lt;dbl&gt; 4, 6, 8
+## $ n   &lt;int&gt; 11, 7, 14
+## $ hp  &lt;dbl&gt; 82.63636, 122.28571, 209.21429
+## $ mpg &lt;dbl&gt; 26.66364, 19.74286, 15.10000</code></pre>
+<p>Another handy thing is changing the variable names in the output depending on the input names. Here, you can use <a href="https://github.com/tidyverse/glue">glue</a> syntax and <code>:=</code>:</p>
+<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="functionalprogramming.html#cb514-1" aria-hidden="true" tabindex="-1"></a>my_summary_w_names <span class="ot">&lt;-</span> <span class="cf">function</span>(tbl, var){</span>
+<span id="cb514-2"><a href="functionalprogramming.html#cb514-2" aria-hidden="true" tabindex="-1"></a>  tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb514-3"><a href="functionalprogramming.html#cb514-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(</span>
+<span id="cb514-4"><a href="functionalprogramming.html#cb514-4" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;mean_{{ var }}&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">mean</span>({{ var }}),</span>
+<span id="cb514-5"><a href="functionalprogramming.html#cb514-5" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;median_{{ var }}&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">median</span>({{ var }}),</span>
+<span id="cb514-6"><a href="functionalprogramming.html#cb514-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">&quot;sd_{{ var }}&quot;</span> <span class="sc">:</span><span class="er">=</span> <span class="fu">sd</span>({{ var }})</span>
+<span id="cb514-7"><a href="functionalprogramming.html#cb514-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb514-8"><a href="functionalprogramming.html#cb514-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb514-9"><a href="functionalprogramming.html#cb514-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb514-10"><a href="functionalprogramming.html#cb514-10" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> <span class="fu">my_summary_w_names</span>(cyl)</span></code></pre></div>
+<pre><code>##   mean_cyl median_cyl   sd_cyl
+## 1   6.1875          6 1.785922</code></pre>
+<p>Find more on programming with <code>dplyr</code> in <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/programming.html">this vignette</a>.</p>
+</div>
+</div>
+<div id="further-readings-2" class="section level3" number="11.2.4">
+<h3><span class="header-section-number">11.2.4</span> Further readings</h3>
+<p>If you want to learn more about functional programming, check out the following resources:</p>
+<ul>
+<li>The <a href="https://r4ds.had.co.nz/functions.html">R4DS chapter</a></li>
+<li><a href="https://www.tutorialspoint.com/r/r_functions.htm">A basic tutorial</a></li>
+<li>A <a href="https://b-rodrigues.github.io/modern_R/defining-your-own-functions.html#writing-your-own-functions">book chapter</a> about control-flow and functions</li>
+<li><a href="http://adv-r.had.co.nz/Functional-programming.html">Hadley on functional programming</a></li>
+</ul>
+</div>
+</div>
+<div id="iteration" class="section level2" number="11.3">
+<h2><span class="header-section-number">11.3</span> Iteration</h2>
+<p>Strictly speaking, there are three kinds of loops: <code>for</code>, <code>repeat</code>, and <code>while</code>. I will touch upon <code>for</code> and <code>while</code>, because they are more straight-forward than repeat. <code>repeat loops</code> will repeat a task until you tell it to stop by hitting the escape button or adding a condition up front. Interactive programming – hitting the escape button to break a loop – is no desired practice and <code>while loops</code> have internalized the condition already. Hence, <code>repeat loops</code> do not appear to have any advantage and I can leave them out deliberately.</p>
+<div id="for-loops" class="section level3" number="11.3.1">
+<h3><span class="header-section-number">11.3.1</span> <code>for</code> loops</h3>
+<p><code>for loops</code> are the sort of loops you will have to work with more often as they allow you to loop <em>over</em> a predefined number of elements. For this sake, I will briefly revise how you index vectors, lists, and tibbles.</p>
+<p>The ith element of a vector can be accessed by using either <code>[[i]]</code> or <code>[i]</code>.</p>
+<p>The ith element of a list can be obtained by using <code>[[i]]</code> – <code>[i]</code> would return a sub-list instead of the element. The second element of the ith element in a list (if it were a vector or a list) can be obtained using <code>[[i]][[2]]</code> etc.</p>
+<p>The ith column of a tibble can be accessed as a vector using <code>[[i]]</code>. The second value of the ith column of a tibble can be accessed using <code>[[i]][[2]]</code></p>
+<p>How does that matter for <code>for loops</code>? Remember the example I showed you in the beginning? All a <code>for loop</code> does is iterating over a vector of values and imputing them instead of a placeholder.</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="functionalprogramming.html#cb516-1" aria-hidden="true" tabindex="-1"></a>example_strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;this&quot;</span>, <span class="st">&quot;is&quot;</span>, <span class="st">&quot;how&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;for&quot;</span>, <span class="st">&quot;loop&quot;</span>, <span class="st">&quot;works&quot;</span>)</span>
+<span id="cb516-2"><a href="functionalprogramming.html#cb516-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb516-3"><a href="functionalprogramming.html#cb516-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(example_strings)) {</span>
+<span id="cb516-4"><a href="functionalprogramming.html#cb516-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(example_strings[[<span class="dv">1</span>]])</span>
+<span id="cb516-5"><a href="functionalprogramming.html#cb516-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;
+## [1] &quot;this&quot;
+## [1] &quot;this&quot;
+## [1] &quot;this&quot;
+## [1] &quot;this&quot;
+## [1] &quot;this&quot;
+## [1] &quot;this&quot;</code></pre>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="functionalprogramming.html#cb518-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq_along</span>(example_strings) <span class="co"># seq_along looks like this</span></span></code></pre></div>
+<pre><code>## [1] 1 2 3 4 5 6 7</code></pre>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="functionalprogramming.html#cb520-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hence, the first iteration looks like this.</span></span>
+<span id="cb520-2"><a href="functionalprogramming.html#cb520-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb520-3"><a href="functionalprogramming.html#cb520-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="fu">seq_along</span>(example_strings)[[<span class="dv">1</span>]]]])</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;</code></pre>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="functionalprogramming.html#cb522-1" aria-hidden="true" tabindex="-1"></a><span class="co"># translates to</span></span>
+<span id="cb522-2"><a href="functionalprogramming.html#cb522-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(example_strings[[<span class="dv">1</span>]])</span></code></pre></div>
+<pre><code>## [1] &quot;this&quot;</code></pre>
+<p>However, this course is about data analysis. So, I have a tibble with different cars and I want to perform some operations on some columns. In this case, I want the average value for every column where it makes sense.</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb524-1"><a href="functionalprogramming.html#cb524-1" aria-hidden="true" tabindex="-1"></a>cars_tbl <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb524-2"><a href="functionalprogramming.html#cb524-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;model_name&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb524-3"><a href="functionalprogramming.html#cb524-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(mpg, cyl, disp, hp, gear)</span>
+<span id="cb524-4"><a href="functionalprogramming.html#cb524-4" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(cars_tbl)</span></code></pre></div>
+<pre><code>## Rows: 32
+## Columns: 5
+## $ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 19.2, 17.8,…
+## $ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4, 4, 4, 8,…
+## $ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7, 140.8, 16…
+## $ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, 180, 180…
+## $ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3,…</code></pre>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="functionalprogramming.html#cb526-1" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">double</span>(<span class="at">length =</span> <span class="fu">ncol</span>(cars_tbl))</span>
+<span id="cb526-2"><a href="functionalprogramming.html#cb526-2" aria-hidden="true" tabindex="-1"></a>output <span class="ot">&lt;-</span> <span class="fu">set_names</span>(output, <span class="fu">colnames</span>(cars_tbl))</span>
+<span id="cb526-3"><a href="functionalprogramming.html#cb526-3" aria-hidden="true" tabindex="-1"></a><span class="co"># names don&#39;t look good -- for loop and change them to &quot;mean_*&quot; using the paste-function</span></span>
+<span id="cb526-4"><a href="functionalprogramming.html#cb526-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb526-5"><a href="functionalprogramming.html#cb526-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(cars_tbl)) {</span>
+<span id="cb526-6"><a href="functionalprogramming.html#cb526-6" aria-hidden="true" tabindex="-1"></a>  output[[i]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(cars_tbl[[i]])</span>
+<span id="cb526-7"><a href="functionalprogramming.html#cb526-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>If you wanted to loop over a tibble and just perform operations to certain variables using <code>dplyr</code> syntax, you could also draw the variable names from a vector. However, for this a slightly different command needs to be used, you cannot simply refer to the variable name in a pipeline. You need to index into the <code>.data</code> pronoun.</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="functionalprogramming.html#cb527-1" aria-hidden="true" tabindex="-1"></a>relevant_columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;gear&quot;</span>)</span>
+<span id="cb527-2"><a href="functionalprogramming.html#cb527-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb527-3"><a href="functionalprogramming.html#cb527-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (var <span class="cf">in</span> relevant_columns) {</span>
+<span id="cb527-4"><a href="functionalprogramming.html#cb527-4" aria-hidden="true" tabindex="-1"></a>  mtcars <span class="sc">%&gt;%</span> <span class="fu">count</span>(.data[[var]]) <span class="sc">%&gt;%</span> <span class="fu">print</span>()</span>
+<span id="cb527-5"><a href="functionalprogramming.html#cb527-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>##     mpg n
+## 1  10.4 2
+## 2  13.3 1
+## 3  14.3 1
+## 4  14.7 1
+## 5  15.0 1
+## 6  15.2 2
+## 7  15.5 1
+## 8  15.8 1
+## 9  16.4 1
+## 10 17.3 1
+## 11 17.8 1
+## 12 18.1 1
+## 13 18.7 1
+## 14 19.2 2
+## 15 19.7 1
+## 16 21.0 2
+## 17 21.4 2
+## 18 21.5 1
+## 19 22.8 2
+## 20 24.4 1
+## 21 26.0 1
+## 22 27.3 1
+## 23 30.4 2
+## 24 32.4 1
+## 25 33.9 1
+##   cyl  n
+## 1   4 11
+## 2   6  7
+## 3   8 14
+##     disp n
+## 1   71.1 1
+## 2   75.7 1
+## 3   78.7 1
+## 4   79.0 1
+## 5   95.1 1
+## 6  108.0 1
+## 7  120.1 1
+## 8  120.3 1
+## 9  121.0 1
+## 10 140.8 1
+## 11 145.0 1
+## 12 146.7 1
+## 13 160.0 2
+## 14 167.6 2
+## 15 225.0 1
+## 16 258.0 1
+## 17 275.8 3
+## 18 301.0 1
+## 19 304.0 1
+## 20 318.0 1
+## 21 350.0 1
+## 22 351.0 1
+## 23 360.0 2
+## 24 400.0 1
+## 25 440.0 1
+## 26 460.0 1
+## 27 472.0 1
+##     hp n
+## 1   52 1
+## 2   62 1
+## 3   65 1
+## 4   66 2
+## 5   91 1
+## 6   93 1
+## 7   95 1
+## 8   97 1
+## 9  105 1
+## 10 109 1
+## 11 110 3
+## 12 113 1
+## 13 123 2
+## 14 150 2
+## 15 175 3
+## 16 180 3
+## 17 205 1
+## 18 215 1
+## 19 230 1
+## 20 245 2
+## 21 264 1
+## 22 335 1
+##   gear  n
+## 1    3 15
+## 2    4 12
+## 3    5  5</code></pre>
+<p>Every <code>for loop</code> consists of three components:</p>
+<ul>
+<li>Output: In the beginning, I create a <code>double</code> vector <code>output &lt;- double(length = ncol(cars_tbl))</code>. As you can see here, I determine the length of the vector in the beginning. This is due to efficiency: if you were to grow the vector by every iteration (using <code>c</code>), the loop becomes very slow. This is especially important if you work with large data sets.<br />
+</li>
+<li>Sequence: <code>i in seq_along(cars_tbl)</code> tells the <code>for loop</code> what to loop over.<br />
+</li>
+<li>Body: <code>output[[i]] &lt;- mean(cars_tbl[[i]])</code>. The actual code. Performs the operation on the respective column <code>cars_tbl[[whatever 'i']]</code> and stores the resulting value in the pre-defined output vector at position <code>i</code>.</li>
+</ul>
+<p>One problem with <code>for loops</code> is that they are considered slow. They are not, at least not if you stick to the following rules:</p>
+<ul>
+<li>Always pre-allocate space – make sure that R does not have to expand your objects</li>
+<li>Do as much as you can outside the loop – every operation inside the loop will be repeated every time the loop is repeated</li>
+</ul>
+<div id="variations" class="section level4" number="11.3.1.1">
+<h4><span class="header-section-number">11.3.1.1</span> Variations</h4>
+<p>In general, you will come across three different problems with <code>for loops</code>.</p>
+<ul>
+<li>Modifying an existing object</li>
+<li>Length of output is unknown</li>
+<li>Sequences are of unknown length</li>
+</ul>
+<div id="modifying-the-existing-object" class="section level5" number="11.3.1.1.1">
+<h5><span class="header-section-number">11.3.1.1.1</span> Modifying the existing object</h5>
+<p>Remember the <code>for loop</code> with the <code>cars_tbl</code>? I could have performed the same operation storing it in the very same tibble again:</p>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb529-1"><a href="functionalprogramming.html#cb529-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(cars_tbl)) {</span>
+<span id="cb529-2"><a href="functionalprogramming.html#cb529-2" aria-hidden="true" tabindex="-1"></a>  cars_tbl[[i]] <span class="ot">&lt;-</span> <span class="fu">mean</span>(cars_tbl[[i]])</span>
+<span id="cb529-3"><a href="functionalprogramming.html#cb529-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>However, in this case it preserves the number of rows and changes all the values to the respective measure. Hence, I need to <code>slice()</code> it.</p>
+<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb530-1"><a href="functionalprogramming.html#cb530-1" aria-hidden="true" tabindex="-1"></a>cars_tbl_sliced <span class="ot">&lt;-</span> cars_tbl <span class="sc">%&gt;%</span> </span>
+<span id="cb530-2"><a href="functionalprogramming.html#cb530-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>)</span></code></pre></div>
+</div>
+<div id="length-of-output-is-unknown" class="section level5" number="11.3.1.1.2">
+<h5><span class="header-section-number">11.3.1.1.2</span> Length of output is unknown</h5>
+<p>Sometimes, you do not know how long your output object is. This is, for instance, if you simulate vectors of random length. Normally, you would just put the values into a vector. However, if you do not know the length, then you would have to ask R to grow the vector every iteration. But this is extremely inefficient. For this, the solution is <code>lists</code>. You always know how many iterations your loop will have. Hence, you can create a list of this exact length and then just store the results in the list (as lists do not care about the length of the singular elements). Afterwards, you can <code>unlist()</code> or <code>flatten_*()</code> the list into a vector.</p>
+</div>
+<div id="unknown-sequence-length" class="section level5" number="11.3.1.1.3">
+<h5><span class="header-section-number">11.3.1.1.3</span> Unknown sequence length</h5>
+<p>Seldom, you also do not know how long your input sequence is. Instead, you want to loop until a certain condition is met. This is where <code>while</code> loops come in handy (but this is the only use case I could think of).</p>
+<p>The basic structure of <code>while loops</code> is as follows:</p>
+<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb531-1"><a href="functionalprogramming.html#cb531-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (condition) {</span>
+<span id="cb531-2"><a href="functionalprogramming.html#cb531-2" aria-hidden="true" tabindex="-1"></a>  code</span>
+<span id="cb531-3"><a href="functionalprogramming.html#cb531-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>What could an example look like?<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> The following loop keeps running until three heads appeared in a row and the condition is met.</p>
+<p>Please note that both vectors which are to be modified within the loop – <code>indicator</code> and <code>head</code> – need to be created beforehand. If I had not created <code>head</code> beforehand, the loop would not have started because there would not have been any vector to assess the length.</p>
+<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb532-1"><a href="functionalprogramming.html#cb532-1" aria-hidden="true" tabindex="-1"></a>indicator <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb532-2"><a href="functionalprogramming.html#cb532-2" aria-hidden="true" tabindex="-1"></a>head <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb532-3"><a href="functionalprogramming.html#cb532-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="fu">length</span>(head) <span class="sc">&lt;</span> <span class="dv">3</span>) {</span>
+<span id="cb532-4"><a href="functionalprogramming.html#cb532-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">sample</span>(<span class="dv">2</span>, <span class="dv">1</span>) <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb532-5"><a href="functionalprogramming.html#cb532-5" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="st">&quot;head&quot;</span></span>
+<span id="cb532-6"><a href="functionalprogramming.html#cb532-6" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb532-7"><a href="functionalprogramming.html#cb532-7" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="st">&quot;tail&quot;</span></span>
+<span id="cb532-8"><a href="functionalprogramming.html#cb532-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb532-9"><a href="functionalprogramming.html#cb532-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (x <span class="sc">==</span> <span class="st">&quot;head&quot;</span>) {</span>
+<span id="cb532-10"><a href="functionalprogramming.html#cb532-10" aria-hidden="true" tabindex="-1"></a>    head <span class="ot">&lt;-</span> <span class="fu">c</span>(head, <span class="dv">1</span>)</span>
+<span id="cb532-11"><a href="functionalprogramming.html#cb532-11" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb532-12"><a href="functionalprogramming.html#cb532-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(head) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb532-13"><a href="functionalprogramming.html#cb532-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb532-14"><a href="functionalprogramming.html#cb532-14" aria-hidden="true" tabindex="-1"></a>  indicator <span class="ot">&lt;-</span> indicator <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb532-15"><a href="functionalprogramming.html#cb532-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="purrrmap" class="section level3" number="11.3.2">
+<h3><span class="header-section-number">11.3.2</span> purrr::map()</h3>
+<p>Loops are good because they make everything very explicit. However, it is often tedious to type. The <code>purrr</code> package provides functions which enable you to iterate over vectors, data frames/tibbles, and lists. Apart from that, it has a lot of functions to work with lists as well. I will only cover the former functions. If you are interested in using <code>purrr</code> for working with lists, check out <a href="https://jennybc.github.io/purrr-tutorial/">this extensive tutorial by Jenny Bryan</a>.</p>
+<p>In the beginning of this chapter, I used the <code>walk()</code> function. This function is related to <code>map()</code> as it iterates over a vector and applies a function to its respective elements. The difference is that <code>walk()</code> doesn’t store the results, <code>map()</code> does.</p>
+<div id="the-basics" class="section level4" number="11.3.2.1">
+<h4><span class="header-section-number">11.3.2.1</span> The basics</h4>
+<p>The structure of the <code>map()</code> function looks like this:</p>
+<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb533-1"><a href="functionalprogramming.html#cb533-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(vector or list, <span class="cf">function</span>(, <span class="cf">if</span> you need it, additional arguments of <span class="cf">function</span>))</span></code></pre></div>
+<p><code>map()</code> always returns a list.</p>
+<p>If you want the output to be in a different format, there are different, type-specific <code>map()</code> functions.</p>
+<ul>
+<li><code>map_dfr()</code> returns a data frame – by binding the rows</li>
+<li><code>map_dfc()</code> returns a data frame – by binding the columns</li>
+<li><code>map_dbl()</code> returns a double vector</li>
+<li><code>map_chr()</code> returns a character vector</li>
+<li><code>map_lgl()</code> returns a logical vector</li>
+</ul>
+<p>In the following I will demonstrate the function of <code>map()</code> with a simple example. The basic vector I will map over is:</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb534-1"><a href="functionalprogramming.html#cb534-1" aria-hidden="true" tabindex="-1"></a>example_dbl <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">1.3</span>, <span class="fl">1.8</span>, <span class="fl">1.9</span>, <span class="fl">2.3</span>)</span></code></pre></div>
+<p>In the first example, I just add 10 to the vector. In order to do so, I first need to create a function which adds 10.</p>
+<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb535-1"><a href="functionalprogramming.html#cb535-1" aria-hidden="true" tabindex="-1"></a>add_10 <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb535-2"><a href="functionalprogramming.html#cb535-2" aria-hidden="true" tabindex="-1"></a>  x <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb535-3"><a href="functionalprogramming.html#cb535-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb536-1"><a href="functionalprogramming.html#cb536-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(example_dbl, add_10)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 11.5
+## 
+## [[2]]
+## [1] 11.3
+## 
+## [[3]]
+## [1] 11.8
+## 
+## [[4]]
+## [1] 11.9
+## 
+## [[5]]
+## [1] 12.3</code></pre>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb538-1"><a href="functionalprogramming.html#cb538-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(example_dbl, add_10)</span></code></pre></div>
+<pre><code>## [1] 11.5 11.3 11.8 11.9 12.3</code></pre>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="functionalprogramming.html#cb540-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_chr</span>(example_dbl, add_10) <span class="co"># does not make sense though</span></span></code></pre></div>
+<pre><code>## [1] &quot;11.500000&quot; &quot;11.300000&quot; &quot;11.800000&quot; &quot;11.900000&quot; &quot;12.300000&quot;</code></pre>
+<div id="anonymous-functions" class="section level5" number="11.3.2.1.1">
+<h5><span class="header-section-number">11.3.2.1.1</span> Anonymous functions</h5>
+<p>In the former example, I did specify the function beforehand. <code>map()</code> also allows you to define the function within the call using a so-called anonymous function. The function’s argument is <code>.x</code> which stands for the respective input.</p>
+<div class="sourceCode" id="cb542"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb542-1"><a href="functionalprogramming.html#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(example_dbl, <span class="sc">~</span>{</span>
+<span id="cb542-2"><a href="functionalprogramming.html#cb542-2" aria-hidden="true" tabindex="-1"></a>  .x <span class="sc">+</span> <span class="dv">10</span></span>
+<span id="cb542-3"><a href="functionalprogramming.html#cb542-3" aria-hidden="true" tabindex="-1"></a>  })</span></code></pre></div>
+<pre><code>## [1] 11.5 11.3 11.8 11.9 12.3</code></pre>
+<p>The <code>for loop</code> which calculated the mean for the <code>cars_tbl</code> would have looked like this in <code>purrr</code>:</p>
+<div class="sourceCode" id="cb544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb544-1"><a href="functionalprogramming.html#cb544-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map</span>(cars_tbl, mean)</span></code></pre></div>
+<pre><code>## $mpg
+## [1] 20.09062
+## 
+## $cyl
+## [1] 6.1875
+## 
+## $disp
+## [1] 230.7219
+## 
+## $hp
+## [1] 146.6875
+## 
+## $gear
+## [1] 3.6875</code></pre>
+<p>When I put it into a tibble, names are preserved:</p>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="functionalprogramming.html#cb546-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dfc</span>(cars_tbl, mean)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 5
+##     mpg   cyl  disp    hp  gear
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  20.1  6.19  231.  147.  3.69</code></pre>
+</div>
+</div>
+<div id="mapping-over-multiple-arguments" class="section level4" number="11.3.2.2">
+<h4><span class="header-section-number">11.3.2.2</span> Mapping over multiple arguments</h4>
+<p>Sometimes you want to apply things to multiple arguments. Think for example of the <code>sample()</code>function. It requires at least two arguments: the size of the sample you draw and the element space <code>x</code> you draw the sample from.</p>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="functionalprogramming.html#cb548-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2</span>(<span class="dv">10</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, sample, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 5
+## 
+## [[2]]
+## [1] 6 7
+## 
+## [[3]]
+## [1] 3 3 7
+## 
+## [[4]]
+## [1]  9  8  3 10
+## 
+## [[5]]
+## [1] 6 7 2 5 5</code></pre>
+<p>However, the <code>map2()</code> functions do not provide you with the possibility to control the type of output you get. You can take care of this using <code>flatten_*()</code>.</p>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="functionalprogramming.html#cb550-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2</span>(<span class="dv">10</span>, <span class="dv">5</span>, sample) <span class="sc">%&gt;%</span> <span class="fu">flatten_dbl</span>()</span></code></pre></div>
+<pre><code>## [1]  9  3  8 10  7</code></pre>
+<p>If you provide it with a vector which is longer than 1, <code>map2()</code> will not perform the operation on every possible combination of the two vectors. Instead, it iterates over both vectors simultaneously, hence, the first iteration uses the first two values, the second iteration the second two values etc.</p>
+<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="functionalprogramming.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="fu">map2</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">3</span>), sample) </span></code></pre></div>
+<pre><code>## [[1]]
+## [1]  9  4  8 10  3
+## 
+## [[2]]
+## [1] 2 3 1</code></pre>
+<p>If you want to map over more than two arguments, <code>pmap()</code> is the way to go. If you work with functions which need multiple values as arguments, you can store the vectors containing the respective values in a tibble. You should name the columns according to the function’s arguments.</p>
+<p>An example here is drawing numbers from a normal distribution – <code>rnorm()</code>. The function takes three arguments: <code>n</code>– the number of values to be drawn, <code>mean</code>, and <code>sd</code>.</p>
+<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="functionalprogramming.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb554-2"><a href="functionalprogramming.html#cb554-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb554-3"><a href="functionalprogramming.html#cb554-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,</span>
+<span id="cb554-4"><a href="functionalprogramming.html#cb554-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd =</span> <span class="fl">0.5</span></span>
+<span id="cb554-5"><a href="functionalprogramming.html#cb554-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb554-6"><a href="functionalprogramming.html#cb554-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pmap</span>(rnorm)</span></code></pre></div>
+<pre><code>## [[1]]
+##  [1] 1.0840927 1.1774841 0.9739474 0.9020327 0.6754651 0.4451164 1.4246371
+##  [8] 1.0111813 1.4155703 0.3778561
+## 
+## [[2]]
+##  [1] 2.084513 2.336583 1.986862 1.904304 1.609047 3.029081 2.375251 2.912104
+##  [9] 2.040030 1.684295
+## 
+## [[3]]
+##  [1] 2.243356 2.681950 3.113151 3.506845 3.126375 2.414026 3.334357 2.174950
+##  [9] 2.817074 2.841941
+## 
+## [[4]]
+##  [1] 3.025877 4.460029 3.688564 3.832982 4.697574 4.318337 3.945784 4.256881
+##  [9] 4.199636 4.831428
+## 
+## [[5]]
+##  [1] 5.137947 5.253136 5.173776 4.811381 5.048810 5.819372 4.562204 5.060880
+##  [9] 5.681065 4.882689
+## 
+## [[6]]
+##  [1] 5.473309 5.565108 5.804936 5.576325 5.869680 5.792790 5.908475 6.203528
+##  [9] 6.312317 6.839103
+## 
+## [[7]]
+##  [1] 6.965653 6.839580 7.735503 7.852165 7.021622 6.833671 6.088882 7.705631
+##  [9] 6.581209 6.438119
+## 
+## [[8]]
+##  [1] 9.521883 8.117511 7.983371 6.633890 7.950105 8.488016 8.206934 8.456161
+##  [9] 8.991866 8.584554
+## 
+## [[9]]
+##  [1]  8.745631  9.352090  8.900792  8.730965  7.572121  8.605177  9.243907
+##  [8] 10.084016  9.250347  9.310105
+## 
+## [[10]]
+##  [1]  9.517048 10.081327  8.960881 10.242613 10.348384 10.092757 10.350367
+##  [8] 10.155841 10.380231 10.921232</code></pre>
+</div>
+</div>
+<div id="further-links-8" class="section level3" number="11.3.3">
+<h3><span class="header-section-number">11.3.3</span> Further links</h3>
+<ul>
+<li><a href="https://rstudio-education.github.io/hopr/loops.html#for-loops">Chapter about loops in Hands-on Programming with R</a></li>
+<li>On <a href="https://resbaz.github.io/2014-r-materials/lessons/30-control-flow/">control flow</a></li>
+<li>A <a href="http://www.rebeccabarter.com/blog/2019-08-19_purrr/">basic introduction to <code>purrr::map</code></a></li>
+<li>The <a href="https://r4ds.had.co.nz/iteration.html#introduction-14">corresponding chapter in R4DS</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wickham2016a" class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. First edition. <span>Sebastopol, CA</span>: <span>O’Reilly</span>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="7">
+<li id="fn7"><p>I have taken this example from the R for Data Science book. I hardly ever work with <code>while loops</code> – it’s handy for web-scraping, for instance, if you want to loop over pages until a certain date is reached, and, therefore, I could not really come up with an example myself.<a href="functionalprogramming.html#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="markdown.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Before you start: R scripts and RMarkdown | A Minimal Book Example</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Before you start: R scripts and RMarkdown | A Minimal Book Example" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Before you start: R scripts and RMarkdown | A Minimal Book Example" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Yihui Xie" />
+
+
+<meta name="date" content="2021-08-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="intro-R.html"/>
+
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>1.1</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro-R.html"><a href="intro-R.html"><i class="fa fa-check"></i><b>2</b> Introduction to R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="intro-R.html"><a href="intro-R.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="intro-R.html"><a href="intro-R.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="intro-R.html"><a href="intro-R.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="intro-R.html"><a href="intro-R.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="intro-R.html"><a href="intro-R.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="intro-R.html"><a href="intro-R.html#further-links"><i class="fa fa-check"></i><b>2.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="before-you-start-r-scripts-and-rmarkdown.html"><a href="before-you-start-r-scripts-and-rmarkdown.html"><i class="fa fa-check"></i><b>3</b> Before you start: R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="before-you-start-r-scripts-and-rmarkdown.html"><a href="before-you-start-r-scripts-and-rmarkdown.html#r-scripts"><i class="fa fa-check"></i><b>3.1</b> R scripts</a></li>
+<li class="chapter" data-level="3.2" data-path="before-you-start-r-scripts-and-rmarkdown.html"><a href="before-you-start-r-scripts-and-rmarkdown.html#rmarkdown"><i class="fa fa-check"></i><b>3.2</b> RMarkdown</a></li>
+<li class="chapter" data-level="3.3" data-path="before-you-start-r-scripts-and-rmarkdown.html"><a href="before-you-start-r-scripts-and-rmarkdown.html#further-links-1"><i class="fa fa-check"></i><b>3.3</b> Further links</a></li>
+<li class="chapter" data-level="3.4" data-path="before-you-start-r-scripts-and-rmarkdown.html"><a href="before-you-start-r-scripts-and-rmarkdown.html#references-1"><i class="fa fa-check"></i><b>3.4</b> References</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Minimal Book Example</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="before-you-start-r-scripts-and-rmarkdown" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Before you start: R scripts and RMarkdown</h1>
+<p>In this course, you will work with two sorts of documents to store your code in: R scripts (suffix <code>.R</code>) and RMarkdown documents (suffix <code>.Rmd</code>). In the following, I will briefly introduce you to both of them.</p>
+<div id="r-scripts" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> R scripts</h2>
+<p>The console, where you can only execute your code, is great for experimenting with R. If you want to store it – e.g., for sharing – you need something different. This is where R scripts come in handy. When you are in RStudio, you create a new script by either clicking <code>File &gt;&gt; New File &gt;&gt; R Script</code> or ctrl/cmd+shift+n. There are multiple ways to run code in the script:<br />
+* cmd/ctrl+return (Mac/Windows) – execute entire expression and jump to next line<br />
+* option/alt+return (Mac/Windows) – execute entire expression and remain in line<br />
+* cmd/ctrl+shift+return (Mac/Windows) – execute entire script from the beginning to the end (rule: every script you hand in or send to somebody else should run smoothly from the beginning to the end)</p>
+<p>If you want to make annotations to your code (which you should do because it makes everything easier to read and understand), just insert ‘#’ into your code. Every expression that stands to the right of the ‘#’ sign will not be executed when you run the code.</p>
+</div>
+<div id="rmarkdown" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> RMarkdown</h2>
+<p>A time will come where you will not just do analyses for yourself in R, but you will also have to communicate them. Let’s take a master’s thesis as an example: you need a type of document that is able to encapsulate: text (properly formatted), visualizations (tables, graphs, maybe images), and references. An RMarkdown document can do it all, plus, your entire analysis can live in there as well. So there is no need anymore for the cumbersome process of copying data from MS Excel or IBM SPSS into an MS Word table. You just tell RMarkdown what it should communicate and what not. (Note that all the project work for this course has to be handed in using R Markdown files.) In the following, I will not provide you with an exhaustive introduction to RMarkdown. Instead, I will focus on getting you started and then referring you to better, more exhaustive resources. It is not that I am too lazy to write a big tutorial, but there are state-of-the-art tutorials and resources (which mainly come straight from people who work on the forefront of the development of these tools) which are available for free. By linking to them, I want to encourage you to get involved and dig into this stuff. So, let’s get you started!</p>
+<p>You create an RMarkdown file by clicking <code>File &gt;&gt; New File &gt;&gt; R Markdown</code>…. Then, a window pops up that looks like this:</p>
+<div class="figure">
+<img src="figures/new_markdown_1.png" alt="" />
+<p class="caption">New RMarkdown</p>
+</div>
+<p>Note that you could also do a presentation (with the <code>beamer</code> package), a <code>shiny</code> app, or use templates. We will focus on simple RMarkdown documents<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.
+Here, you can type in a title, the name(s) of the author(s), and choose the default output format. For now you have to choose one, but later you can switch to one of the others whenever you want to.<br />
+* <em>HTML</em> is handy for lightweight, quickly knitted files, or if you want to publish it on a website.<br />
+* <em>PDF</em> is good if you are experienced with <span class="math inline">\(\LaTeX\)</span> and want to further modify it in terms of formatting etc., or simply want to get a more formally looking document (I use it if I need to hand in something that is supposed to be graded). If you want to knit to PDF, you need a running <span class="math inline">\(\LaTeX\)</span> version on your machine. If you do not have one, I recommend you to install <code>tinytex.</code> I linked installation instructions down below.
+* <em>Word</em> puts out an MS Word document – especially handy if you collaborate with people who are either not experienced in R, like older faculty, or want some parts to be proof-read (remember the Track-Changes function?). Note that you need to have MS Word installed on your machine.</p>
+<p>Did you notice the term “knit?” The logic behind RMarkdown documents is that you edit them in RStudio and then “knit” them. This means that it calls the <code>knitr</code> package. Thereby, all the code you include into the document is executed from scratch. If the code does not work and throws an error, the document will not knit – hence, it needs to be properly written to avoid head-scratching. The <code>knitr</code> package creates a markdown file (suffix: .md). This is then processed by <code>pandoc</code>, a universal document converter. The big advantage of this two-step approach is that it enables a wide range of output formats.</p>
+<p>For your first RMarkdown document, choose HTML and click “OK.” Then, you see a new plain-text file which looks like this:</p>
+<div class="figure">
+<img src="figures/new_markdown_2.png" alt="" />
+<p class="caption">A fresh and clean RMarkdown document</p>
+</div>
+<p>In the top section, surrounded by <code>---</code>, you can see the so-called YAML header (or YAML metadata, or YAML frontmatter – check out <a href="https://en.wikipedia.org/wiki/YAML">Wikipedia</a> for more information on it). YAML stands for “YAML Ain’t Markup Language” and it is a human-readable data-serialization language. Quick heads-up: indentation matters in your YAML header. This is the metadata of your document. In this minimalistic example, the title, the author, the date, and the desired output are specified (as you specified them when you created the new document). Hence, you can always change them.</p>
+<p>After the YAML header, there comes a code chunk. Code chunks start with <code>```{r}</code> and end with <code>```</code>. Inside the code chunk, you can write R code which can be executed by either clicking the green “Play” button or by using the same keyboard shortcuts as in scripts. There are several chunk options available: either click on the sprocket or check them out online and include them in the chunk’s header (like this: <code>```{r include=FALSE}</code>).
+Beyond that, you can (and should) name your chunks. This makes it easier to find the flawed ones when your document fails to knit. This is done by simply including the name into the title like this: <code>```{r cars}</code>. Find more on chunk options <a href="https://bookdown.org/yihui/rmarkdown/r-code.html">here</a>.</p>
+<p>The double hashes imply that “R Markdown” is a header. In the text, there are examples on how to include links (“&lt;&gt;”), how to make text bold (double asterixes), etc. For more information on how to format plain text in an RMarkdown document, check out the RMarkdown <a href="https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf?_ga=2.261726157.1753636382.1588487988-401398042.1588487988">cheatsheet</a> and <a href="https://rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf?_ga=2.261726157.1753636382.1588487988-401398042.1588487988">Reference guide</a>.</p>
+</div>
+<div id="further-links-1" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Further links</h2>
+<ul>
+<li>If you require a more extensive description of how to install R and RStudio, click here: <a href="https://rstudio-education.github.io/hopr/starting.html">Hands-on Programming with R – Appendix A</a>, a book by one of the co-authors of R for Data Science.</li>
+<li>If you are already more advanced, you can read more useful stuff on using R and RStudio by two RStudio employees: <a href="https://rstats.wtf/index.html">What they forgot to teach you about R</a></li>
+<li>Hadley Wickham and Garrett Grolemund wrote an <a href="https://r4ds.had.co.nz/workflow-scripts.html">entire chapter</a> in R4DS on scripts – and on <a href="https://r4ds.had.co.nz/r-markdown.html">RMarkdown</a>.<br />
+</li>
+<li>Yihui Xie, J. J. Allaire, and Garrett Grolemund wrote what they call “R Markdown: The Definitive Guide.” It is freely available <a href="https://bookdown.org/yihui/rmarkdown/">online</a>.<br />
+</li>
+<li>An introduction to RMarkdown from RStudio can be found <a href="https://rmarkdown.rstudio.com/lesson-1.html">here</a>.<br />
+</li>
+<li>Yihui Xie published a <a href="https://yihui.org/tinytex/">manual</a> for installing the <code>tinytex</code> package.<br />
+</li>
+<li>If you want to write academic papers using RMarkdown, you need to be able to include references properly. When I decided to do so, I found it sort of complicated. However, I stuck to <a href="https://ikashnitsky.github.io/2019/zotero/">this tutorial</a> and since then it has worked like a charm. More on this in Session #8.</li>
+<li><a href="www.github.com">GitHub</a> might make your daily life and your shared projects decisively easier, especially in connection with RMarkdown. Find an illustration of its potential in <a href="https://www.youtube.com/watch?v=s3JldKoA0zw">this vide</a>.</li>
+</ul>
+</div>
+<div id="references-1" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> References</h2>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Cotton, Richard. 2013. <em>Learning <span>R</span></em>. First Edition. <span>Beijing ; Sebastopol, CA</span>: <span>O’Reilly</span>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. First edition. <span>Sebastopol, CA</span>: <span>O’Reilly</span>.
+</div>
+<div class="csl-entry">
+Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R <span>Markdown</span>: The Definitive Guide</em>. <span>Boca Raton</span>: <span>Taylor &amp; Francis, CRC Press</span>.
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="3">
+<li id="fn3"><p>but feel free to approach me if you want to get some additional resources on the other types.<a href="before-you-start-r-scripts-and-rmarkdown.html#fnref3" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intro-R.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

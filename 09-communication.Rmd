@@ -1,0 +1,15 @@
+# Writing academic papers with `RMarkdown` {#markdown}
+
+## Introduction
+
+When it comes to communicating results, RStudio comes with the `knitr` package and `RMarkdown`. It is practical insofar as it allows you to combine both your code and its results, and the text you write to accompany it. Several output formats are supported, for instance PDF, docx, slideshows, HTML, etc. `RMarkdown` files have the suffix `.Rmd`. 
+
+I have prepared a basic example RMD document and the corresponding PDF (knit using `tinytex`), HTML, and MS WORD versions. You can download the [zip file from my Dropbox](https://www.dropbox.com/s/0kixct6k5jz0ib9/example-rmd.zip?dl=0). I invite you to have a look at the documents and how the RMD file translates to the different output formats.
+
+## Further resources
+
+* The vignette for [`kableExtra`](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+* The [YAML fieldguide](https://cran.r-project.org/web/packages/ymlthis/vignettes/yaml-fieldguide.html)
+* A comprehensive introduction [to the new visual editor](https://rstudio.github.io/visual-markdown-editing/#/intro)
+* An [introduction to \LaTeX formulas](https://www.nature.com/articles/d41586-019-01796-1)
+* A [formula editor](https://latex.codecogs.com/eqneditor/editor.php)

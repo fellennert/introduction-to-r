@@ -1,0 +1,568 @@
+# Exercises
+
+
+
+## Chapter 2
+
+1. Install R and RStudio.
+
+2. Set RStudio up as you wish to. Choose a nice pane layout and theme.
+
+3. Create an RStudio Project for this course.
+
+4. Set up RMarkdown. Write a short text on your expectations for this course. It should at least contain: a header, an image, an unordered list. Knit it to HTML and PDF. Bonus points for including references to papers you would recommend.
+
+5. Install and load the `tidyverse` package. 
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+Solution:
+```{r eval=FALSE}
+install.packages("tidyverse")
+library(tidyverse)
+```
+</details>
+
+## Chapter 3
+
+1. A farmer has 53323 chickens, 1334 cows, and 4323 horses.
+    a. Store them in a vector. Name the elements.
+    b. The animals have bred. There are now 75 per cent more chickens, 30 per cent more cows, and 50 per cent more horses. What is this in absolute numbers? Store the results in a new vector. Round up the results using the `ceiling()` function.
+    c. The farmer has to pay the tax amount x for every 2000th animal of a certain breed. How many times x does she have to pay for each breed (use the `floor()` function)? For which breed does she have to pay the most (you can use the `max()` function for this)?
+2. Store the data from task 6 in a tibble. Name the columns `breed`, `number_timepoint_1`, `number_timepoint_2`, `number of tax units`.
+    a.Which variable should be converted to a factor variable?
+    b. What's the difference in numbers between time point 1 and time point 2? Store the result in a vector named `difference`. 
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+#1
+#a
+animals <- c(chicken = 53323, cows = 1334, horses = 4323)
+
+#b
+bred_animals <- ceiling(animals * c(1.75, 1.3, 1.5))
+
+#c
+taxes <- floor(bred_animals/2000)
+max(taxes)
+
+#2
+animal_tibble <- tibble(
+  breed = names(animals),
+  number_timepoint_1 = animals,
+  number_timepoint_2 = bred_animals,
+  `number of tax units` = taxes
+)
+
+#a
+#breed
+
+#b
+difference <- animal_tibble[["number_timepoint_2"]] - animal_tibble[["number_timepoint_1"]]
+```
+
+</details>
+
+## Chapter 4
+
+Firstly, download and extract [the zip file](https://www.dropbox.com/s/ptnot75sed1lupx/training-files.zip?dl=0). Then…
+
+Read them in using the right functions. Specify the parameters properly. Hints can be found in hints.md. Each file should be stored in an object, names should correspond to the file names.
+
+Bring the data sets into a tidy format. Store the tidy data sets in a new object, named like the former object plus the suffix "_tidy" -- e.g., `books_tidy`. If no tidying is needed, you do not have to create a new object. The pipe operator should be used to connect the different steps.
+
+Note: this is challenging, absolutely. If you have problems, try to google the different functions and think about what the different parameters indicate. If that is to no avail, send me an e-mail. I am very happy to provide you further assistance.
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(readxl)
+
+#read-in
+#books
+books <- read_tsv("books.tsv")
+books <- read_delim("books.txt", delim = "|") #alternatively
+
+#ches
+ches_2017_tidy <- read_csv("ches_2017.csv")
+ches_2017_modified <- read_csv("ches_2017_modified.csv", skip = 4)
+
+#publishers
+publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+  rename(city = place)
+
+#spotify
+spotify2018 <- read_csv("spotify2018.csv")
+
+#tidying
+#books
+books_tidy <- read_delim("books.txt", delim = "|") %>% 
+  separate(col = "author", into= c("author_1", "author_2"), sep = " and ")
+books_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
+  separate_rows(author, sep = c(" and "))
+
+# There also is " with " as a potential separator -- separate() only takes a sep argument of length 1. You could replace " with " with " and " beforehand using `str_replace_all` -- but more on this in Chapter 6
+
+books_really_tidy_rows <- read_delim("books.txt", delim = "|") %>% 
+  mutate(author = str_replace_all(author, pattern = c(" with " = " and "))) %>% 
+  separate_rows(author, sep = c(" and "))
+
+#ches
+ches_2017_tidy <- read_csv("ches_2017.csv")
+ches_2017_modified_tidy <- read_csv("ches_2017_modified.csv", skip = 4) %>%
+  pivot_wider(names_from = variable)
+
+#publishers
+publishers1 <- read_excel("publishers.xlsx", sheet = "publishers_a-l") 
+publishers2 <- read_excel("publishers.xlsx", sheet = "publishers_m-z") %>% 
+  rename(city = place)
+
+publishers_tidy <- bind_rows(publishers1, publishers2) %>% 
+  separate(col = city, into = c("city", "state"), sep=", ")
+
+#spotify
+spotify2018 <- read_csv("spotify2018.csv")
+```
+
+</details>
+
+## Chapter 5
+
+Open the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=0).
+
+1. Find the duplicated movie. How could you go across this? 
+2. Which director has made the longest movie?
+3. What's the highest ranked movie?
+4. Which movie got the most votes?
+5. Which movie had the biggest revenue in 2016?
+6. How much revenue did the movies in the dataset make each year in total?
+7. Filter movies following some conditions:
+    a. More runtime than the average runtime (hint: you could also use `mutate()` before).
+    b. Movies directed by J. J. Abrams.
+    c. More votes than the median of all of the votes.
+    d. The movies which have the most common value (the mode) in terms of rating (`mode()` does exist but will not work in the way you might like it to work -- run the script below and use the `my_mode` function).
+
+```{r eval=FALSE}
+## helper function for mode
+
+my_mode <- function(x){ 
+    ta = table(x)
+    tam = max(ta)
+    if (all(ta == tam))
+         mod = NA
+    else
+         if(is.numeric(x))
+    mod = as.numeric(names(ta)[ta == tam])
+    else
+         mod = names(ta)[ta == tam]
+    return(mod)
+}
+
+```
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+imdb <- read_csv("imdb2006-2016.csv")
+
+#1 
+imdb %>% count(Title) %>% arrange(-n)
+
+#2
+imdb %>% 
+  arrange(-`Runtime (Minutes)`) %>% 
+  slice(1) %>% 
+  select(Director)
+
+#3
+imdb %>% 
+  arrange(Rank) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#4
+imdb %>% 
+  arrange(-Votes) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#5
+imdb %>% 
+  filter(Year == 2016) %>% 
+  arrange(-`Revenue (Millions)`) %>% 
+  slice(1) %>% 
+  select(Title)
+
+#6
+imdb %>% 
+  filter(!is.na(`Revenue (Millions)`)) %>% 
+  group_by(Year) %>% 
+  summarize(total_revenue = sum(`Revenue (Millions)`))
+
+#7a
+imdb %>% 
+  filter(`Runtime (Minutes)` > mean(`Runtime (Minutes)`))
+
+#7b
+imdb %>% 
+  filter(Director == "J.J. Abrams")
+
+#7c
+imdb %>% 
+  filter(Votes > median(Votes))
+
+#7d
+## helper function for mode
+my_mode <- function(x){ 
+    ta = table(x)
+    tam = max(ta)
+    if (all(ta == tam))
+         mod = NA
+    else
+         if(is.numeric(x))
+    mod = as.numeric(names(ta)[ta == tam])
+    else
+         mod = names(ta)[ta == tam]
+    return(mod)
+}
+
+imdb %>% 
+  filter(Rating == my_mode(Rating))
+```
+
+</details>
+
+## Chapter 6
+
+1.Write a regex for Swedish mobile number. Test it with `str_detect("+46 71-738 25 33", "[insert your regex here]")`. 
+2. There are different character classes. Write the regex expression for the character classes alnum (letters and numbers), alpha (letters), digit (digits), lower (lowercase letters), upper (uppercase letters), and space (different sorts of whitespace).
+3. Remember the vector of heights? 
+    a. How can you extract the meters using the negative look behind?
+    b. Bring it into numeric format (i.e., your_solution == c(1.3, 2.01, 3.1)) using regexes and `stringr` commands.
+4. Find all Mercedes in the `mtcars` data set.
+5. Take the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=0) and split the `Genre` column into different columns (hint: look at the `tidyr::separate()` function). How would you do it if `Genre` were a vector using `str_split_fixed()`?
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+#1
+str_detect("+46 71-738 25 33", "\\+46 [0-9]{2}\\-[0-9]{3} [0-9]{2} [0-9]{2}")
+
+#2
+
+
+#3
+heights <- c("1m30cm", "2m01cm", "3m10cm")
+
+#a
+meters <- str_extract(heights, "(?<!m)[0-9]")
+
+#b
+for_test <- str_replace(heights, "(?<=[0-9])m", "\\.") %>% 
+  str_replace("cm", "") %>% 
+  as.numeric() 
+
+for_test == c(1.3, 2.01, 3.1)
+
+#4
+mtcars %>% 
+  rownames_to_column("model") %>% 
+  filter(str_detect(model, "Merc"))
+
+#5
+imdb <- read_csv("imdb2006-2016.csv")
+
+imdb %>% 
+  separate(Genre, sep = ",", into = c("genre_1", "genre_2", "genre_3"))
+
+imdb$Genre %>% 
+  str_split_fixed(pattern = ",", 3)
+```
+
+</details>
+
+## Chapter 7
+
+For now, I will not include too many exercises in here. However, you will have to work with factors extensively when we come to data visualization.
+
+Read in the [ESS file](https://www.dropbox.com/s/c9llcbln6jui1t8/ess2016_ger.csv?dl=0). 
+
+1. Convert the variable `party_vote` into a factor variable called `party_code_fct`. Drop all other variables.
+2. Look at the distribution of the parties; keep the 4 most common ones, all others should be coded to `Other`. Do it using the following three functions. Which of them was the best for the job?
+    a) using `fct_recode()`
+    b) using `fct_collapse()`
+    c) using `fct_lump()`
+3. Reorder the factor levels according to their number of occurrence.
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+```{r eval=FALSE}
+#read file
+ess_2016 <- read_csv("ess2016_ger.csv")
+
+#1 
+ess_w_factor <- ess_2016 %>% 
+  mutate(party_code_fct = as_factor(party_vote)) %>% 
+  select(party_code_fct)
+
+#2
+ess_w_factor %>% 
+  count(party_code_fct) %>% 
+  filter(!is.na(party_code_fct)) %>% 
+  arrange(-n)
+
+#2a
+ess_recoded <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_recode(party_code_fct,
+                                     Other = "AfD",
+                                     Other = "FDP",
+                                     Other = "Andere Partei",
+                                     Other = "Piratenpartei",
+                                     Other = "NPD"))
+
+# levels(ess_recoded$party_code_fct) # for validating that it has worked
+
+#2b
+ess_collapsed <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_collapse(party_code_fct,
+                                       Other = c("AfD", "FDP", "Andere Partei", "Piratenpartei", "NPD")))
+
+# levels(ess_collapsed$party_code_fct) # for validating that it has worked
+
+#2c
+ess_lumped <- ess_w_factor %>% 
+  mutate(party_code_fct = fct_lump(party_code_fct, n = 4))
+
+# levels(ess_collapsed$party_code_fct) # for validating that it has worked
+
+#3
+ess_ordered <- ess_w_factor %>% 
+  count(party_code_fct) %>% 
+  mutate(party_code_fct = fct_reorder(party_code_fct, n))
+
+# levels(ess_ordered$party_code_fct) # for validating that it has worked
+```
+
+</details>
+  
+## Chapter 8
+
+Take the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=0). 
+
+1. Create a descriptive tibble containing the numeric variables which is sort of publishable (i.e., so that you could put it into a `flextable` or `kable` call). No need to discuss the results though.
+2. Does it make sense to use the arithmetic mean? Calculate the median and include it in the results for the numeric variables.
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+
+```{r eval=FALSE}
+library(skimr)
+
+imdb <- read_csv("imdb2006-2016.csv")
+
+#1
+for_table <- imdb %>% 
+  skim() %>% 
+  yank("numeric") %>% 
+  select(Variable = 1,
+         Mean = 4,
+         SD = 5,
+         Minimum = 6,
+         Maximum = 10) %>% 
+  mutate(across(where(is.numeric), ~round(., 1)))
+
+#2
+median_joined <- imdb %>% 
+  summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = c("Variable")
+  ) %>%
+  mutate(value = round(value, 1)) %>% 
+  rename(Median = value) %>% 
+  right_join(for_table)
+```
+
+</details>
+
+## Chapter 9
+
+Take the [IMDb file](https://www.dropbox.com/s/81o3zzdkw737vt0/imdb2006-2016.csv?dl=0).
+
+Try to think about how you could answer the following questions graphically. If you fail, take a look at the hints.
+
+1. Do higher rated movies generate more revenue?
+    a. Plot revenue and rating as a scatter plot. 
+    b. Do you think there is a correlation? How could you make stronger claims about it? Maybe even graphically? 
+    c. Interpret the plot. 
+    d. Add a nice title and labels. 
+2. How evenly are the different years' movies represented? (Why would it be pointless to make claims about the productivity of directors?) 
+    a. Make a bar plot. 
+    b. Interpret the plot. 
+    c. Add a nice title and labels. 
+3. Which year was the best for cinema fetishists? (When could they watch the most highest rated movies?)
+    a. Make a box plot. 
+    b. Interpret the plot. 
+    c. Add a nice title and labels. 
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+
+
+```{r eval=FALSE}
+imdb <- read_csv("imdb2006-2016.csv")
+
+#1
+imdb %>% 
+  ggplot() +
+  geom_point(aes(Rating, `Revenue (Millions)`)) +
+  geom_smooth(aes(Rating, `Revenue (Millions)`), method = "lm", se = FALSE) +
+  labs(title = "Fig. 1: Rating and Revenue; scatter plot with regression line")
+
+#2
+imdb %>% 
+  ggplot() +
+  geom_bar(aes(x = Year)) +
+  scale_x_continuous(breaks = 2006:2016) +
+  labs(y = "N",
+       title = "Fig. 2: Number of movies in the IMDb data set per year ")
+#Not evenly at all!
+#It, of course, wouldn't make sense because we're only having a sample of the data here.
+
+#3
+imdb %>% 
+  ggplot() +
+  geom_boxplot(aes(x = as_factor(Year), y = Rating)) +
+  labs(title = "Fig. 3: Boxplots depicting the movies' rating",
+       x = "Year")
+```
+
+</details>
+
+## Chapter 10
+
+No exercises for RMarkdown. If you want to, you can try to write the next report you have to hand in or something similar in RMarkdown. Hit me up for help and feedback whenever.
+
+## Chapter 11
+
+1. Create a new vector of type character and length 3. Try to fill it with "I" "accomplished" "task2" using a for loop.
+2. Create proper names for the output of the following chunk (i.e., so that the last two columns' names begin with "mean_"). 
+    a) using a `for` loop.
+    b) using `map` and an anonymous function.
+```{r eval=FALSE}
+summarize_mean <- function(data, vars) {
+  data %>% summarize(n = n(), across({{ vars }}, mean))
+}
+
+means_tbl <- mtcars %>% 
+  group_by(cyl) %>% 
+  summarize_mean(all_of(c("hp", "mpg"))) %>% 
+  glimpse()
+```
+3. Use a `for` loop to compute the `median` of every numeric column in `mtcars`. Store it in a vector called `median_values`. Every element should have the name of the variable and the prefix `median_`.
+4. Try to store the results of the following `pmap()` call in a tibble. First call is in first column, second one in the second one, etc. How could you go across this? 
+5. Create a `rescale0to1` function. 
+6. Play 10 rounds of Roulette and store the results in a tibble 
+    a. using a `for` loop
+    b. using a `while` loop
+    c. using `map()` (e.g., by storing them in a vector and then calling `enframe()`)
+7. Extend the Roulette function (colors!). You will need a lot of if...else. Try to split it up into several functions (e.g., `determine_color`, `determine_return`, etc.). Make it "bullet-proof" -- how should you go across cases where people bet on a number and a color? 
+You can use the following code chunk to determine the values and their colors:
+
+```{r eval=FALSE}
+red_fields <- c(32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3)
+black_fields <- setdiff(1:36, red_fields)
+zero <- 0
+```
+
+<details>
+  <summary>Solution. Click to expand!</summary>
+  
+```{r eval=FALSE}
+#1
+raw_vec <- c("I", "accomplished", "task3")
+fill_vec <- character(length = 3L)
+
+for (i in seq_along(raw_vec)) {
+  fill_vec[i] <- raw_vec[i]
+}
+
+#2
+#a
+for (i in 3:4) {
+  colnames(means_tbl)[i] <- str_c("mean_", colnames(means_tbl)[i])
+}
+#b
+colnames(means_tbl)[3:4] <- map_chr(colnames(means_tbl)[3:4], ~str_c("mean_", .x))
+
+#3
+median_values <- numeric(length = 11L)
+for (i in seq_along(mtcars)) {
+  median_values[i] <- median(mtcars[ ,i], na.rm = TRUE)
+}
+
+set_names(median_values, str_c("median_", colnames(mtcars)))
+
+#4
+tibble(
+  n = 10,
+  mean = 1:10,
+  sd = 0.5
+) %>% 
+  pmap(rnorm) %>% 
+  bind_cols()
+
+#5
+rescale0to1 <- function(x) {
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x. na.rm = TRUE))
+}
+
+#6
+play_roulette_basic <- function(bet = 1, number) {
+  if (number > 36) stop("You can only bet on numbers between 0 and 36.")
+  draw <- sample(0:36, 1)
+  if (number == draw) {
+    return(str_c("Nice, you won", as.character(bet * 36), "Dollars", sep = " "))
+  } else {
+    return("I'm sorry, you lost.")
+  }
+}
+
+#a
+results_tbl_for <- tibble(
+  result = character(length = 10)
+)
+for (i in seq_along(results_vec)) {
+  results_tbl_for$result[[i]] <- play_roulette_basic(1, 1)
+}
+
+#b
+results_tbl_while <- tibble(
+  result = character(length = 10)
+)
+
+indicator <- 0
+
+while (indicator < 10) {
+  indicator <- indicator + 1
+  results_tbl_while$result[[indicator]] <- play_roulette_basic(1, 1)
+}
+
+#c 
+results_tbl_map <- map_chr(1:10, play_roulette_basic, n = 1) %>%
+  enframe(name = NULL, value = "result")
+
+#7 to be done later
+```
+
+</details>
+  

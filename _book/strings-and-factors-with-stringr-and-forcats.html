@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Strings and factors with stringr and forcats | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Strings and factors with stringr and forcats | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Strings and factors with stringr and forcats | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="string-manipulation-with-stringr-and-regular-expressions.html"/>
+<link rel="next" href="visualizations-with-ggplot2.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+<li class="chapter" data-level="1.2.4" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.2.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.3</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+<li class="chapter" data-level="2.5.3" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.5.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intro-to-r.html"><a href="intro-to-r.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intro-to-r.html"><a href="intro-to-r.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intro-to-r.html"><a href="intro-to-r.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intro-to-r.html"><a href="intro-to-r.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intro-to-r.html"><a href="intro-to-r.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intro-to-r.html"><a href="intro-to-r.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intro-to-r.html"><a href="intro-to-r.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intro-to-r.html"><a href="intro-to-r.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intro-to-r.html"><a href="intro-to-r.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="working-with-data.html"><a href="working-with-data.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="working-with-data.html"><a href="working-with-data.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="working-with-data.html"><a href="working-with-data.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="working-with-data.html"><a href="working-with-data.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="working-with-data.html"><a href="working-with-data.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="working-with-data.html"><a href="working-with-data.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="working-with-data.html"><a href="working-with-data.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="working-with-data.html"><a href="working-with-data.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="working-with-data.html"><a href="working-with-data.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="working-with-data.html"><a href="working-with-data.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="working-with-data.html"><a href="working-with-data.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="working-with-data.html"><a href="working-with-data.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="working-with-data.html"><a href="working-with-data.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="working-with-data.html"><a href="working-with-data.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="working-with-data.html"><a href="working-with-data.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="working-with-data.html"><a href="working-with-data.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="working-with-data.html"><a href="working-with-data.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="working-with-data.html"><a href="working-with-data.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="working-with-data.html"><a href="working-with-data.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="working-with-data.html"><a href="working-with-data.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="manipulation-with-dplyr.html"><a href="manipulation-with-dplyr.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="string-manipulation-with-stringr-and-regular-expressions.html"><a href="string-manipulation-with-stringr-and-regular-expressions.html#structure-of-regexes"><i class="fa fa-check"></i><b>6.2.1</b> Structure of regexes</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html"><i class="fa fa-check"></i><b>7</b> Strings and factors with <code>stringr</code> and <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#string-manipulation-with-stringr"><i class="fa fa-check"></i><b>7.1</b> String manipulation with <code>stringr</code></a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#basic-manipulations-1"><i class="fa fa-check"></i><b>7.1.1</b> Basic manipulations</a></li>
+<li class="chapter" data-level="7.1.2" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#regular-expressions-1"><i class="fa fa-check"></i><b>7.1.2</b> Regular expressions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#factors-with-forcats"><i class="fa fa-check"></i><b>7.2</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#creating-a-factor"><i class="fa fa-check"></i><b>7.2.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2.2" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2.2</b> Some basic operations</a></li>
+<li class="chapter" data-level="7.2.3" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#further-links-5"><i class="fa fa-check"></i><b>7.2.3</b> Further links</a></li>
+<li class="chapter" data-level="7.2.4" data-path="strings-and-factors-with-stringr-and-forcats.html"><a href="strings-and-factors-with-stringr-and-forcats.html#further-links-6"><i class="fa fa-check"></i><b>7.2.4</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="visualizations-with-ggplot2.html"><a href="visualizations-with-ggplot2.html"><i class="fa fa-check"></i><b>8</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="visualizations-with-ggplot2.html"><a href="visualizations-with-ggplot2.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>8.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="visualizations-with-ggplot2.html"><a href="visualizations-with-ggplot2.html#the-layers"><i class="fa fa-check"></i><b>8.1.1</b> The layers</a></li>
+<li class="chapter" data-level="8.1.2" data-path="visualizations-with-ggplot2.html"><a href="visualizations-with-ggplot2.html#making-them-publishable"><i class="fa fa-check"></i><b>8.1.2</b> Making them “publishable”</a></li>
+<li class="chapter" data-level="8.1.3" data-path="visualizations-with-ggplot2.html"><a href="visualizations-with-ggplot2.html#further-readings-1"><i class="fa fa-check"></i><b>8.1.3</b> Further readings</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="writing-academic-papers-with-rmarkdown.html"><a href="writing-academic-papers-with-rmarkdown.html"><i class="fa fa-check"></i><b>9</b> Writing academic papers with <code>RMarkdown</code></a></li>
+<li class="chapter" data-level="10" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html"><i class="fa fa-check"></i><b>10</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#flow-control"><i class="fa fa-check"></i><b>10.1</b> Flow control</a></li>
+<li class="chapter" data-level="10.2" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#functions"><i class="fa fa-check"></i><b>10.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#writing-your-own-functions"><i class="fa fa-check"></i><b>10.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="10.2.2" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#an-example-roulette"><i class="fa fa-check"></i><b>10.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="10.2.3" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>10.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="10.2.4" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#further-readings-2"><i class="fa fa-check"></i><b>10.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#iteration"><i class="fa fa-check"></i><b>10.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#for-loops"><i class="fa fa-check"></i><b>10.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="10.3.2" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#purrrmap"><i class="fa fa-check"></i><b>10.3.2</b> purrr::map()</a></li>
+<li class="chapter" data-level="10.3.3" data-path="functional-programming-and-iterations.html"><a href="functional-programming-and-iterations.html#further-links-7"><i class="fa fa-check"></i><b>10.3.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="strings-and-factors-with-stringr-and-forcats" class="section level1" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Strings and factors with <code>stringr</code> and <code>forcats</code></h1>
+<p>When analyzing data, a significant number of variables will be in some sort of text format. When you want to manipulate those variables, an easy approach would be exporting the data to MS Excel and then just perform those manipulations by hand. This is very time-consuming, though, and, hence, I rather recommend the R way, which scales well and works fast for data sets of varying sizes.</p>
+<p>Moreover, a common example for textual data is categorical data. An example for this would be the survey question about a person’s marital status (which might take “married,” “widowed,” “separated,” “divorced,” “single”), hence a variable which can take a limited number of values.</p>
+<div id="string-manipulation-with-stringr" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> String manipulation with <code>stringr</code></h2>
+<p>Quick reminder: a string is an element of a character vector and can be created by simply wrapping some text in backticks:</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb334-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;Hi, how are you doing?&quot;</span></span>
+<span id="cb334-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb334-2" aria-hidden="true" tabindex="-1"></a>vector_of_strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Hi, how are you doing?&quot;</span>, <span class="st">&quot;I&#39;m doing well, HBY?&quot;</span>, <span class="st">&quot;Me too, thanks for asking.&quot;</span>)</span></code></pre></div>
+<p>(Question: how would you go about quotes in strings?)</p>
+<p>The <code>stringr</code> package contains a multitude of commands (49 in total) which can be used to achieve a couple of things: manipulating character vectors; operations which are sensitive to different locales; matching patterns. Basically, those goals can also be achieved with base R functions, but <code>stringr</code>’s advantage is its consistency. The makers of <code>stringr</code> describe it as</p>
+<blockquote>
+<p>A consistent, simple and easy to use set of wrappers around the fantastic ‘stringi’ package. All function and argument names (and positions) are consistent, all functions deal with “NA”’s and zero length vectors in the same way, and the output from one function is easy to feed into the input of another.</p>
+</blockquote>
+<p>Every <code>stringr</code> function starts with <code>str_</code> – which facilitates finding the proper command: just type <code>str_</code> and RStudio’s auto-suggest function should take care of the rest (if it doesn’t pop up by itself, you can trigger it by hitting the tab-key). Also, they take a vector of strings as their first argument, which facilitates using them in a <code>%&gt;%</code>-pipeline and adding them to a <code>mutate()</code>-call.</p>
+<p>One important component of <code>stringr</code> functions is regular expressions which will be introduced later as well.</p>
+<div id="basic-manipulations-1" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> Basic manipulations</h3>
+<p>In the following, I will introduce you to a number of different operations that can be performed on strings.</p>
+<div id="changing-the-case-of-the-words-1" class="section level4" number="7.1.1.1">
+<h4><span class="header-section-number">7.1.1.1</span> Changing the case of the words</h4>
+<p>A basic operation is changing words’ case.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb335-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_lower</span>(vector_of_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;hi, how are you doing?&quot;     &quot;i&#39;m doing well, hby?&quot;      
+## [3] &quot;me too, thanks for asking.&quot;</code></pre>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_upper</span>(vector_of_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;HI, HOW ARE YOU DOING?&quot;     &quot;I&#39;M DOING WELL, HBY?&quot;      
+## [3] &quot;ME TOO, THANKS FOR ASKING.&quot;</code></pre>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb339-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_title</span>(vector_of_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;Hi, How Are You Doing?&quot;     &quot;I&#39;m Doing Well, Hby?&quot;      
+## [3] &quot;Me Too, Thanks For Asking.&quot;</code></pre>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_sentence</span>(vector_of_strings)</span></code></pre></div>
+<pre><code>## [1] &quot;Hi, how are you doing?&quot;     &quot;I&#39;m doing well, hby?&quot;      
+## [3] &quot;Me too, thanks for asking.&quot;</code></pre>
+</div>
+<div id="deternining-a-strings-length-1" class="section level4" number="7.1.1.2">
+<h4><span class="header-section-number">7.1.1.2</span> Deternining a string’s length</h4>
+<p>Determining the string’s number of characters goes as follows:</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_length</span>(vector_of_strings)</span></code></pre></div>
+<pre><code>## [1] 22 20 26</code></pre>
+</div>
+<div id="extracting-particular-characters-1" class="section level4" number="7.1.1.3">
+<h4><span class="header-section-number">7.1.1.3</span> Extracting particular characters</h4>
+<p>Characters can be extracted (by position) using <code>str_sub</code></p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(vector_of_strings, <span class="at">start =</span> <span class="dv">1</span>, <span class="at">end =</span> <span class="dv">5</span>) <span class="co"># extracting first to fifth character</span></span></code></pre></div>
+<pre><code>## [1] &quot;Hi, h&quot; &quot;I&#39;m d&quot; &quot;Me to&quot;</code></pre>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(vector_of_strings, <span class="at">start =</span> <span class="sc">-</span><span class="dv">5</span>, <span class="at">end =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="co"># extracting fifth-to-last to last character</span></span></code></pre></div>
+<pre><code>## [1] &quot;oing?&quot; &quot; HBY?&quot; &quot;king.&quot;</code></pre>
+<p>You can also use <code>str_sub()</code> to replace strings. E.g., to replace the last character by a full stop, you can do the following:</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb349-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(vector_of_strings, <span class="at">start =</span> <span class="sc">-</span><span class="dv">1</span>) <span class="ot">&lt;-</span> <span class="st">&quot;.&quot;</span></span>
+<span id="cb349-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb349-2" aria-hidden="true" tabindex="-1"></a>vector_of_strings</span></code></pre></div>
+<pre><code>## [1] &quot;Hi, how are you doing.&quot;     &quot;I&#39;m doing well, HBY.&quot;      
+## [3] &quot;Me too, thanks for asking.&quot;</code></pre>
+<p>However, in everyday use you would probably go with <code>str_replace()</code> and regular expressions.</p>
+</div>
+<div id="concatenating-strings-1" class="section level4" number="7.1.1.4">
+<h4><span class="header-section-number">7.1.1.4</span> Concatenating strings</h4>
+<p>Similar to how <code>c()</code> puts together different elements (or vectors of length 1) into a single vector, <code>str_c()</code> can be used to concatenate several strings into a single string. This can, for instance, be used to write some birthday invitations.</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb351-1" aria-hidden="true" tabindex="-1"></a>names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Inger&quot;</span>, <span class="st">&quot;Peter&quot;</span>, <span class="st">&quot;Kalle&quot;</span>, <span class="st">&quot;Ingrid&quot;</span>)</span>
+<span id="cb351-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb351-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb351-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb351-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_c</span>(<span class="st">&quot;Hi&quot;</span>, names, <span class="st">&quot;I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;HiIngerI hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [2] &quot;HiPeterI hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [3] &quot;HiKalleI hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [4] &quot;HiIngridI hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot;</code></pre>
+<p>Well, this looks kind of ugly, as there are no spaces and commas are lacking as well. You can fix that by determining a separator using the <code>sep</code> argument.</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb353-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_c</span>(<span class="st">&quot;Hi&quot;</span>, names, <span class="st">&quot;I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Hi, Inger, I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [2] &quot;Hi, Peter, I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [3] &quot;Hi, Kalle, I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot; 
+## [4] &quot;Hi, Ingrid, I hope you&#39;re doing well. As per this letter, I invite you to my birthday party.&quot;</code></pre>
+<p>You could also collapse the strings contained in a vector together into one single string using the <code>collapse</code> argument.</p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb355-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_c</span>(names, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Inger, Peter, Kalle, Ingrid&quot;</code></pre>
+<p>This can also be achieved using the <code>str_flatten()</code> function.</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_flatten</span>(names, <span class="at">collapse =</span> <span class="st">&quot;, &quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Inger, Peter, Kalle, Ingrid&quot;</code></pre>
+</div>
+<div id="repetition-1" class="section level4" number="7.1.1.5">
+<h4><span class="header-section-number">7.1.1.5</span> Repetition</h4>
+<p>Repeating (or duplicating) strings is performed using <code>str_dup()</code>. The function takes two arguments: the string to be duplicated and the number of times.</p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb359-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_dup</span>(<span class="st">&quot;felix&quot;</span>, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;felixfelix&quot;</code></pre>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb361-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_dup</span>(<span class="st">&quot;felix&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;felix&quot;           &quot;felixfelix&quot;      &quot;felixfelixfelix&quot;</code></pre>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_dup</span>(names, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;IngerInger&quot;   &quot;PeterPeter&quot;   &quot;KalleKalle&quot;   &quot;IngridIngrid&quot;</code></pre>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb365-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_dup</span>(names, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Inger&quot;                    &quot;PeterPeter&quot;              
+## [3] &quot;KalleKalleKalle&quot;          &quot;IngridIngridIngridIngrid&quot;</code></pre>
+</div>
+<div id="removing-unnecessary-whitespaces-1" class="section level4" number="7.1.1.6">
+<h4><span class="header-section-number">7.1.1.6</span> Removing unnecessary whitespaces</h4>
+<p>Often text contains unnecessary whitespaces.</p>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb367-1" aria-hidden="true" tabindex="-1"></a>unnecessary_whitespaces <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;    on the left&quot;</span>, <span class="st">&quot;on the right    &quot;</span>, <span class="st">&quot;    on both sides   &quot;</span>, <span class="st">&quot;   literally    everywhere  &quot;</span>)</span></code></pre></div>
+<p>Removing the ones at the beginning or the end of a string can be accomplished using <code>str_trim()</code>.</p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb368-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trim</span>(unnecessary_whitespaces, <span class="at">side =</span> <span class="st">&quot;left&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;on the left&quot;               &quot;on the right    &quot;         
+## [3] &quot;on both sides   &quot;          &quot;literally    everywhere  &quot;</code></pre>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trim</span>(unnecessary_whitespaces, <span class="at">side =</span> <span class="st">&quot;right&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;    on the left&quot;            &quot;on the right&quot;              
+## [3] &quot;    on both sides&quot;          &quot;   literally    everywhere&quot;</code></pre>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trim</span>(unnecessary_whitespaces, <span class="at">side =</span> <span class="st">&quot;both&quot;</span>) <span class="co"># the default option</span></span></code></pre></div>
+<pre><code>## [1] &quot;on the left&quot;             &quot;on the right&quot;           
+## [3] &quot;on both sides&quot;           &quot;literally    everywhere&quot;</code></pre>
+<p><code>str_trim()</code> could not fix the last string though, where unnecessary whitespaces were also present in between words. Here, <code>str_squish</code> is more appropriate. It removes leading or trailing whitespaces as well as duplicated ones in between words.</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_squish</span>(unnecessary_whitespaces)</span></code></pre></div>
+<pre><code>## [1] &quot;on the left&quot;          &quot;on the right&quot;         &quot;on both sides&quot;       
+## [4] &quot;literally everywhere&quot;</code></pre>
+</div>
+</div>
+<div id="regular-expressions-1" class="section level3" number="7.1.2">
+<h3><span class="header-section-number">7.1.2</span> Regular expressions</h3>
+<p>Up to now, you have been introduced to the more basic functions of the <code>stringr</code> package. Those are useful, for sure, yet limited. However, to make use of the full potential of <code>stringr</code>, you will first have to get acquainted to regular expressions (also often abbreviated as “regex” with plural “regexes”).</p>
+<p>Those regular expressions are patterns that can be used to describe certain strings. Hence, if you want to replace certain words with another one, you can write the proper regex and it will identify the strings you want to replace and the <code>stringr</code> function (i.e., <code>str_replace()</code>) will take care of the rest. Exemplary use cases of regexes are the identification of phone numbers, email addresses, or whether a password you choose on a web page consists of enough characters, an upper-case character, and at least one special character.</p>
+<p>Before you dive into regexes, beware that they are quite complicated in the beginning (honestly, I was quite overwhelmed when I encountered them first). Yet, mastering them is very rewarding and will definitely pay off in the future.</p>
+<div id="structure-of-regexes-1" class="section level4" number="7.1.2.1">
+<h4><span class="header-section-number">7.1.2.1</span> Structure of regexes</h4>
+<div id="literal-characters-1" class="section level5" number="7.1.2.1.1">
+<h5><span class="header-section-number">7.1.2.1.1</span> Literal characters</h5>
+<p>The most basic regex patterns consist of literal characters only. <code>str_view()</code> tells you which parts of a string match a pattern is present in the element.</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb376-1" aria-hidden="true" tabindex="-1"></a>five_largest_cities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Stockholm&quot;</span>, <span class="st">&quot;Göteborg&quot;</span>, <span class="st">&quot;Malmö&quot;</span>, <span class="st">&quot;Uppsala&quot;</span>, <span class="st">&quot;Västerås&quot;</span>)</span>
+<span id="cb376-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb376-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb376-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb376-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;stockholm&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-bb3486349adfa5d821dc" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb3486349adfa5d821dc">{"x":{"html":"<ul>\n  <li>Stockholm<\/li>\n  <li>Göteborg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<p>Note that regexes are case-sensitive.</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb377-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;Stockholm&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-44474b3e8cd160f85a98" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-44474b3e8cd160f85a98">{"x":{"html":"<ul>\n  <li><span class='match'>Stockholm<\/span><\/li>\n  <li>Göteborg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<p>They also match parts of words:</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb378-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;borg&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-2514ce28ae593bde0f73" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2514ce28ae593bde0f73">{"x":{"html":"<ul>\n  <li>Stockholm<\/li>\n  <li>Göte<span class='match'>borg<\/span><\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<p>Moreover, they are “greedy,” they only match the first occurrence (in “Stockholm”):</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-5d05eac75555269eefd0" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5d05eac75555269eefd0">{"x":{"html":"<ul>\n  <li>St<span class='match'>o<\/span>ckholm<\/li>\n  <li>Göteb<span class='match'>o<\/span>rg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<p>This can be addressed in the <code>stringr</code> package by using <code>str_._all()</code> function – but more on that later.</p>
+<p>Every letter of the English alphabet can serve as a literal character. Those literal characters <em>match themselves</em>. This is, however, not the case with the other sort of characters, so-called metacharacters.</p>
+</div>
+<div id="metacharacters-1" class="section level5" number="7.1.2.1.2">
+<h5><span class="header-section-number">7.1.2.1.2</span> Metacharacters</h5>
+<p>When using regexes, the following characters are considered metacharacters and have a special meaning:</p>
+<p><code>. \ | ( ) { } [ ] ^ $ - * + ?</code></p>
+<div id="the-wildcard-1" class="section level6" number="7.1.2.1.2.1">
+<h6><span class="header-section-number">7.1.2.1.2.1</span> The wildcard</h6>
+<p>Did you notice how I used the dot to refer to the entirety of the <code>str_._all()</code> functions? This is basically what the <code>.</code> meta-character does: it matches every character except for a new line. The first call extracts all function names from the <code>stringr</code> package, the second one shows the matches (i.e., the elements of the vector where it can find the pattern).</p>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb380-1" aria-hidden="true" tabindex="-1"></a>stringr_functions <span class="ot">&lt;-</span> <span class="fu">ls</span>(<span class="st">&quot;package:stringr&quot;</span>)</span>
+<span id="cb380-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb380-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb380-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb380-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_._all&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [49] FALSE FALSE FALSE FALSE</code></pre>
+<p>Well, as you can see, there are none. This is due to the fact that the <code>.</code> can only replace one character. We need some sort of multiplier to find them. The ones available are:</p>
+<ul>
+<li><code>?</code> – zero or one</li>
+<li><code>*</code> – zero or more</li>
+<li><code>+</code> – one or more</li>
+<li><code>{n}</code> – exactly n</li>
+<li><code>{n,}</code> – n or more</li>
+<li><code>{n,m}</code> – between n and m</li>
+</ul>
+<p>In our case, the appropriate one is <code>+</code>:</p>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb382-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_.+_all&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [13] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
+## [25]  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+## [49] FALSE FALSE FALSE FALSE</code></pre>
+<p>However, if you want to match the character dot? This probkem might arise when searching for clock time. A naive regex might look like this:</p>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb384-1" aria-hidden="true" tabindex="-1"></a>vectors_with_time <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;13500&quot;</span>, <span class="st">&quot;13M00&quot;</span>, <span class="st">&quot;13.00&quot;</span>)</span>
+<span id="cb384-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb384-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb384-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb384-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13.00&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] TRUE TRUE TRUE</code></pre>
+<p>Yet, it matches everything. We need some sort of literal dot. Here, the escape character <code>\</code> comes in handy. By putting it in front of the metacharacter, it does no longer has its special meaning, and is interpreted as a literal character. This procedure is referred to as “escaping.” Note that you will need to escape <code>\</code> as well.</p>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb386-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13</span><span class="sc">\\</span><span class="st">.00&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] FALSE FALSE  TRUE</code></pre>
+</div>
+<div id="sets-of-characters-1" class="section level6" number="7.1.2.1.2.2">
+<h6><span class="header-section-number">7.1.2.1.2.2</span> Sets of characters</h6>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="factors-with-forcats" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Factors with <code>forcats</code></h2>
+<p>Factors are used in R to represent categorical data. In the following, I will briefly introduce you to the <code>forcats</code> package (nice anagram, Hadley!). Factors are augmented vectors which build upon integers. If you want to learn more about them, consider reading <a href="https://peerj.com/preprints/3163/">this paper</a>.</p>
+<div id="creating-a-factor" class="section level3" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> Creating a factor</h3>
+<p>You can create a factor in two manners.</p>
+<ol style="list-style-type: decimal">
+<li>Take a character vector and coerce it to a factor</li>
+</ol>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb388-1" aria-hidden="true" tabindex="-1"></a>parties <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;AfD&quot;</span>, <span class="st">&quot;CDU&quot;</span>, <span class="st">&quot;CSU&quot;</span>, <span class="st">&quot;FDP&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Leftists&quot;</span>, <span class="st">&quot;SPD&quot;</span>)</span>
+<span id="cb388-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb388-2" aria-hidden="true" tabindex="-1"></a>parties_fct <span class="ot">&lt;-</span> <span class="fu">as_factor</span>(parties)</span>
+<span id="cb388-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb388-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb388-4" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(parties_fct)</span></code></pre></div>
+<pre><code>## [1] &quot;integer&quot;</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Create it from scratch by providing levels and a vector respectively</li>
+</ol>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb390-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb390-1" aria-hidden="true" tabindex="-1"></a>party_sample <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sample</span>(parties, <span class="dv">49</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="st">&quot;CUD&quot;</span>)</span>
+<span id="cb390-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb390-2" aria-hidden="true" tabindex="-1"></a><span class="fu">factor</span>(party_sample, <span class="at">levels =</span> parties)</span></code></pre></div>
+<pre><code>##  [1] FDP      Leftists Leftists AfD      CDU      CSU      Greens   CSU     
+##  [9] CSU      AfD      FDP      AfD      AfD      Greens   CSU      CDU     
+## [17] SPD      CDU      AfD      Leftists CSU      FDP      Leftists AfD     
+## [25] CSU      SPD      Greens   FDP      SPD      CDU      Greens   SPD     
+## [33] AfD      AfD      CDU      SPD      CSU      FDP      Greens   SPD     
+## [41] Greens   CSU      Leftists AfD      CDU      Greens   Greens   FDP     
+## [49] SPD      &lt;NA&gt;    
+## Levels: AfD CDU CSU FDP Greens Leftists SPD</code></pre>
+<p>If you want to access the levels, use <code>levels()</code></p>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb392-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct)</span></code></pre></div>
+<pre><code>## [1] &quot;AfD&quot;      &quot;CDU&quot;      &quot;CSU&quot;      &quot;FDP&quot;      &quot;Greens&quot;   &quot;Leftists&quot; &quot;SPD&quot;</code></pre>
+</div>
+<div id="some-basic-operations" class="section level3" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Some basic operations</h3>
+<p>I will have a further look into factors using data on the presidential elections in the U.S.</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb394-1" aria-hidden="true" tabindex="-1"></a>election_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/pres16results.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb394-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb394-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb394-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb394-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glimpse</span>()</span></code></pre></div>
+<pre><code>## Rows: 18475 Columns: 9</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (5): county, fips, cand, st, lead
+## dbl (4): pct_report, votes, total_votes, pct</code></pre>
+<pre><code>## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre><code>## Rows: 18,007
+## Columns: 9
+## $ county      &lt;chr&gt; &quot;Los Angeles County&quot;, &quot;Los Angeles County&quot;, &quot;Los Angeles C…
+## $ fips        &lt;chr&gt; &quot;6037&quot;, &quot;6037&quot;, &quot;6037&quot;, &quot;6037&quot;, &quot;6037&quot;, &quot;17031&quot;, &quot;17031&quot;, …
+## $ cand        &lt;chr&gt; &quot;Hillary Clinton&quot;, &quot;Donald Trump&quot;, &quot;Gary Johnson&quot;, &quot;Jill S…
+## $ st          &lt;chr&gt; &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;CA&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;IL&quot;, &quot;TX&quot;…
+## $ pct_report  &lt;dbl&gt; 1.0000, 1.0000, 1.0000, 1.0000, 1.0000, 0.9746, 0.9746, 0.…
+## $ votes       &lt;dbl&gt; 1654626, 542591, 56905, 46682, 13471, 1528582, 440213, 559…
+## $ total_votes &lt;dbl&gt; 2314275, 2314275, 2314275, 2314275, 2314275, 2055215, 2055…
+## $ pct         &lt;dbl&gt; 0.714965162, 0.234453987, 0.024588694, 0.020171328, 0.0058…
+## $ lead        &lt;chr&gt; &quot;Hillary Clinton&quot;, &quot;Hillary Clinton&quot;, &quot;Hillary Clinton&quot;, &quot;…</code></pre>
+<p>Which variables should be converted to factors? – <code>county</code>, <code>cand</code>, <code>st</code>, <code>lead</code>.</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="ot">&lt;-</span> election_data <span class="sc">%&gt;%</span> </span>
+<span id="cb399-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">county =</span> <span class="fu">as_factor</span>(county),</span>
+<span id="cb399-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">candidate =</span> <span class="fu">as_factor</span>(cand),</span>
+<span id="cb399-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">state =</span> <span class="fu">as_factor</span>(st),</span>
+<span id="cb399-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">lead =</span> <span class="fu">as_factor</span>(lead)) <span class="sc">%&gt;%</span> </span>
+<span id="cb399-6"><a href="strings-and-factors-with-stringr-and-forcats.html#cb399-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, candidate, state, pct_report<span class="sc">:</span>pct, lead)</span></code></pre></div>
+<div id="reordering-factors" class="section level4" number="7.2.2.1">
+<h4><span class="header-section-number">7.2.2.1</span> Reordering factors</h4>
+<p>Sometimes you want to reorder factors – for instance, when you want to create plots. (Note: you will learn more on plots in the next session on data visualization)</p>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb400-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb400-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb400-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb400-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb400-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">%&gt;%</span> </span>
+<span id="cb400-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb400-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb400-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb400-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-150-1.png" width="672" /></p>
+<p>Two orders would make sense: alphabetical and according to their number of votes. <code>fct_reorder()</code> takes another variable and orders the factor according to it.</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span></span>
+<span id="cb401-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb401-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">%&gt;%</span> </span>
+<span id="cb401-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes)) <span class="sc">%&gt;%</span> </span>
+<span id="cb401-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb401-6"><a href="strings-and-factors-with-stringr-and-forcats.html#cb401-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-151-1.png" width="672" /></p>
+<p>If you want to have it ordered the other way round, multiply the ordering variable with -1:</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb402-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb402-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">%&gt;%</span> </span>
+<span id="cb402-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes<span class="sc">*</span>(<span class="sc">-</span><span class="dv">1</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb402-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb402-6"><a href="strings-and-factors-with-stringr-and-forcats.html#cb402-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-152-1.png" width="672" /></p>
+<p>You could also achieve this by calling <code>fct_rev()</code> afterwards: it reverses the order of the factor.</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb403-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">%&gt;%</span> </span>
+<span id="cb403-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">sum_votes =</span> <span class="fu">sum</span>(votes)) <span class="sc">%&gt;%</span> </span>
+<span id="cb403-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">fct_reorder</span>(state, sum_votes),</span>
+<span id="cb403-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">state =</span> <span class="fu">fct_rev</span>(state)) <span class="sc">%&gt;%</span> </span>
+<span id="cb403-6"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sum_votes, <span class="at">y =</span> state)) <span class="sc">+</span></span>
+<span id="cb403-7"><a href="strings-and-factors-with-stringr-and-forcats.html#cb403-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+<p>If you want to do bar plots, which you can use to depict the frequency of a value, you can order them according to the frequency they appear in using <code>fct_infreq()</code>:</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb404-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb404-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb404-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lead =</span> lead <span class="sc">%&gt;%</span> <span class="fu">fct_infreq</span>() <span class="sc">%&gt;%</span> <span class="fu">fct_rev</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb404-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb404-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> lead)) <span class="sc">+</span></span>
+<span id="cb404-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb404-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_bar</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-154-1.png" width="672" /></p>
+</div>
+<div id="modifying-levels" class="section level4" number="7.2.2.2">
+<h4><span class="header-section-number">7.2.2.2</span> Modifying levels</h4>
+<p>Remember the first factor? You need to put some graphs together and decide that you would rather like to use the original German names for the parties. Go for <code>fct_recode()</code>.</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb405-1" aria-hidden="true" tabindex="-1"></a>parties_fct_ger <span class="ot">&lt;-</span> <span class="fu">fct_recode</span>(parties_fct,</span>
+<span id="cb405-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb405-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Buendnis90/Die Gruenen&quot;</span> <span class="ot">=</span> <span class="st">&quot;Greens&quot;</span>, </span>
+<span id="cb405-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb405-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Die Linke&quot;</span> <span class="ot">=</span> <span class="st">&quot;Leftists&quot;</span></span>
+<span id="cb405-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb405-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Damn, now the levels are not in alphabetical order anymore.</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct_ger)</span></code></pre></div>
+<pre><code>## [1] &quot;AfD&quot;                    &quot;CDU&quot;                    &quot;CSU&quot;                   
+## [4] &quot;FDP&quot;                    &quot;Buendnis90/Die Gruenen&quot; &quot;Die Linke&quot;             
+## [7] &quot;SPD&quot;</code></pre>
+<p>In this case, this can be done pretty quickly. Just copy the levels and manipulate the order:</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-1" aria-hidden="true" tabindex="-1"></a>parties_fct_ger_alphabetical <span class="ot">&lt;-</span> <span class="fu">fct_relevel</span>(parties_fct_ger, </span>
+<span id="cb408-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-2" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">c</span>(<span class="st">&quot;AfD&quot;</span>, </span>
+<span id="cb408-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-3" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;Buendnis90/Die Gruenen&quot;</span>, </span>
+<span id="cb408-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;CDU&quot;</span>, </span>
+<span id="cb408-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-5" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;CSU&quot;</span>,</span>
+<span id="cb408-6"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-6" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;Die Linke&quot;</span>,</span>
+<span id="cb408-7"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-7" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;FDP&quot;</span>,</span>
+<span id="cb408-8"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-8" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;SPD&quot;</span>))</span>
+<span id="cb408-9"><a href="strings-and-factors-with-stringr-and-forcats.html#cb408-9" aria-hidden="true" tabindex="-1"></a><span class="fu">levels</span>(parties_fct_ger_alphabetical)</span></code></pre></div>
+<pre><code>## [1] &quot;AfD&quot;                    &quot;Buendnis90/Die Gruenen&quot; &quot;CDU&quot;                   
+## [4] &quot;CSU&quot;                    &quot;Die Linke&quot;              &quot;FDP&quot;                   
+## [7] &quot;SPD&quot;</code></pre>
+<p>Now you need to write something for someone who is not particular familiar with the political landscape in Germany and rather wants “left,” “center,” and “right” instead of the party’s names. Give <code>fct_collapse()</code> a shot – and feel free to change it if you disagree with my classification.</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb410-1" aria-hidden="true" tabindex="-1"></a>lcr_ger <span class="ot">&lt;-</span> <span class="fu">fct_collapse</span>(parties_fct,</span>
+<span id="cb410-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb410-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">left =</span> <span class="fu">c</span>(<span class="st">&quot;Leftists&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;SPD&quot;</span>),</span>
+<span id="cb410-3"><a href="strings-and-factors-with-stringr-and-forcats.html#cb410-3" aria-hidden="true" tabindex="-1"></a>                        <span class="at">centre =</span> <span class="fu">c</span>(<span class="st">&quot;CDU&quot;</span>, <span class="st">&quot;CSU&quot;</span>, <span class="st">&quot;FDP&quot;</span>),</span>
+<span id="cb410-4"><a href="strings-and-factors-with-stringr-and-forcats.html#cb410-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">right =</span> <span class="fu">c</span>(<span class="st">&quot;AfD&quot;</span>)</span>
+<span id="cb410-5"><a href="strings-and-factors-with-stringr-and-forcats.html#cb410-5" aria-hidden="true" tabindex="-1"></a>                        )</span></code></pre></div>
+<p>Another thing you could do – and this is handy for the election data set – is collapsing things together according to their frequency of appearance. In the case of the election data set, this might be handy to lump together the candidates into three groups: Donald Trump, Hillary Clinton, and other.</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb411-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb411-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb411-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">candidate =</span> <span class="fu">fct_lump</span>(candidate, <span class="at">n =</span> <span class="dv">2</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 18,007 × 8
+##    county      candidate    state pct_report  votes total_votes     pct lead    
+##    &lt;fct&gt;       &lt;fct&gt;        &lt;fct&gt;      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;   
+##  1 Los Angele… Hillary Cli… CA         1     1.65e6     2314275 0.715   Hillary…
+##  2 Los Angele… Donald Trump CA         1     5.43e5     2314275 0.234   Hillary…
+##  3 Los Angele… Gary Johnson CA         1     5.69e4     2314275 0.0246  Hillary…
+##  4 Los Angele… Other        CA         1     4.67e4     2314275 0.0202  Hillary…
+##  5 Los Angele… Other        CA         1     1.35e4     2314275 0.00582 Hillary…
+##  6 Cook County Hillary Cli… IL         0.975 1.53e6     2055215 0.744   Hillary…
+##  7 Cook County Donald Trump IL         0.975 4.40e5     2055215 0.214   Hillary…
+##  8 Cook County Gary Johnson IL         0.975 5.59e4     2055215 0.0272  Hillary…
+##  9 Cook County Other        IL         0.975 3.05e4     2055215 0.0149  Hillary…
+## 10 Harris Cou… Hillary Cli… TX         1     7.06e5     1302887 0.542   Hillary…
+## # … with 17,997 more rows</code></pre>
+<p>The problem here is that Gary Johnson appears as often as the two other candidates (have you ever heard of him?). Hence, <code>fct_lump()</code> cannot decide which levels to lump together. However, it has saved me a couple lines of code:</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="strings-and-factors-with-stringr-and-forcats.html#cb413-1" aria-hidden="true" tabindex="-1"></a>election_data_w_fct <span class="sc">%&gt;%</span> </span>
+<span id="cb413-2"><a href="strings-and-factors-with-stringr-and-forcats.html#cb413-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">candidate =</span> <span class="fu">fct_lump</span>(candidate, <span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">fct_recode</span>(<span class="st">&quot;Other&quot;</span> <span class="ot">=</span> <span class="st">&quot;Gary Johnson&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 18,007 × 8
+##    county      candidate    state pct_report  votes total_votes     pct lead    
+##    &lt;fct&gt;       &lt;fct&gt;        &lt;fct&gt;      &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt; &lt;fct&gt;   
+##  1 Los Angele… Hillary Cli… CA         1     1.65e6     2314275 0.715   Hillary…
+##  2 Los Angele… Donald Trump CA         1     5.43e5     2314275 0.234   Hillary…
+##  3 Los Angele… Other        CA         1     5.69e4     2314275 0.0246  Hillary…
+##  4 Los Angele… Other        CA         1     4.67e4     2314275 0.0202  Hillary…
+##  5 Los Angele… Other        CA         1     1.35e4     2314275 0.00582 Hillary…
+##  6 Cook County Hillary Cli… IL         0.975 1.53e6     2055215 0.744   Hillary…
+##  7 Cook County Donald Trump IL         0.975 4.40e5     2055215 0.214   Hillary…
+##  8 Cook County Other        IL         0.975 5.59e4     2055215 0.0272  Hillary…
+##  9 Cook County Other        IL         0.975 3.05e4     2055215 0.0149  Hillary…
+## 10 Harris Cou… Hillary Cli… TX         1     7.06e5     1302887 0.542   Hillary…
+## # … with 17,997 more rows</code></pre>
+</div>
+</div>
+<div id="further-links-5" class="section level3" number="7.2.3">
+<h3><span class="header-section-number">7.2.3</span> Further links</h3>
+<ul>
+<li>The chapter in <a href="https://r4ds.had.co.nz/factors.html">R4DS</a></li>
+<li>If you want to learn more about factors, consider reading <a href="https://peerj.com/preprints/3163/">this paper</a></li>
+<li>Another <a href="https://www.r-bloggers.com/2020/06/working-with-factors-in-r-tutorial-forcats-package/">tutorial</a></li>
+</ul>
+</div>
+<div id="further-links-6" class="section level3" number="7.2.4">
+<h3><span class="header-section-number">7.2.4</span> Further links</h3>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="string-manipulation-with-stringr-and-regular-expressions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualizations-with-ggplot2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

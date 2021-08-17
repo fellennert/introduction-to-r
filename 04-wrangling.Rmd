@@ -1,0 +1,500 @@
+# Manipulation with `dplyr` {#wrangling}
+
+The last sessions (3.1--3.3) showed you four things: how you get datasets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (`%>%`), and an introduction to tidy data and how to make datasets tidy using the `tidyr` package [@wickham2020b]. 
+What you haven't learned was how you can actually manipulate the data itself. In the `tidyverse` framework [@wickham2019d], the package which enables you to accomplish those tasks is `dplyr` [@wickham2020].
+
+`dplyr` joined the party in 2014, building upon the `plyr` package. The d in `dplyr` stands for data set and `dplyr` works with tibbles (or data frames) only. 
+
+It consists of five main functions, the "verbs":
+
+* `arrange()` -- sort values
+* `filter()` -- pick observations
+* `mutate()` -- create new variables (columns) 
+* `select()` -- select variables
+* `summarize()` -- create summaries from multiple values
+
+They are joined by `group_by()`, a function that changes the scope on which entities the functions are applied to. 
+
+Furthermore, diverse `bind_` functions and `_join`s enable you to combine multiple tibbles into one. They will be introduced later
+
+## Working with the main "verbs"
+
+In the following, I will guide you through how you can use the verbs to accomplish whatever goals which require data wrangling you might have. 
+
+The data set I will use here consists of the 1,000 most popular movies on IMDb which were published between 2006 and 2016 and some data on them. It was created by PromptCloud and DataStock and published on Kaggle, more information can be found [here](https://www.kaggle.com/PromptCloudHQ/imdb-data).
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+imdb_raw <- read_csv("data/imdb2006-2016.csv")
+```
+
+The data set hasn't been modified by me before. I will show you how I would go across it using a couple of `dplyr` functions.
+
+### `select()`
+
+`select` enables you to *select* columns. Since we are dealing with tidy data, every variable has its own column.
+
+`glimpse()` provides you with an overview of the data set and its columns.
+
+```{r}
+glimpse(imdb_raw)
+```
+
+The columns I want to keep are: `Title`, `Director`, `Year`, `Runtime (Minutes)`, `Rating`, `Votes`, and `Revenue (Millions)`. Furthermore, I want to rename the columns: every column's name should be in lowercase and a regular name that does not need to be surrounded by back ticks -- i.e., a name that only consists of characters, numbers, underscores, or dots. 
+
+This can be achieved in a couple of ways:
+
+First, by choosing the columns column by column and subsequently renaming them:
+
+```{r}
+imdb_raw %>% 
+  select(Title, Director, Year, `Runtime (Minutes)`, Rating, Votes, `Revenue (Millions)`) %>% 
+  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) %>% 
+  glimpse()
+```
+
+Second, the columns can also be chosen vice versa: unnecessary columns can be dropped using a minus:
+
+```{r}
+imdb_raw %>% 
+  select(-Rank, -Genre, -Description, -Actors, -Metascore) %>% 
+  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) %>% 
+  glimpse()
+```
+
+Columns can also be renamed in the selecting process:
+
+```{r}
+imdb_raw %>% 
+  select(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) %>% 
+  glimpse()
+```
+
+You can also make your expressions shorter by using a couple of hacks:
+
+`:` can be used to select all columns between two:
+
+```{r}
+imdb_raw %>% 
+  select(Title, Director, Year:`Revenue (Millions)`) %>% 
+  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) %>% 
+  glimpse()
+```
+
+`starts_with()` select columns whose names start with the same character string:
+
+```{r}
+imdb_selected <- imdb_raw %>% 
+  select(Title, Director, Votes, Year, starts_with("R")) %>% 
+  select(-Rank) %>% 
+  rename(title = Title, director = Director, year = Year, runtime = `Runtime (Minutes)`, rating = Rating, votes = Votes, revenue_million = `Revenue (Millions)`) %>% 
+  glimpse()
+```
+
+As you may have noticed, the order in the `select()` matters: columns will be ordered in the same order as they are chosen.
+
+A couple of further shortcuts for `select()` do exist. An overview can be found in the [`dplyr` cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf).
+
+### `filter()`
+
+Whereas `select()` enables you to choose variables (i.e., columns), `filter()` lets you choose observations (i.e., rows).  
+
+In this case, I only want movies with a revenue above $100,000,000:
+
+```{r}
+imdb_selected %>% 
+  filter(revenue_million > 100) %>% 
+  glimpse()
+```
+
+Besides, I am especially interested in the director Christopher Nolan. Therefore, I want to look at movies that were directed by him and made more than $100,000,000:
+
+```{r}
+imdb_selected %>% 
+  filter(revenue_million > 100 & director == "Christopher Nolan") %>% 
+  glimpse()
+```
+
+The following overview is taken from the [`dplyr` cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf) and shows the operators you can use in `filter()`:
+
+![Overview of comparison operators](figures/operators.png)
+
+#### Exemplary application
+
+To demonstrate how a real-world application of this stuff could look like, I will now provide you a brief insight into my private life and how I organize movie nights. JK. You could definitely try this at home and surprise your loved ones with such hot applications. If you are brave and surprise your latest Tinder match with an .RDS file containing suggestions for Netflix&Chill, please let me know what their response looked like.
+
+Tonight, I will hang out with a real nerd. Probably because they (nerds have all kinds of genders) know about my faible for R, they have sent me a vector containing a couple of movies we could watch tonight:
+
+```{r}
+set.seed(123) # guarantees that movie_vec will always be the same thing
+movie_vec <- imdb_raw$Title[sample(1000, 10, replace = FALSE)]
+movie_vec
+```
+
+However, I want to make a more informed decision and decide to obtain some more information on the movies from my IMDb data set:
+
+```{r}
+imdb_selected %>% 
+  filter(title %in% movie_vec) %>% 
+  glimpse()
+```
+
+I have convinced them to watch either one of the movies they have suggested or one directed by Christopher Nolan or one with a rating greater or equal to 8.5 and send them back this data set:
+
+```{r}
+imdb_selected %>% 
+  filter(title %in% movie_vec | director == "Christopher Nolan" | rating >= 8.5) %>% 
+  glimpse()
+```
+
+"I deteste 'Interstellar'," is the response. "All right," I say to myself, "I can easily exclude it."
+
+```{r}
+imdb_selected %>% 
+  filter(title %in% movie_vec | director == "Christopher Nolan" | rating >= 8.5 & title != "Interstellar") %>% # if you want to negate something, put the ! in front of it
+  glimpse()
+```
+
+Oh, that did not work. I should wrap them in columns:
+
+```{r}
+imdb_selected %>% 
+  filter((title %in% movie_vec | director == "Christopher Nolan" | rating >= 8.5) & title != "Interstellar") %>% 
+  glimpse()
+```
+
+They come up with a new idea: we have a Scottish evening with a movie directed by the Scottish director Gillies MacKinnon:
+
+```{r}
+imdb_selected %>% 
+  filter(director == "Gillies MacKinnon") %>% 
+  glimpse()
+```
+
+"Well, apparently there is a problem in the data set," I notice. "There is an NA in the revenue column. I should probably have a further look at this."
+
+```{r}
+imdb_selected %>% 
+  filter(is.na(revenue_million)) %>% 
+  glimpse()
+```
+
+Well, that's quite a significant number of NAs. I will need to exclude these cases:
+
+```{r}
+imdb_selected %>% 
+  filter(!is.na(revenue_million)) %>% 
+  glimpse()
+```
+
+#### Other possibilities to subset observations
+
+`slice()` selects rows by positions:
+
+```{r}
+imdb_selected %>% 
+  slice(1:10) %>% 
+  glimpse()
+```
+
+`distinct` removes duplicate rows:
+
+```{r}
+imdb_selected %>% 
+  distinct(director) %>% 
+  glimpse()
+```
+
+By default, it will remove all other columns apart from the one(s) you have specified. You can avoid that by setting `.keep_all = TRUE`:
+
+```{r}
+imdb_selected %>% 
+  distinct(title, .keep_all = TRUE) %>% 
+  glimpse()
+```
+
+Oh, interesting, there is apparently one movie which is in there twice. How could we find this movie? (Exercise 1)
+
+### `mutate()`
+
+My data set looks pretty nice already, but one flaw catches the eye: the column `revenue_million` should probably be converted to `revenue`. Hence, I need to create a new variable which contains the values from `revenue_million` multiplied by 1,000,000 and drop the now obsolete `revenue_million`.
+
+```{r}
+imdb_selected %>% 
+  mutate(revenue = revenue_million * 1000000) %>% 
+  select(-revenue_million) %>% 
+  glimpse()
+```
+
+The structure of the `mutate()` call looks like this: first, you need to provide the name of the new variable. If the variable exists already, it will be replaced. Second, the equal sign tells R what the new variable should contain. Third, a function that outputs a vector which is as long as the tibble has rows or 1. 
+
+If we want to drop all other columns and just keep the new one: `transmute()` drops all the original columns.
+
+```{r}
+imdb_selected %>% 
+  transmute(revenue = revenue_million * 1000000) %>% 
+  glimpse()
+```
+
+`mutate()` uses so-called *window functions*. They take one vector of values and return another vector of values. An overview -- again, from the cheatsheet:
+
+![Window functions](figures/window functions.png)
+
+Another feature of `dplyr`, which is useful in combination with mutate, is `case_when()`.
+
+`case_when()` can for instance be used to create binary indicator variables. In this example I want it to be 0 if the movie was made before 2010 and 1 if not. 
+
+```{r}
+imdb_selected %>% 
+  mutate(indicator = case_when(year < 2010 ~ 0,
+                               year >= 2010 ~ 1,
+                               TRUE ~ 2)) %>% 
+  glimpse()
+```
+
+Keep in mind that you can throw any function into `mutate()` as long as it is vectorized and the output has the same length as the tibble or 1.
+
+### `summarize()` and `group_by`
+
+When you analyze data, you often want to compare entities according to some sort of summary statistic. This means that you, first, need to split up your data set into certain groups which share one or more characteristics, and, second, collapse the columns together into single-row summaries. The former challenge is accomplished using `group_by()` whose argument is one or more variables, the latter requires the `summarize()` function. This function works similar to `mutate()` but uses *summary functions* -- which take a vector of multiple values and return a single value -- instead of window functions -- which return a vector of the same length as the input.
+
+Let me provide you an example. 
+
+I am interested in the director's average ratings:
+
+```{r}
+imdb_selected %>% 
+  group_by(director) %>% 
+  summarize(avg_rating = mean(rating))
+```
+
+In general, `summarize()` always works like this: first, you change the scope from the entire tibble to different groups. Then, you calculate your summary. If you then want to further manipulate your date or calculate something else based on the new summary, you need to call `ungroup()`. 
+
+You can see the summary functions below:
+
+![Summary functions in R](figures/summary functions.png)
+
+Another handy function akin to this is `count()`. It counts all occurrences of a singular value in the tibble.
+
+If I were interested in how many movies of the different directors have made it into the data set, I could use this code:
+
+```{r}
+imdb_selected %>% 
+  count(director)
+```
+
+Beyond that, you can also use `group_by()` with mutate. If you do so, the rows will not be collapsed together as in `summarize()`. 
+
+### `arrange()`
+
+Finally, you can also sort values using `arrange()`. In the last section, I was interested in directors' respective average ratings. The values were ordered according to their name (hence, "Aamir Khan" was first). In this case, the order dos not make too much sense, because the first name does not say too much about the director's ratings. Therefore, I want to sort them according to their average ratings:
+
+```{r}
+imdb_selected %>% 
+  group_by(director) %>% 
+  summarize(avg_rating = mean(rating)) %>% 
+  arrange(avg_rating)
+```
+
+All right, Jason Friedberg is apparently the director of the worst rated movie in my data set. But it would be more handy, if they were arranged in descending order. I can use `desc()` for this:
+
+```{r}
+imdb_selected %>% 
+  group_by(director) %>% 
+  summarize(avg_rating = mean(rating)) %>% 
+  arrange(-avg_rating)
+```
+
+Chapeau, Nitesh Tiwari!
+
+## Introducing `joins`
+  
+The last session showed you three things: how you get data sets into R, a couple of ways to create tibbles, and an introduction to tidy data and how to make data sets tidy using the `tidyr` package. As you may recall from the last session, it was not able to solve the last two problems with only the tools `tidyr` offers. In particular, the problems were:    
+
+* Multiple types of observational units are stored in the same table.
+* A single observational unit is stored in multiple tables.  
+
+Both problems need some different kind of tools: joins. Joins can be used to merge tibbles together. This tutorial, again, builds heavy on the R for Data Science book [@wickham2016a]
+
+### Multiple types of units are in the same table
+
+Let's look at the following data set. It contains the billboard charts in 2000 and was obtained from the [`tidyr` GitHub repo](https://github.com/tidyverse/tidyr/blob/master/data/billboard.rda). The example below is taken from the `tidyr` vignette which can be loaded using `vignette("tidy-data", package = "tidyr")`.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+load("data/billboard.rda")
+```
+
+```{r}
+glimpse(billboard)
+```
+
+Here, you can immediately see the problem: it contains two types of observations: songs and ranks. Hence, the data set needs to be split up. However, there should be a pointer from the rank data set to the song data set. First, I add an ID column to `song_tbl`. Then, I can add it to `rank_tbl` and drop the unnecessary columns which contain the name of the artist and the track. 
+
+```{r}
+song_tbl <- billboard %>% 
+  distinct(artist, track) %>% 
+  mutate(song_id = row_number())
+
+glimpse(song_tbl)
+```
+
+```{r}
+rank_tbl <- billboard %>% 
+  pivot_longer(cols = starts_with("wk"), 
+               names_to = "week", 
+               names_prefix = "wk", 
+               values_to = "rank") %>% 
+  mutate(week = as.numeric(week),
+         date = date.entered + (week-1) * 7) %>% 
+  drop_na() %>% 
+  left_join(song_tbl, by = c("artist", "track")) %>% 
+  select(song_id, date, week, rank)
+
+glimpse(rank_tbl)
+```
+
+### One unit is in multiple tables
+
+For this example, I have split up a data set from the `socviz` package containing data on the 2016 elections in the U.S. according to census region and stored them in a folder. I can scrape the file names in the folder and read it into a list in an automated manner. You will learn this when we touch upon iteration. 
+
+```{r}
+library(fs)
+file_list <- dir_ls(path = "data/socviz_us") %>% 
+  map(read_csv,
+      col_types = cols(
+        id = col_double(),
+        name = col_character(),
+        state = col_character(),
+        census_region = col_character(),
+        pop_dens = col_character(),
+        pop_dens4 = col_character(),
+        pop_dens6 = col_character(),
+        pct_black = col_character(),
+        pop = col_double(),
+        female = col_double(),
+        white = col_double(),
+        black = col_double(),
+        travel_time = col_double(),
+        land_area = col_double(),
+        hh_income = col_double(),
+        su_gun4 = col_character(),
+        su_gun6 = col_character(),
+        fips = col_double(),
+        votes_dem_2016 = col_double(),
+        votes_gop_2016 = col_double(),
+        total_votes_2016 = col_double(),
+        per_dem_2016 = col_double(),
+        per_gop_2016 = col_double(),
+        diff_2016 = col_double(),
+        per_dem_2012 = col_double(),
+        per_gop_2012 = col_double(),
+        diff_2012 = col_double(),
+        winner = col_character(),
+        partywinner16 = col_character(),
+        winner12 = col_character(),
+        partywinner12 = col_character(),
+        flipped = col_character()
+))
+```
+
+The list now consists of four tibbles which need to be bound together. You can achieve this using `bind_rows()`. Its counterpart is `bind_cols()` which binds columns together. It matches rows by position.
+
+```{r}
+election_data <- file_list %>% bind_rows()
+glimpse(election_data)
+```
+
+Now, the data set is ready for cleaning and tidying. Feel free to do this is as a take-home exercise. 
+
+However, the topic of this script is different joins. The `dplyr` package offers six different joins: `left_join()`, `right_join()`, `inner_join()`, `full_join()`, `semi_join()`, and `anti_join()`. The former four are mutating joins, they add columns. The latter two can be used to filter rows in a data set. Below is an overview from the `dplyr` cheatsheet:
+
+![Overview of the different joins](figures/joins.png) 
+
+In the following, I will illustrate this using the election data. I split up the data set into three: data on the elections 2016 and 2012, and demographic data. The column they have in common is the county's respective name. 
+
+```{r}
+election_data16 <- election_data %>% 
+  select(name, state, votes_dem_2016:diff_2016, winner, partywinner16)
+
+election_data12 <- election_data %>% 
+  select(name, state, per_dem_2012:partywinner12)
+
+demographic_data <- election_data %>% 
+  select(name, state, pop:hh_income) %>% 
+  slice(1:2000)
+```
+
+### `left_join()` and `right_join()`
+
+```{r}
+election_data16 %>% 
+  left_join(demographic_data)
+```
+
+If the column that both data sets have in common has the same name, there's no need to provide it. If this is not the case, you need to provide it in a character vector:
+
+```{r}
+election_data16 %>% 
+  rename(county = name) %>% 
+  right_join(demographic_data, by = c("county" = "name"))
+```
+
+Here, the problem is that the same counties exist in different states. Therefore, all combinations are returned. Hence, I need to specify two arguments: the county's name and state. 
+
+```{r}
+election_data16 %>% 
+  rename(county = name) %>% 
+  right_join(demographic_data, by = c("county" = "name", "state"))
+```
+
+Left joins return all rows which are in `x`. If a column is in `x` but not in `y`, an `NA` will be included at this position. Right joins work vice versa.
+
+### `inner_join()`
+
+```{r}
+election_data16 %>% 
+  inner_join(demographic_data)
+```
+
+An `inner_join()` returns all rows which are in `x` and `y`. 
+
+### `full_join()`
+
+```{r}
+election_data16 %>% 
+  full_join(demographic_data)
+```
+
+A `full_join()` returns rows and columns from both `x` and `y`.
+
+### `semi_join()`
+
+Filtering joins only keep the cases from `x`, no data set is added.
+
+```{r}
+election_data16 %>% 
+  semi_join(demographic_data)
+```
+
+The `semi_join()` returns all rows from `x` with matching values in `y`. You can compare it to a `right_join()` but without adding the columns of `y`.
+
+### `anti_join()`
+
+```{r}
+election_data16 %>% 
+  anti_join(demographic_data)
+```
+
+`anti_join()` returns all rows from `x` with no matching rows in `y`.
+
+## Further links
+
+* [Chapter in R4DS](https://r4ds.had.co.nz/transform.html)
+* More on window functions in the vignette: `vignette("window-functions")`
+* Again, [the cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+* A [tutorial on YouTube](https://www.youtube.com/watch?v=jWjqLW-u3hc)
+* Another introduction can be found [here](https://stat545.com/join-cheatsheet.html).
+* The [chapter in R4DS](https://r4ds.had.co.nz/relational-data.html) has some nice diagrams.

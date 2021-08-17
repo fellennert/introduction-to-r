@@ -1,0 +1,135 @@
+---
+title: "Session 8 -- Using RMarkdown for research papers"
+author: "Felix Lennert"
+date: "2021-02-10"
+output: pdf_document
+header-includes:
+    - \usepackage{setspace}\doublespacing
+fontsize: 12pt
+abstract: \singlespacing I have used this \LaTeX\ command to make this abstract single spaced. To make it work properly, I have to load the \LaTeX\ package `setspace` which I just do by using `header-includes` and then adding it. Writing an abstract in RMarkdown is fairly easy. You just put it into the YAML header. If you want it to be on the first page as some sort of title page, make sure to put a \\pagebreak right after the YAML header before the actual body of text begins. You can use `geometry:` in the YAML header to define arguments than can be set in the \LaTeX\ `geometry` package, `margin=1` here sets margins to 1 inch.  `fontsize:` sets the font size, `spacing:` refers to the spacing -- in this case I want it to be double (this is just the easy, markdown way to do it, the tedious but more flexible \LaTeX\ way outlined above of course works like a charm).
+geometry: margin=1in
+spacing: double
+csl: ASA.csl
+bibliography: applied-quantitative-methods.bib
+link-citations: TRUE
+---
+
+\pagebreak
+
+# Main section
+
+## Sub section
+
+### Sub-sub section
+
+You should always use one hash for main sections, two for sub sections, and three for sub-sub sections. Moreover, you should not make a sub section if you only have one sub section in the respective main section. Same holds for sub-sub sections in a sub section -- just as I did. 
+
+# Dealing with chunks in papers
+
+## General notes
+
+What works best for me is doing a huge chunk with all the code upfront. This chunk contains everything: loading packages, cleaning the data, building the models, etc. It would look like this:
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(tidyverse)
+library(stargazer)
+library(kableExtra)
+
+cars_tbl <- mtcars %>% 
+  select(cyl, mpg, hp, wt)
+
+m1 <- lm(mpg ~ cyl, data = cars_tbl)
+m2 <- lm(mpg ~ hp, data = cars_tbl)
+m3 <- lm(mpg ~ wt, data = cars_tbl)
+m4 <- lm(mpg ~ cyl + hp + wt, data = cars_tbl)
+```
+
+It is important that it is absolutely invisible. You achieve this by putting `message=FALSE, warning=FALSE, include=FALSE` into the chunk description.
+
+## Tables
+
+If you want to put tables into your paper, a handy package is `kableExtra`. It works with nice `tidyverse` syntax and produces neat tables using tibbles as input. Setting `echo=FALSE` leads to only outputting the result of the chunk. When knitting the RMarkdown document to PDF, numbers are added to the tables automatically.
+
+```{r echo=FALSE}
+cars_tbl %>% 
+  kable(format = "latex", booktabs = TRUE, caption = "example table") %>% # as we want to knit it to pdf; booktabs makes nicer tables (no vertical lines)
+  kable_styling(latex_options = c("hold_position"), # prevents the table from getting positioned wherever latex thinks it should be
+                font_size = 8) %>% 
+  footnote(general = "there are different kinds of footnotes. This is a general comment.",
+           number = c("this is a numbered one", "this one as well"),
+           alphabet = c("footnote a", "footnote b"),
+           symbol = c("a star", "a cross"))
+```
+
+## Figures
+
+`echo=FALSE` also works fine for `ggplot` calls.
+
+```{r echo=FALSE}
+cars_tbl %>% 
+  ggplot() +
+  geom_smooth(aes(hp, mpg), method = "lm")
+```
+
+Damn, now it shows this weird message. This can be fixed by including `message=FALSE, warning=FALSE` as well. Figure sizes can be determined by including `fig.width=10, fig.height=10` in the chunk header (change size by replacing the `10`s). Centering it is then done using `fig.align="center"`
+
+Also, the figure is shown in a weird position. If you want to avoid that for the next one and just let it start on a new page, you can add `\pagebreak`. This is a $\LaTeX$ command -- which you can use in RMD documents. You can also use HTML snippets.
+
+\pagebreak
+
+```{r echo=FALSE, fig.align='center', fig.height=5, fig.width=5, message=FALSE, warning=FALSE}
+cars_tbl %>% 
+  ggplot() +
+  geom_smooth(aes(hp, mpg), method = "lm")
+```
+
+# Additional writing things
+
+## Footnotes
+
+You can add footnotes by using the `^` sign where you want to put it and some square brackets with the content you want right next to it (no spaces!).^[just like this]
+
+## Equations
+
+Inline equations can be added using `$` and $\LaTeX$ formula syntax: $y = \beta_{0} + \beta_{1}x + \epsilon$. While $\LaTeX$ syntax is a bit hard to grasp at first, it really pays off in the long run (at least it did so for me). Apple Keynote, for instance, uses it as the default way to type in formulas. MS Office might accept it as well (I wouldn't know).
+
+If you want to let the formula stand out and on its own, use `$$`:
+
+$$y = \beta_{0} + \beta_{1}x + \epsilon$$
+
+## Citations
+
+Probably the most important thing about scientific writing is using citations though. With the latest version of RStudio (\>1.4), you can link it to your Zotero library (if you run both Zotero and RStudio on the same machine, default settings should suffice; if not, go to options \> RMarkdown \> Citations and then provide it a Zotero API key which you can generate on \<zotero.org\> in your personal settings). Then, you can add citations using the `Insert` button in the visual markdown editor.
+
+However, what this does is simply creating a bib file containing several references and adding it to the folder your RMarkdown document is living in. Hence, I would just install the `Better BibTex` extension to Zotero, export the reference list for your particular project (if you work like me and do projects for each piece of scientific writing you have to produce or course you give) as a bib file into your RMD file's folder -- remember to "Keep it updated", and then specify it in the YAML header (`bibliography: references.bib`). If you want to use a certain citation style, you need a .csl file which can be downloaded from \<zotero.org\> (the simplest way is to just google the style you need, e.g., "asa" for American Sociological Association and ".csl" for the file format). Put it in the same folder as your .bib file and the RMD file and add `csl: filename.csl` to the YAML header. Setting `link-citations: TRUE` makes your citations hyperlinks to the entries in the reference section.
+
+Then, adding citations is straight-forward: you add your literature to the library in Zotero and then use the citekey Zotero has created for the document in RMarkdown [@xie2018]. If you want to cite multiple papers in one pair of brackets, separate them by `;`: [@xie2018; @wickham2019]. You can add text before and after [see @xie2018: 34--67].
+
+If you quote an author in the text already, such as Wickham [-@wickham2019], putting a `-` in front of the `@citekey` will only return the year. Another way of achieving this is using the mere cite key in the text, such as @wickham2019.
+
+By default, the reference section is put at the end of the document. You can, however, employ a little hack to do it wherever you want. Look at the end of the document where I have left some room for the appendix. Before the appendix, I have inserted the references. Make sure you have a nice \\pagebreak before the references section to make it look neat. Also, if you use doublespacing, you might consider making the references single-spaced.
+
+# Further resources
+
+-   The vignette for [`kableExtra`](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+-   The [YAML fieldguide](https://cran.r-project.org/web/packages/ymlthis/vignettes/yaml-fieldguide.html)
+-   A comprehensive introduction [to the new visual editor](https://rstudio.github.io/visual-markdown-editing/#/intro)
+-   An [introduction to \LaTeX formulas](https://www.nature.com/articles/d41586-019-01796-1)
+-   A [formula editor](https://latex.codecogs.com/eqneditor/editor.php)
+
+\pagebreak
+
+# References
+
+\singlespacing
+
+::: {#refs}
+:::
+
+\pagebreak
+
+# Appendix
+
+## Appendix A
+
+## Appendix B

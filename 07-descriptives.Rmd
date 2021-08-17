@@ -1,0 +1,231 @@
+# Describing data sets {#descriptives}
+
+When it comes to the description of data sets, it's often about just getting a quick feel for the data. While `dplyr`'s `summarize()` is a great weapon for summarizing singular variables -- and I have already shown you in Chapter \@(wrangling) how to do this -- you need a hassle-free tool to quickly get an overview. For this use-case, `skimr` is my personal weapon of choice. It is not part of the `tidyverse` -- yet super-compatible -- so we first need to load (and perhaps install) it. 
+
+```{r}
+if (!"skimr" %in% installed.packages()[,1]) install.packages("skimr")
+library(skimr)
+```
+
+## Basic descriptives
+
+`skimr` is designed around its main function `skim()`. This function handles tibbles as well as vectors. It returns a so-called `skim_df` which is basically a tibble with some added columns. However, its biggest strength is the fact that it provides descriptives fast and in a easily comprehensible manner. Moreover, you can then go on and further modify them using tidyverse function.
+
+```{r, render = knitr::normal_print}
+skim(mtcars) # it excels with tibbles as input
+```
+
+```{r, render = knitr::normal_print}
+skim(mtcars$mpg) # vectors are fine, too
+```
+
+Usually, data sets come with columns in different flavors. As an example, we can look at the imdb data set. This set contains categorical and numeric variables:
+
+```{r, render = knitr::normal_print}
+imdb_raw %>% skim()
+```
+
+Of course, the type of variable determines the type of operation that can be performed and `skimr` smartly distinguishes between variable types.
+
+### Grouped descriptives
+
+You can look at certain descriptives by group. Then, `skim()` will return descriptives for each group in a rowwise fashion. Just call `group_by()` before passing the tibble to the `skim()` call
+
+```{r, render = knitr::normal_print}
+mtcars %>% 
+  group_by(cyl) %>% 
+  skim()
+```
+
+### Modifying the `skim()` output
+
+You can also limit the variables that should be described in the call:
+
+```{r, render = knitr::normal_print}
+mtcars %>% 
+  group_by(cyl) %>% 
+  skim(mpg, hp, wt)
+```
+
+When you transform the `skim_df` into a normal tibble, you can see that additional columns are added:
+
+```{r, render = knitr::normal_print}
+mtcars %>% 
+  group_by(cyl) %>% 
+  skim(mpg, hp, wt) %>% 
+  as_tibble()
+```
+
+Those are: `skim_type` which denotes the type of variable (usually "categorical" or "numeric") and `skim_variable` containing the name of the variable that is summarized. If there are grouping variables, those are included with their original name (in this case, the number of cylinder, "cyl"). 
+
+Therefore, normal `dplyr` syntax works in a pipeline with a `skim_df`:
+
+```{r, render = knitr::normal_print}
+mtcars %>% 
+  group_by(cyl) %>% 
+  skim(mpg, hp, wt) %>%
+  select(skim_type:numeric.sd)
+```
+
+There are also two handy shortcuts to distinguish between the different types of data. `partition()` takes a `skim_df` object and returns a list containing tibbles for each variable type. `yank()` can be used to deliberately choose a variable type upfront.
+
+```{r, render = knitr::normal_print}
+imdb_raw %>% 
+  skim() %>% 
+  partition()
+```
+
+```{r, render = knitr::normal_print}
+imdb_raw %>% 
+  skim() %>% 
+  yank("numeric")
+```
+
+### Further descriptives
+
+Note that `skimr` only supports a limited number of measures. If you want to add further descriptives, you can use `dplyr::summarize()` combined with the `across()` function to compute the measures. Then you would have to spread the tibbles using `tidyr::pivot_longer()` and `tidyr::pivot_wider()` and, finally, join together the tibbles. For the imdb data set and the measures median and variance, this would look like as follows:
+
+```{r}
+imdb_raw %>% 
+  summarize(across(where(is.numeric), 
+                   list(
+                     median = ~median(.x, na.rm = TRUE),
+                     variance = ~var(.x, na.rm = TRUE)
+  ))) %>% 
+  pivot_longer(
+    cols = everything(),
+    names_to = c("skim_variable", ".value"),
+    names_sep = "_"
+  ) %>% 
+  right_join(imdb_raw %>% skim())
+```
+
+## Communicating results
+
+By default, when used in RMarkdown documents, `skimr` outputs quite decent looking tables which look like this:
+
+```{r}
+imdb_raw %>% 
+  skim() %>% 
+  yank("numeric")
+```
+
+In the RMarkdown chunks above, I had to set my chunk options to `render = knitr::normal_print` to avoid this behavior.
+
+### Tables with `knitr::kable()` and `kableExtra`
+
+The problem with the default output is the lack of modifiability. The column names, for instance, would suffice for small reports but are inappropriate for something you would want to hand in somewhere or even publish. In RMarkdown, the proper tool for modifying and printing tables is the `knitr::kable()` function with extended functionalities from the `kableExtra` package. In the following, I will provide a brief and coarse introduction to the package. It is so coarse that you basically will have to work through the vignettes yourself as for the tables everything is relevant and I am not willing to copy the entire vignettes. So, hit the internet and look at the [kableExtra vignette for html](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html#Column__Row_Specification) and [pdf](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_pdf.pdf). 
+
+I will exemplify how it can look like to make a table with descriptives in an HTML-document. I will also add a description for how you can get this into a Word or $\LaTeX$ document so that you are not limited to RMarkdown when reporting results.
+
+The `kableExtra` package needs to be loaded (or even installed) first:
+
+```{r}
+if (!"kableExtra" %in% installed.packages()[,1]) install.packages("kableExtra")
+library(kableExtra)
+```
+
+The basic command is `kable()`. It takes a tibble and outputs it as an html-table. It looks disgusting. 
+
+```{r}
+mtcars %>% kable()
+```
+
+This is where `kable_styling()` comes into play. It gives your table the so-called "twitter bootstrap style" (for html outputs) and allows you to take over control. Read the above-mentioned vignettes for more information on how to use them properly.
+
+```{r}
+mtcars %>% 
+  kable() %>% 
+  kable_styling()
+```
+
+### Use case: reporting `skimr` results
+
+#### Basics for HTML and PDF
+
+First, I need to get the results in a proper tibble. I use the `mtcars` data set.
+
+```{r}
+desc_mtcars <- skim(mtcars) %>% as_tibble()
+```
+
+First, I select and rename the variables I deem interesting. To save myself some time, I choose variables based on their position:
+```{r}
+for_table <- desc_mtcars %>% 
+  select(Variable = 2,
+         Mean = 5,
+         SD = 6,
+         Minimum = 7,
+         Maximum = 11) %>% 
+  mutate(across(where(is.numeric), ~round(., 1))) # round the output
+```
+
+Now, I have put it into a tibble that, in theory, be just printed down as a table (you might wish to change the names of the variables, but let's save this for another time; if you're willing to: `case_when()` might be your best shot). I proceed with the `kable()` call.
+
+```{r}
+for_table %>% 
+  kable(caption = "Example for a table with some descriptives") %>% 
+  kable_styling(
+    bootstrap_options = "striped", # several design options
+    full_width = FALSE, # defaults to TRUE
+    position = "center", # where is it positioned?
+    fixed_thead = TRUE # whether header is fixed when scrolling through -- only for longer tables
+  ) %>% 
+  column_spec(1, bold = TRUE, border_right = TRUE) %>% # column specifications can be easily modified
+  footnote(general = "You can add some footnotes with certain signs, too.", # this is how you add a footnote
+           number = c("Footnote 1; ", "Footnote 2; "),
+           alphabet = c("Footnote A; ", "Footnote B; "),
+           symbol = c("Footnote Symbol 1; ", "Footnote Symbol 2"),
+           general_title = "General: ", number_title = "Type I: ",
+           alphabet_title = "Type II: ", symbol_title = "Type III: ",
+           footnote_as_chunk = T, title_format = c("italic", "underline")
+           )
+```
+
+For $\LaTeX$ tables this would generally look the same. Depending on whether you knit the RMarkdown file to PDF or HTML, the output will change. You also have some different specification options for $\LaTeX$ output. 
+
+#### Getting it into a Word file
+
+Unfortunately, you cannot yet output the tables produced with `kable` into a proper Word file. In order to achieve this, however, you can use `flextable` and then export the tables in different formats. `flextable` is similarly capable as `kable`. An introduction can be found [here](https://ardata-fr.github.io/flextable-book/). 
+
+A coarse example follows.
+
+First, it needs to be loaded.
+
+
+```{r}
+if (!"flextable" %in% installed.packages()[,1]) install.packages("flextable")
+library(flextable)
+```
+
+Then, I can produce the table and export it to DOCX or PPTX format using the `save_as_*()` function.
+
+```{r eval=FALSE, include=TRUE}
+for_table %>% 
+  flextable() %>% 
+  save_as_docx(path = "example_table_docx.docx", sep = "/")
+
+for_table %>% 
+  flextable() %>% 
+  save_as_pptx(path = "example_table_pptx.pptx", sep = "/")
+```
+
+Then, further manipulations can be performed in MS Word or PowerPoint (or LibreOffice or whatever).
+
+Also, if you have a working version of Word or PowerPoint on your machine, you can use the following commands to start up an interactive session:
+
+```{r eval=FALSE, include=TRUE}
+for_table %>% 
+  flextable() %>% 
+  print(preview = "docx")
+
+for_table %>% 
+  flextable() %>% 
+  print(preview = "pptx")
+```
+
+## Further links
+
+* An [exhaustive introduction to `skimr`](https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html).
+* [Intro to `flextable`](https://davidgohel.github.io/flextable/).
+* More [on `kable`](https://bookdown.org/yihui/rmarkdown-cookbook/kable.html).
