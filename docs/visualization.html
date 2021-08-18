@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Visualizations with ggplot2 | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Visualizations with ggplot2 | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Visualizations with ggplot2 | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="descriptives.html"/>
+<link rel="next" href="markdown.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.3</b> Further links</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.4</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.6</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intror.html"><a href="intror.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intror.html"><a href="intror.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intror.html"><a href="intror.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intror.html"><a href="intror.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intror.html"><a href="intror.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intror.html"><a href="intror.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intror.html"><a href="intror.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intror.html"><a href="intror.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intror.html"><a href="intror.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="workingwithdata.html"><a href="workingwithdata.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="workingwithdata.html"><a href="workingwithdata.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workingwithdata.html"><a href="workingwithdata.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="workingwithdata.html"><a href="workingwithdata.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="workingwithdata.html"><a href="workingwithdata.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="workingwithdata.html"><a href="workingwithdata.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="workingwithdata.html"><a href="workingwithdata.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workingwithdata.html"><a href="workingwithdata.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="workingwithdata.html"><a href="workingwithdata.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="workingwithdata.html"><a href="workingwithdata.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="workingwithdata.html"><a href="workingwithdata.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workingwithdata.html"><a href="workingwithdata.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="workingwithdata.html"><a href="workingwithdata.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="wrangling.html"><a href="wrangling.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="wrangling.html"><a href="wrangling.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="wrangling.html"><a href="wrangling.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="wrangling.html"><a href="wrangling.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="wrangling.html"><a href="wrangling.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="wrangling.html"><a href="wrangling.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="wrangling.html"><a href="wrangling.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="wrangling.html"><a href="wrangling.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="wrangling.html"><a href="wrangling.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="wrangling.html"><a href="wrangling.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="wrangling.html"><a href="wrangling.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="wrangling.html"><a href="wrangling.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="wrangling.html"><a href="wrangling.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="wrangling.html"><a href="wrangling.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="wrangling.html"><a href="wrangling.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="wrangling.html"><a href="wrangling.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stringregex.html"><a href="stringregex.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="stringregex.html"><a href="stringregex.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="stringregex.html"><a href="stringregex.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stringregex.html"><a href="stringregex.html#literal-characters"><i class="fa fa-check"></i><b>6.2.1</b> Literal characters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stringregex.html"><a href="stringregex.html#metacharacters"><i class="fa fa-check"></i><b>6.2.2</b> Metacharacters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stringregex.html"><a href="stringregex.html#more-advanced-string-manipulation"><i class="fa fa-check"></i><b>6.3</b> More advanced string manipulation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="stringregex.html"><a href="stringregex.html#detect-matches"><i class="fa fa-check"></i><b>6.3.1</b> Detect matches</a></li>
+<li class="chapter" data-level="6.3.2" data-path="stringregex.html"><a href="stringregex.html#mutating-strings"><i class="fa fa-check"></i><b>6.3.2</b> Mutating strings</a></li>
+<li class="chapter" data-level="6.3.3" data-path="stringregex.html"><a href="stringregex.html#extracting-text"><i class="fa fa-check"></i><b>6.3.3</b> Extracting text</a></li>
+<li class="chapter" data-level="6.3.4" data-path="stringregex.html"><a href="stringregex.html#split-vectors"><i class="fa fa-check"></i><b>6.3.4</b> Split vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="stringregex.html"><a href="stringregex.html#further-links-5"><i class="fa fa-check"></i><b>6.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="workwithfactors.html"><a href="workwithfactors.html"><i class="fa fa-check"></i><b>7</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workwithfactors.html"><a href="workwithfactors.html#creating-a-factor"><i class="fa fa-check"></i><b>7.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2" data-path="workwithfactors.html"><a href="workwithfactors.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2</b> Some basic operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workwithfactors.html"><a href="workwithfactors.html#reordering-factors"><i class="fa fa-check"></i><b>7.2.1</b> Reordering factors</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workwithfactors.html"><a href="workwithfactors.html#modifying-levels"><i class="fa fa-check"></i><b>7.2.2</b> Modifying levels</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="workwithfactors.html"><a href="workwithfactors.html#further-links-6"><i class="fa fa-check"></i><b>7.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="descriptives.html"><a href="descriptives.html"><i class="fa fa-check"></i><b>8</b> Describing data sets</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="descriptives.html"><a href="descriptives.html#basic-descriptives"><i class="fa fa-check"></i><b>8.1</b> Basic descriptives</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="descriptives.html"><a href="descriptives.html#grouped-descriptives"><i class="fa fa-check"></i><b>8.1.1</b> Grouped descriptives</a></li>
+<li class="chapter" data-level="8.1.2" data-path="descriptives.html"><a href="descriptives.html#modifying-the-skim-output"><i class="fa fa-check"></i><b>8.1.2</b> Modifying the <code>skim()</code> output</a></li>
+<li class="chapter" data-level="8.1.3" data-path="descriptives.html"><a href="descriptives.html#further-descriptives"><i class="fa fa-check"></i><b>8.1.3</b> Further descriptives</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="descriptives.html"><a href="descriptives.html#communicating-results"><i class="fa fa-check"></i><b>8.2</b> Communicating results</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="descriptives.html"><a href="descriptives.html#tables-with-knitrkable-and-kableextra"><i class="fa fa-check"></i><b>8.2.1</b> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></a></li>
+<li class="chapter" data-level="8.2.2" data-path="descriptives.html"><a href="descriptives.html#use-case-reporting-skimr-results"><i class="fa fa-check"></i><b>8.2.2</b> Use case: reporting <code>skimr</code> results</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="descriptives.html"><a href="descriptives.html#further-links-7"><i class="fa fa-check"></i><b>8.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>9</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualization.html"><a href="visualization.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>9.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
+<li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#exporting-graphics"><i class="fa fa-check"></i><b>9.2</b> Exporting graphics</a></li>
+<li class="chapter" data-level="9.3" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.3</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="markdown.html"><a href="markdown.html#introduction"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="markdown.html"><a href="markdown.html#further-resources"><i class="fa fa-check"></i><b>10.2</b> Further resources</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functionalprogramming.html"><a href="functionalprogramming.html"><i class="fa fa-check"></i><b>11</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#flow-control"><i class="fa fa-check"></i><b>11.1</b> Flow control</a></li>
+<li class="chapter" data-level="11.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functions"><i class="fa fa-check"></i><b>11.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#writing-your-own-functions"><i class="fa fa-check"></i><b>11.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="11.2.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#an-example-roulette"><i class="fa fa-check"></i><b>11.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="11.2.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>11.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="11.2.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-readings-2"><i class="fa fa-check"></i><b>11.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#iteration"><i class="fa fa-check"></i><b>11.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
+<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="exercises.html"><a href="exercises.html#chapter-2"><i class="fa fa-check"></i><b>13.1</b> Chapter 2</a></li>
+<li class="chapter" data-level="13.2" data-path="exercises.html"><a href="exercises.html#chapter-3"><i class="fa fa-check"></i><b>13.2</b> Chapter 3</a></li>
+<li class="chapter" data-level="13.3" data-path="exercises.html"><a href="exercises.html#chapter-4"><i class="fa fa-check"></i><b>13.3</b> Chapter 4</a></li>
+<li class="chapter" data-level="13.4" data-path="exercises.html"><a href="exercises.html#chapter-5"><i class="fa fa-check"></i><b>13.4</b> Chapter 5</a></li>
+<li class="chapter" data-level="13.5" data-path="exercises.html"><a href="exercises.html#chapter-6"><i class="fa fa-check"></i><b>13.5</b> Chapter 6</a></li>
+<li class="chapter" data-level="13.6" data-path="exercises.html"><a href="exercises.html#chapter-7"><i class="fa fa-check"></i><b>13.6</b> Chapter 7</a></li>
+<li class="chapter" data-level="13.7" data-path="exercises.html"><a href="exercises.html#chapter-8"><i class="fa fa-check"></i><b>13.7</b> Chapter 8</a></li>
+<li class="chapter" data-level="13.8" data-path="exercises.html"><a href="exercises.html#chapter-9"><i class="fa fa-check"></i><b>13.8</b> Chapter 9</a></li>
+<li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
+<li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="visualization" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Visualizations with <code>ggplot2</code></h1>
+<blockquote>
+<p>“The purpoose of visualization is insight, not pictures.” – Ben A. Shneiderman</p>
+</blockquote>
+<p>In R, the dominant package for visualizing data is <code>ggplot2</code> which belongs to the tidyverse.</p>
+<div id="the-layered-grammar-of-graphics" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> The “layered grammar of graphics”</h2>
+<p><code>ggplot2</code> works with tibbles and the data needs to be in a tidy format. It builds graphics using “the layered grammar of graphics.” <span class="citation">(<a href="#ref-wickham2010" role="doc-biblioref">Wickham 2010</a>)</span></p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="visualization.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb436-2"><a href="visualization.html#cb436-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb436-3"><a href="visualization.html#cb436-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-4"><a href="visualization.html#cb436-4" aria-hidden="true" tabindex="-1"></a>publishers <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/publishers_with_places.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;publishers_a-l&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb436-5"><a href="visualization.html#cb436-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="fu">read_excel</span>(<span class="st">&quot;data/publishers_with_places.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="st">&quot;publishers_m-z&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb436-6"><a href="visualization.html#cb436-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(city, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">&quot;city&quot;</span>, <span class="st">&quot;state&quot;</span>), <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb436-7"><a href="visualization.html#cb436-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(publisher, city) </span>
+<span id="cb436-8"><a href="visualization.html#cb436-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb436-9"><a href="visualization.html#cb436-9" aria-hidden="true" tabindex="-1"></a>publishers_filtered <span class="ot">&lt;-</span> publishers <span class="sc">%&gt;%</span> </span>
+<span id="cb436-10"><a href="visualization.html#cb436-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(city) <span class="sc">%&gt;%</span> </span>
+<span id="cb436-11"><a href="visualization.html#cb436-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">n</span>() <span class="sc">&gt;</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb436-12"><a href="visualization.html#cb436-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code></pre></div>
+<p>This implies that you start with a base layer – the initial <code>ggplot2</code> call.</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="visualization.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> publishers_filtered)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-186-1.png" width="672" /></p>
+<p>The initial call produces an empty coordinate system. It can be filled with additional layers.</p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="visualization.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> publishers_filtered) <span class="sc">+</span></span>
+<span id="cb438-2"><a href="visualization.html#cb438-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> city)) </span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-187-1.png" width="672" /></p>
+<p>Unlike the remainder of the tidyverse, <code>ggplot2</code> uses a <code>+</code> instead of the pipe <code>%&gt;%</code>. If you use the pipe by accident, it will not work and an (informative) error message will appear.</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="visualization.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ggplot(data = publishers_filtered) %&gt;% </span></span>
+<span id="cb439-2"><a href="visualization.html#cb439-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   geom_bar(aes(x = city)) </span></span></code></pre></div>
+<div id="the-layers" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> The layers</h3>
+<p>In general, a call looks like this:</p>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="visualization.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="sc">&lt;</span>DATA<span class="sc">&gt;</span>) <span class="sc">+</span> </span>
+<span id="cb440-2"><a href="visualization.html#cb440-2" aria-hidden="true" tabindex="-1"></a>  <span class="er">&lt;</span>GEOM_FUNCTION<span class="sc">&gt;</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="sc">&lt;</span>MAPPINGS<span class="sc">&gt;</span>))</span></code></pre></div>
+<p>As you might have seen above, I provided the data in the initial <code>ggplot</code> call. Then, when I added the layer – the <code>geom_bar()</code> for a bar plot – I had to provide the mapping – which variables I wanted to plot – using <code>aes()</code>. This is referred to as the <code>aesthetics</code>. In my case, I wanted the cities to be projected to the x-axis. Since I was using <code>geom_bar</code> to create a bar plot, the number of occurrences of the respective cities were automatically counted and depicted on the y-axis. There are more <code>geom_*</code> functions and they all create different plots. Whether you can use them or not depends on the data you have at hand and/or the number of variables you want to plot. In the following, I will give you a brief overview of the most important geoms.</p>
+<div id="one-variable" class="section level4" number="9.1.1.1">
+<h4><span class="header-section-number">9.1.1.1</span> One variable</h4>
+<p>If you only want to display one variable, the x- or y-axis, as you choose, will depict the variable’s value. The counterpart will display the frequency or density of those values.</p>
+<div id="one-variable-discrete" class="section level5" number="9.1.1.1.1">
+<h5><span class="header-section-number">9.1.1.1.1</span> One variable – discrete</h5>
+<p>Here, the only possible kind of visualization is a bar plot as shown above. If the visualization should look more fancy, e.g., with colored bars, you have several arguments at hand. If they should not be different for different kinds of data, they need to be specified outside the <code>aes()</code>. There are always different arguments and you can look them up using <code>?&lt;GEOM_FUNCTION&gt;</code> and then looking at the Aesthetics section. Apart from that, you can also look at the <a href="https://rstudio.com/wp-content/uploads/2015/12/ggplot2-cheatsheet-2.0.pdf"><code>ggplot2</code> cheatsheet</a>.</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="visualization.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> publishers_filtered) <span class="sc">+</span></span>
+<span id="cb441-2"><a href="visualization.html#cb441-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x =</span> city), <span class="at">fill =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-190-1.png" width="672" /></p>
+</div>
+<div id="one-variable-continuous" class="section level5" number="9.1.1.1.2">
+<h5><span class="header-section-number">9.1.1.1.2</span> One variable – continuous</h5>
+<p>If you want to display a continuous variable’s distribution of values, you can use a histogram. Its <code>geom_*</code> function is <code>geom_histogram()</code>:</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="visualization.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/billboard.rda&quot;</span>)</span>
+<span id="cb442-2"><a href="visualization.html#cb442-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb442-3"><a href="visualization.html#cb442-3" aria-hidden="true" tabindex="-1"></a>song_tbl <span class="ot">&lt;-</span> billboard <span class="sc">%&gt;%</span> </span>
+<span id="cb442-4"><a href="visualization.html#cb442-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(artist, track) <span class="sc">%&gt;%</span> </span>
+<span id="cb442-5"><a href="visualization.html#cb442-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">song_id =</span> <span class="fu">row_number</span>())</span>
+<span id="cb442-6"><a href="visualization.html#cb442-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb442-7"><a href="visualization.html#cb442-7" aria-hidden="true" tabindex="-1"></a>rank_tbl <span class="ot">&lt;-</span> billboard <span class="sc">%&gt;%</span> </span>
+<span id="cb442-8"><a href="visualization.html#cb442-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">&quot;wk&quot;</span>), </span>
+<span id="cb442-9"><a href="visualization.html#cb442-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">&quot;week&quot;</span>, </span>
+<span id="cb442-10"><a href="visualization.html#cb442-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_prefix =</span> <span class="st">&quot;wk&quot;</span>, </span>
+<span id="cb442-11"><a href="visualization.html#cb442-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">&quot;rank&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb442-12"><a href="visualization.html#cb442-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">week =</span> <span class="fu">as.numeric</span>(week),</span>
+<span id="cb442-13"><a href="visualization.html#cb442-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">date =</span> date.entered <span class="sc">+</span> (week<span class="dv">-1</span>) <span class="sc">*</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb442-14"><a href="visualization.html#cb442-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb442-15"><a href="visualization.html#cb442-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(song_tbl, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;artist&quot;</span>, <span class="st">&quot;track&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb442-16"><a href="visualization.html#cb442-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(song_id, date, week, rank)</span></code></pre></div>
+<p>How does the distribution of songs over the weeks look like?</p>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="visualization.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rank_tbl) <span class="sc">+</span></span>
+<span id="cb443-2"><a href="visualization.html#cb443-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">x =</span> week))</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-192-1.png" width="672" /></p>
+<p>A smoothed histogram is <code>geom_density()</code>:</p>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="visualization.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> rank_tbl) <span class="sc">+</span></span>
+<span id="cb445-2"><a href="visualization.html#cb445-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">x =</span> week))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-193-1.png" width="672" /></p>
+</div>
+</div>
+<div id="two-variables" class="section level4" number="9.1.1.2">
+<h4><span class="header-section-number">9.1.1.2</span> Two variables</h4>
+<p>In the majority of cases, you will want to display the relationship between two variables, one on the x- and the other one on the y-axis.</p>
+<div id="both-continuous" class="section level5" number="9.1.1.2.1">
+<h5><span class="header-section-number">9.1.1.2.1</span> Both continuous</h5>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="visualization.html#cb446-1" aria-hidden="true" tabindex="-1"></a>county_data_midwest <span class="ot">&lt;-</span> socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb446-2"><a href="visualization.html#cb446-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(census_region <span class="sc">==</span> <span class="st">&quot;Midwest&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb446-3"><a href="visualization.html#cb446-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code></pre></div>
+<p>If both variables are continuous, the easiest option is to use a scatterplot.</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="visualization.html#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb447-2"><a href="visualization.html#cb447-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
+<p>Here, it might make sense to color the points according to a categorical variable (state, in this case). If so, a legend is added which maps the colors to their respective values.</p>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="visualization.html#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb448-2"><a href="visualization.html#cb448-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
+<p>Since I look at the relationship between votes for the Republicans and the Democrats, and the U.S. is a two-party system, there is a fairly clear relationship between them both. This can also be depicted using <code>geom_smooth()</code>:</p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="visualization.html#cb449-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb449-2"><a href="visualization.html#cb449-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state))</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-197-1.png" width="672" /></p>
+<p>Here, <code>color = state</code> has a different effect: each dimension of the categorical variable gets its own line.</p>
+<p>If you do not want it to be smoothed, just use <code>geom_line()</code>.</p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="visualization.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb451-2"><a href="visualization.html#cb451-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-198-1.png" width="672" /></p>
+</div>
+<div id="discrete-x-continuous-y" class="section level5" number="9.1.1.2.2">
+<h5><span class="header-section-number">9.1.1.2.2</span> Discrete X, continuous Y</h5>
+<p>In this case, different categories of data will be put on the x-axis and some of their properties will be displayed on the y-axis. The probably most prominent example for this type of plot is a box plot:</p>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="visualization.html#cb452-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb452-2"><a href="visualization.html#cb452-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> state, <span class="at">y =</span> per_gop_2016))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-199-1.png" width="672" /></p>
+</div>
+<div id="both-discrete" class="section level5" number="9.1.1.2.3">
+<h5><span class="header-section-number">9.1.1.2.3</span> Both discrete</h5>
+<p>It is rarely the case that you want to depict two categorical variables in one plot. If so, you can use <code>geom_jitter()</code>. It is related to <code>geom_point()</code>. The difference is that with <code>geom_jitter()</code>, a little bit of noise is added to the dots, making them appear distinct.</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="visualization.html#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb453-2"><a href="visualization.html#cb453-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(<span class="at">x =</span> state, <span class="at">y =</span> winner))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-200-1.png" width="672" /></p>
+<p>As opposed to:</p>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="visualization.html#cb454-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb454-2"><a href="visualization.html#cb454-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> state, <span class="at">y =</span> winner))</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-201-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="making-them-publishable" class="section level3" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Making them “publishable”</h3>
+<p>So far, I have only added one layer to the plot. This suffices for the most basic visualizations. The good thing about R and RMarkdown is, however, that you can write entire publications only using their means. Hence, the plots need to look awesome. This section is dedicated to how you can achieve this. First, I will touch upon how you can make them look good using <code>scales</code>. <code>labs()</code> allow you to add titles, captions, and axis labels. Finally, <code>facet_*</code> allows you to plot multiple plots into one.</p>
+<div id="scales" class="section level4" number="9.1.2.1">
+<h4><span class="header-section-number">9.1.2.1</span> Scales</h4>
+<p>Scales can be used to take control of how the data’s values are mapped to the aesthetic’s visual values. You can find a more exhaustive tutorial on them <a href="https://www3.nd.edu/~steve/computing_with_data/12_Scales_themes/scales_themes.html">here</a>.</p>
+<ul>
+<li><code>scale_*_continuous</code> – for dealing with continuous values. (you can find an exhaustive list of colors in R <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">here</a>)</li>
+</ul>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="visualization.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> county_data_midwest) <span class="sc">+</span></span>
+<span id="cb455-2"><a href="visualization.html#cb455-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> white)) <span class="sc">+</span></span>
+<span id="cb455-3"><a href="visualization.html#cb455-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb455-4"><a href="visualization.html#cb455-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb455-5"><a href="visualization.html#cb455-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;green&quot;</span>,</span>
+<span id="cb455-6"><a href="visualization.html#cb455-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">high =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-202-1.png" width="672" /></p>
+<ul>
+<li><p><code>scale_*_discrete</code> – for dealing with discrete values</p></li>
+<li><p><code>scale_*_manual</code> – manually mapping discrete values to visual values</p></li>
+</ul>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="visualization.html#cb456-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb456-2"><a href="visualization.html#cb456-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span>, <span class="st">&quot;IL&quot;</span>, <span class="st">&quot;IN&quot;</span>, <span class="st">&quot;KS&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb456-3"><a href="visualization.html#cb456-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb456-4"><a href="visualization.html#cb456-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb456-5"><a href="visualization.html#cb456-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;IL&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>, <span class="st">&quot;IN&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;KS&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb456-6"><a href="visualization.html#cb456-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">&quot;State&quot;</span>,</span>
+<span id="cb456-7"><a href="visualization.html#cb456-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">breaks =</span> <span class="fu">waiver</span>(),</span>
+<span id="cb456-8"><a href="visualization.html#cb456-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Iowa&quot;</span>, <span class="st">&quot;Illinois&quot;</span>, <span class="st">&quot;Indiana&quot;</span>, <span class="st">&quot;Kansas&quot;</span>)) </span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-203-1.png" width="672" /></p>
+</div>
+<div id="adding-titles-captions-etc." class="section level4" number="9.1.2.2">
+<h4><span class="header-section-number">9.1.2.2</span> Adding titles, captions, etc.</h4>
+<p>Now you have modified the scales and colors – there is a lot more to be modified if you want to – but you have not added a meaningful title, a nice caption (where were the data obtained?), and the axes do not have proper names, too. This can be achieved using <code>labs()</code> (which is the abbreviation for labels).</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="visualization.html#cb458-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb458-2"><a href="visualization.html#cb458-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span>, <span class="st">&quot;IL&quot;</span>, <span class="st">&quot;IN&quot;</span>, <span class="st">&quot;KS&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb458-3"><a href="visualization.html#cb458-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb458-4"><a href="visualization.html#cb458-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb458-5"><a href="visualization.html#cb458-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;IL&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>, <span class="st">&quot;IN&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;KS&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb458-6"><a href="visualization.html#cb458-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">name =</span> <span class="st">&quot;State&quot;</span>,</span>
+<span id="cb458-7"><a href="visualization.html#cb458-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">waiver</span>(),</span>
+<span id="cb458-8"><a href="visualization.html#cb458-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Iowa&quot;</span>, <span class="st">&quot;Illinois&quot;</span>, <span class="st">&quot;Indiana&quot;</span>, <span class="st">&quot;Kansas&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb458-9"><a href="visualization.html#cb458-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb458-10"><a href="visualization.html#cb458-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb458-11"><a href="visualization.html#cb458-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;Relationship between percentages of votes for Democrats and Republicans in selected states in the Midwest&quot;</span>) <span class="sc">+</span></span>
+<span id="cb458-12"><a href="visualization.html#cb458-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Percentage of votes for the Democrats in 2016&quot;</span>) <span class="sc">+</span></span>
+<span id="cb458-13"><a href="visualization.html#cb458-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Percentage of votes for the Republicans in 2016&quot;</span>) </span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-204-1.png" width="672" /></p>
+<p>Well, that doesn’t look good, the title is too long. Inserting <code>\n</code> – for new line – will do the trick.</p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="visualization.html#cb460-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb460-2"><a href="visualization.html#cb460-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span>, <span class="st">&quot;IL&quot;</span>, <span class="st">&quot;IN&quot;</span>, <span class="st">&quot;KS&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb460-3"><a href="visualization.html#cb460-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb460-4"><a href="visualization.html#cb460-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb460-5"><a href="visualization.html#cb460-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;IL&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>, <span class="st">&quot;IN&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;KS&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb460-6"><a href="visualization.html#cb460-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">name =</span> <span class="st">&quot;State&quot;</span>,</span>
+<span id="cb460-7"><a href="visualization.html#cb460-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">waiver</span>(),</span>
+<span id="cb460-8"><a href="visualization.html#cb460-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Iowa&quot;</span>, <span class="st">&quot;Illinois&quot;</span>, <span class="st">&quot;Indiana&quot;</span>, <span class="st">&quot;Kansas&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb460-9"><a href="visualization.html#cb460-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb460-10"><a href="visualization.html#cb460-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb460-11"><a href="visualization.html#cb460-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;Relationship between percentages of votes for Democrats </span><span class="sc">\n</span><span class="st">and Republicans in selected states in the Midwest&quot;</span>) <span class="sc">+</span></span>
+<span id="cb460-12"><a href="visualization.html#cb460-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Percentage of votes for the Democrats in 2016&quot;</span>) <span class="sc">+</span></span>
+<span id="cb460-13"><a href="visualization.html#cb460-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Percentage of votes for the Republicans in 2016&quot;</span>) </span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-205-1.png" width="672" /></p>
+<p>However, providing it with three different layers just for labeling is pretty tedious. This is where <code>labs()</code> comes in handy.</p>
+<div class="sourceCode" id="cb462"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb462-1"><a href="visualization.html#cb462-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb462-2"><a href="visualization.html#cb462-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span>, <span class="st">&quot;IL&quot;</span>, <span class="st">&quot;IN&quot;</span>, <span class="st">&quot;KS&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb462-3"><a href="visualization.html#cb462-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb462-4"><a href="visualization.html#cb462-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> state)) <span class="sc">+</span></span>
+<span id="cb462-5"><a href="visualization.html#cb462-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;IA&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;IL&quot;</span> <span class="ot">=</span> <span class="st">&quot;green&quot;</span>, <span class="st">&quot;IN&quot;</span> <span class="ot">=</span> <span class="st">&quot;red&quot;</span>, <span class="st">&quot;KS&quot;</span> <span class="ot">=</span> <span class="st">&quot;purple&quot;</span>),</span>
+<span id="cb462-6"><a href="visualization.html#cb462-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">name =</span> <span class="st">&quot;State&quot;</span>,</span>
+<span id="cb462-7"><a href="visualization.html#cb462-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">breaks =</span> <span class="fu">waiver</span>(),</span>
+<span id="cb462-8"><a href="visualization.html#cb462-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Iowa&quot;</span>, <span class="st">&quot;Illinois&quot;</span>, <span class="st">&quot;Indiana&quot;</span>, <span class="st">&quot;Kansas&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb462-9"><a href="visualization.html#cb462-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb462-10"><a href="visualization.html#cb462-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb462-11"><a href="visualization.html#cb462-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Relationship between percentages of votes for Democrats </span><span class="sc">\n</span><span class="st">and Republicans in selected states in the Midwest&quot;</span>,</span>
+<span id="cb462-12"><a href="visualization.html#cb462-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">caption =</span> <span class="st">&quot;Data obtained from the socviz R package&quot;</span>,</span>
+<span id="cb462-13"><a href="visualization.html#cb462-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">x =</span> <span class="st">&quot;Percentage of votes for the Democrats in 2016&quot;</span>,</span>
+<span id="cb462-14"><a href="visualization.html#cb462-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;Percentage of votes for the Republicans in 2016&quot;</span>) </span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values (geom_point).</code></pre>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-206-1.png" width="672" /></p>
+</div>
+<div id="facets" class="section level4" number="9.1.2.3">
+<h4><span class="header-section-number">9.1.2.3</span> Facets</h4>
+<p>The original dataset consists of four different census regions. If I were to compare them, I could color them accordingly.</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="visualization.html#cb464-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb464-2"><a href="visualization.html#cb464-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb464-3"><a href="visualization.html#cb464-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb464-4"><a href="visualization.html#cb464-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> census_region)) <span class="sc">+</span></span>
+<span id="cb464-5"><a href="visualization.html#cb464-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb464-6"><a href="visualization.html#cb464-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb464-7"><a href="visualization.html#cb464-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_discrete</span>()</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-207-1.png" width="672" /></p>
+<p>Despite the coloring according to the different states, it is still hard to assess whether there really are differences. Apart from that, I would like to assess the impact the percentage of white people in the population has. This would be easier if I put them into individual graphs. I can achieve this using so-called facets. Facets enable me to divide the plot into subplots based on categorical variables. <code>facet_wrap()</code> puts them into a rectangular layout. The categorical variable needs to be provided prefixed with a tilde <code>~</code>, <code>nrow</code> determines the number of rows.</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="visualization.html#cb465-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb465-2"><a href="visualization.html#cb465-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb465-3"><a href="visualization.html#cb465-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb465-4"><a href="visualization.html#cb465-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> white)) <span class="sc">+</span></span>
+<span id="cb465-5"><a href="visualization.html#cb465-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb465-6"><a href="visualization.html#cb465-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb465-7"><a href="visualization.html#cb465-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;green&quot;</span>,</span>
+<span id="cb465-8"><a href="visualization.html#cb465-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb465-9"><a href="visualization.html#cb465-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>census_region,</span>
+<span id="cb465-10"><a href="visualization.html#cb465-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">nrow =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-208-1.png" width="672" /></p>
+<p>Apart from that, I can also spread it out using two different variables. Here, I will look at differences in the distribution of males and females in the counties split up by who won in 2016 and 2012. This can be achieved using <code>facet_grid(categorical_variable_1~categorical_variable_2)</code>. The former one will be out into rows, the latter into columns.</p>
+<div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb466-1"><a href="visualization.html#cb466-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb466-2"><a href="visualization.html#cb466-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb466-3"><a href="visualization.html#cb466-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb466-4"><a href="visualization.html#cb466-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> white)) <span class="sc">+</span></span>
+<span id="cb466-5"><a href="visualization.html#cb466-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb466-6"><a href="visualization.html#cb466-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb466-7"><a href="visualization.html#cb466-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;green&quot;</span>,</span>
+<span id="cb466-8"><a href="visualization.html#cb466-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb466-9"><a href="visualization.html#cb466-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(winner<span class="sc">~</span>winner12)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-209-1.png" width="672" /></p>
+<p>If you want to facet using only one variable, put a dot at where the other variable would stand otherwise…</p>
+<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="visualization.html#cb467-1" aria-hidden="true" tabindex="-1"></a>socviz<span class="sc">::</span>county_data <span class="sc">%&gt;%</span> </span>
+<span id="cb467-2"><a href="visualization.html#cb467-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb467-3"><a href="visualization.html#cb467-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb467-4"><a href="visualization.html#cb467-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> per_dem_2016, <span class="at">y =</span> per_gop_2016, <span class="at">color =</span> white)) <span class="sc">+</span></span>
+<span id="cb467-5"><a href="visualization.html#cb467-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb467-6"><a href="visualization.html#cb467-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb467-7"><a href="visualization.html#cb467-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;green&quot;</span>,</span>
+<span id="cb467-8"><a href="visualization.html#cb467-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">high =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb467-9"><a href="visualization.html#cb467-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>(.<span class="sc">~</span>winner)</span></code></pre></div>
+<p><img src="introduction-to-r_files/figure-html/unnamed-chunk-210-1.png" width="672" /></p>
+<p>… or just use <code>facet_wrap()</code>.</p>
+</div>
+</div>
+</div>
+<div id="exporting-graphics" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Exporting graphics</h2>
+<p>If you include the graphics in an RMarkdown document, make sure you use the proper chunk options (i.e., <code>{r echo=FALSE, message=FALSE, warning=FALSE}</code>).</p>
+<p>If you, however, want to export it and put it into an MS Word document or so, you can just use the <code>ggsave()</code> function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, <code>ggsave()</code> just uses this one.</p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="visualization.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(mpg, wt)) <span class="sc">+</span></span>
+<span id="cb468-2"><a href="visualization.html#cb468-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb468-3"><a href="visualization.html#cb468-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-4"><a href="visualization.html#cb468-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>) <span class="co">#save it to pdf</span></span>
+<span id="cb468-5"><a href="visualization.html#cb468-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.png&quot;</span>) <span class="co">#save it to png</span></span>
+<span id="cb468-6"><a href="visualization.html#cb468-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-7"><a href="visualization.html#cb468-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">4</span>) <span class="co">#specify width and height -- in inches by default</span></span>
+<span id="cb468-8"><a href="visualization.html#cb468-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>) <span class="co">#change unit using the units argument</span></span></code></pre></div>
+</div>
+<div id="further-readings-1" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Further readings</h2>
+<ul>
+<li><a href="https://ggplot2-book.org">ggplot2 – the book.</a></li>
+<li>The <a href="http://www.cookbook-r.com/Graphs/">graphic cookbook for R</a>.</li>
+<li>Another <a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html">tutorial</a>.</li>
+<li>The <code>ggsave()</code> function <a href="https://ggplot2.tidyverse.org/reference/ggsave.html">in further detail</a>.</li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-wickham2010" class="csl-entry">
+Wickham, Hadley. 2010. <span>“A <span>Layered Grammar</span> of <span>Graphics</span>.”</span> <em>Journal of Computational and Graphical Statistics</em> 19 (1): 3–28. <a href="https://doi.org/10.1198/jcgs.2009.07098">https://doi.org/10.1198/jcgs.2009.07098</a>.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="descriptives.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="markdown.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

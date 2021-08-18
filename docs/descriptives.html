@@ -1,0 +1,3794 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 8 Describing data sets | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 8 Describing data sets | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 8 Describing data sets | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="workwithfactors.html"/>
+<link rel="next" href="visualization.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.3</b> Further links</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.4</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.6</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intror.html"><a href="intror.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intror.html"><a href="intror.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intror.html"><a href="intror.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intror.html"><a href="intror.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intror.html"><a href="intror.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intror.html"><a href="intror.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intror.html"><a href="intror.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intror.html"><a href="intror.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intror.html"><a href="intror.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="workingwithdata.html"><a href="workingwithdata.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="workingwithdata.html"><a href="workingwithdata.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workingwithdata.html"><a href="workingwithdata.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="workingwithdata.html"><a href="workingwithdata.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="workingwithdata.html"><a href="workingwithdata.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="workingwithdata.html"><a href="workingwithdata.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="workingwithdata.html"><a href="workingwithdata.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workingwithdata.html"><a href="workingwithdata.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="workingwithdata.html"><a href="workingwithdata.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="workingwithdata.html"><a href="workingwithdata.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="workingwithdata.html"><a href="workingwithdata.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workingwithdata.html"><a href="workingwithdata.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="workingwithdata.html"><a href="workingwithdata.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="wrangling.html"><a href="wrangling.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="wrangling.html"><a href="wrangling.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="wrangling.html"><a href="wrangling.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="wrangling.html"><a href="wrangling.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="wrangling.html"><a href="wrangling.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="wrangling.html"><a href="wrangling.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="wrangling.html"><a href="wrangling.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="wrangling.html"><a href="wrangling.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="wrangling.html"><a href="wrangling.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="wrangling.html"><a href="wrangling.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="wrangling.html"><a href="wrangling.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="wrangling.html"><a href="wrangling.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="wrangling.html"><a href="wrangling.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="wrangling.html"><a href="wrangling.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="wrangling.html"><a href="wrangling.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="wrangling.html"><a href="wrangling.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stringregex.html"><a href="stringregex.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="stringregex.html"><a href="stringregex.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="stringregex.html"><a href="stringregex.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stringregex.html"><a href="stringregex.html#literal-characters"><i class="fa fa-check"></i><b>6.2.1</b> Literal characters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stringregex.html"><a href="stringregex.html#metacharacters"><i class="fa fa-check"></i><b>6.2.2</b> Metacharacters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stringregex.html"><a href="stringregex.html#more-advanced-string-manipulation"><i class="fa fa-check"></i><b>6.3</b> More advanced string manipulation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="stringregex.html"><a href="stringregex.html#detect-matches"><i class="fa fa-check"></i><b>6.3.1</b> Detect matches</a></li>
+<li class="chapter" data-level="6.3.2" data-path="stringregex.html"><a href="stringregex.html#mutating-strings"><i class="fa fa-check"></i><b>6.3.2</b> Mutating strings</a></li>
+<li class="chapter" data-level="6.3.3" data-path="stringregex.html"><a href="stringregex.html#extracting-text"><i class="fa fa-check"></i><b>6.3.3</b> Extracting text</a></li>
+<li class="chapter" data-level="6.3.4" data-path="stringregex.html"><a href="stringregex.html#split-vectors"><i class="fa fa-check"></i><b>6.3.4</b> Split vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="stringregex.html"><a href="stringregex.html#further-links-5"><i class="fa fa-check"></i><b>6.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="workwithfactors.html"><a href="workwithfactors.html"><i class="fa fa-check"></i><b>7</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workwithfactors.html"><a href="workwithfactors.html#creating-a-factor"><i class="fa fa-check"></i><b>7.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2" data-path="workwithfactors.html"><a href="workwithfactors.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2</b> Some basic operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workwithfactors.html"><a href="workwithfactors.html#reordering-factors"><i class="fa fa-check"></i><b>7.2.1</b> Reordering factors</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workwithfactors.html"><a href="workwithfactors.html#modifying-levels"><i class="fa fa-check"></i><b>7.2.2</b> Modifying levels</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="workwithfactors.html"><a href="workwithfactors.html#further-links-6"><i class="fa fa-check"></i><b>7.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="descriptives.html"><a href="descriptives.html"><i class="fa fa-check"></i><b>8</b> Describing data sets</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="descriptives.html"><a href="descriptives.html#basic-descriptives"><i class="fa fa-check"></i><b>8.1</b> Basic descriptives</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="descriptives.html"><a href="descriptives.html#grouped-descriptives"><i class="fa fa-check"></i><b>8.1.1</b> Grouped descriptives</a></li>
+<li class="chapter" data-level="8.1.2" data-path="descriptives.html"><a href="descriptives.html#modifying-the-skim-output"><i class="fa fa-check"></i><b>8.1.2</b> Modifying the <code>skim()</code> output</a></li>
+<li class="chapter" data-level="8.1.3" data-path="descriptives.html"><a href="descriptives.html#further-descriptives"><i class="fa fa-check"></i><b>8.1.3</b> Further descriptives</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="descriptives.html"><a href="descriptives.html#communicating-results"><i class="fa fa-check"></i><b>8.2</b> Communicating results</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="descriptives.html"><a href="descriptives.html#tables-with-knitrkable-and-kableextra"><i class="fa fa-check"></i><b>8.2.1</b> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></a></li>
+<li class="chapter" data-level="8.2.2" data-path="descriptives.html"><a href="descriptives.html#use-case-reporting-skimr-results"><i class="fa fa-check"></i><b>8.2.2</b> Use case: reporting <code>skimr</code> results</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="descriptives.html"><a href="descriptives.html#further-links-7"><i class="fa fa-check"></i><b>8.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>9</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualization.html"><a href="visualization.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>9.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
+<li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#exporting-graphics"><i class="fa fa-check"></i><b>9.2</b> Exporting graphics</a></li>
+<li class="chapter" data-level="9.3" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.3</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="markdown.html"><a href="markdown.html#introduction"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="markdown.html"><a href="markdown.html#further-resources"><i class="fa fa-check"></i><b>10.2</b> Further resources</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functionalprogramming.html"><a href="functionalprogramming.html"><i class="fa fa-check"></i><b>11</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#flow-control"><i class="fa fa-check"></i><b>11.1</b> Flow control</a></li>
+<li class="chapter" data-level="11.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functions"><i class="fa fa-check"></i><b>11.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#writing-your-own-functions"><i class="fa fa-check"></i><b>11.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="11.2.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#an-example-roulette"><i class="fa fa-check"></i><b>11.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="11.2.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>11.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="11.2.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-readings-2"><i class="fa fa-check"></i><b>11.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#iteration"><i class="fa fa-check"></i><b>11.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
+<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="exercises.html"><a href="exercises.html#chapter-2"><i class="fa fa-check"></i><b>13.1</b> Chapter 2</a></li>
+<li class="chapter" data-level="13.2" data-path="exercises.html"><a href="exercises.html#chapter-3"><i class="fa fa-check"></i><b>13.2</b> Chapter 3</a></li>
+<li class="chapter" data-level="13.3" data-path="exercises.html"><a href="exercises.html#chapter-4"><i class="fa fa-check"></i><b>13.3</b> Chapter 4</a></li>
+<li class="chapter" data-level="13.4" data-path="exercises.html"><a href="exercises.html#chapter-5"><i class="fa fa-check"></i><b>13.4</b> Chapter 5</a></li>
+<li class="chapter" data-level="13.5" data-path="exercises.html"><a href="exercises.html#chapter-6"><i class="fa fa-check"></i><b>13.5</b> Chapter 6</a></li>
+<li class="chapter" data-level="13.6" data-path="exercises.html"><a href="exercises.html#chapter-7"><i class="fa fa-check"></i><b>13.6</b> Chapter 7</a></li>
+<li class="chapter" data-level="13.7" data-path="exercises.html"><a href="exercises.html#chapter-8"><i class="fa fa-check"></i><b>13.7</b> Chapter 8</a></li>
+<li class="chapter" data-level="13.8" data-path="exercises.html"><a href="exercises.html#chapter-9"><i class="fa fa-check"></i><b>13.8</b> Chapter 9</a></li>
+<li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
+<li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="descriptives" class="section level1" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Describing data sets</h1>
+<p>When it comes to the description of data sets, it’s often about just getting a quick feel for the data. While <code>dplyr</code>’s <code>summarize()</code> is a great weapon for summarizing singular variables – and I have already shown you in Chapter @(wrangling) how to do this – you need a hassle-free tool to quickly get an overview. For this use-case, <code>skimr</code> is my personal weapon of choice. It is not part of the <code>tidyverse</code> – yet super-compatible – so we first need to load (and perhaps install) it.</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="descriptives.html#cb399-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">&quot;skimr&quot;</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]) <span class="fu">install.packages</span>(<span class="st">&quot;skimr&quot;</span>)</span>
+<span id="cb399-2"><a href="descriptives.html#cb399-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span></code></pre></div>
+<div id="basic-descriptives" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Basic descriptives</h2>
+<p><code>skimr</code> is designed around its main function <code>skim()</code>. This function handles tibbles as well as vectors. It returns a so-called <code>skim_df</code> which is basically a tibble with some added columns. However, its biggest strength is the fact that it provides descriptives fast and in a easily comprehensible manner. Moreover, you can then go on and further modify them using tidyverse function.</p>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="descriptives.html#cb400-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(mtcars) <span class="co"># it excels with tibbles as input</span></span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values
+## Name                       mtcars
+## Number of rows             32    
+## Number of columns          11    
+## _______________________          
+## Column type frequency:           
+##   numeric                  11    
+## ________________________         
+## Group variables            None  
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##    skim_variable n_missing complete_rate    mean      sd    p0    p25    p50
+##  1 mpg                   0             1  20.1     6.03  10.4   15.4   19.2 
+##  2 cyl                   0             1   6.19    1.79   4      4      6   
+##  3 disp                  0             1 231.    124.    71.1  121.   196.  
+##  4 hp                    0             1 147.     68.6   52     96.5  123   
+##  5 drat                  0             1   3.60    0.535  2.76   3.08   3.70
+##  6 wt                    0             1   3.22    0.978  1.51   2.58   3.32
+##  7 qsec                  0             1  17.8     1.79  14.5   16.9   17.7 
+##  8 vs                    0             1   0.438   0.504  0      0      0   
+##  9 am                    0             1   0.406   0.499  0      0      0   
+## 10 gear                  0             1   3.69    0.738  3      3      4   
+## 11 carb                  0             1   2.81    1.62   1      2      2   
+##       p75   p100 hist 
+##  1  22.8   33.9  ▃▇▅▁▂
+##  2   8      8    ▆▁▃▁▇
+##  3 326    472    ▇▃▃▃▂
+##  4 180    335    ▇▇▆▃▁
+##  5   3.92   4.93 ▇▃▇▅▁
+##  6   3.61   5.42 ▃▃▇▁▂
+##  7  18.9   22.9  ▃▇▇▂▁
+##  8   1      1    ▇▁▁▁▆
+##  9   1      1    ▇▁▁▁▆
+## 10   4      5    ▇▁▆▁▂
+## 11   4      8    ▇▂▅▁▁</code></pre>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="descriptives.html#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="fu">skim</span>(mtcars<span class="sc">$</span>mpg) <span class="co"># vectors are fine, too</span></span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values    
+## Name                       mtcars$mpg
+## Number of rows             32        
+## Number of columns          1         
+## _______________________              
+## Column type frequency:               
+##   numeric                  1         
+## ________________________             
+## Group variables            None      
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable n_missing complete_rate  mean    sd    p0   p25   p50   p75
+## 1 data                  0             1  20.1  6.03  10.4  15.4  19.2  22.8
+##    p100 hist 
+## 1  33.9 ▃▇▅▁▂</code></pre>
+<p>Usually, data sets come with columns in different flavors. As an example, we can look at the imdb data set. This set contains categorical and numeric variables:</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="descriptives.html#cb404-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> <span class="fu">skim</span>()</span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values    
+## Name                       Piped data
+## Number of rows             1000      
+## Number of columns          12        
+## _______________________              
+## Column type frequency:               
+##   character                5         
+##   numeric                  7         
+## ________________________             
+## Group variables            None      
+## 
+## ── Variable type: character ────────────────────────────────────────────────────
+##   skim_variable n_missing complete_rate   min   max empty n_unique whitespace
+## 1 Title                 0             1     2    61     0      999          0
+## 2 Genre                 0             1     5    26     0      207          0
+## 3 Description           0             1    42   421     0     1000          0
+## 4 Director              0             1     3    32     0      644          0
+## 5 Actors                0             1    43    77     0      996          0
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable      n_missing complete_rate      mean         sd     p0     p25
+## 1 Rank                       0         1        500.      289.       1     251. 
+## 2 Year                       0         1       2013.        3.21  2006    2010  
+## 3 Runtime (Minutes)          0         1        113.       18.8     66     100  
+## 4 Rating                     0         1          6.72      0.945    1.9     6.2
+## 5 Votes                      0         1     169808.   188763.      61   36309  
+## 6 Revenue (Millions)       128         0.872     83.0     103.       0      13.3
+## 7 Metascore                 64         0.936     59.0      17.2     11      47  
+##        p50      p75     p100 hist 
+## 1    500.     750.     1000  ▇▇▇▇▇
+## 2   2014     2016      2016  ▃▂▂▃▇
+## 3    111      123       191  ▂▇▅▁▁
+## 4      6.8      7.4       9  ▁▁▃▇▃
+## 5 110799   239910.  1791916  ▇▁▁▁▁
+## 6     48.0    114.      937. ▇▁▁▁▁
+## 7     59.5     72       100  ▁▅▇▇▂</code></pre>
+<p>Of course, the type of variable determines the type of operation that can be performed and <code>skimr</code> smartly distinguishes between variable types.</p>
+<div id="grouped-descriptives" class="section level3" number="8.1.1">
+<h3><span class="header-section-number">8.1.1</span> Grouped descriptives</h3>
+<p>You can look at certain descriptives by group. Then, <code>skim()</code> will return descriptives for each group in a rowwise fashion. Just call <code>group_by()</code> before passing the tibble to the <code>skim()</code> call</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="descriptives.html#cb406-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb406-2"><a href="descriptives.html#cb406-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb406-3"><a href="descriptives.html#cb406-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>()</span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values    
+## Name                       Piped data
+## Number of rows             32        
+## Number of columns          11        
+## _______________________              
+## Column type frequency:               
+##   numeric                  10        
+## ________________________             
+## Group variables            cyl       
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##    skim_variable   cyl n_missing complete_rate    mean     sd     p0    p25
+##  1 mpg               4         0             1  26.7    4.51   21.4   22.8 
+##  2 mpg               6         0             1  19.7    1.45   17.8   18.6 
+##  3 mpg               8         0             1  15.1    2.56   10.4   14.4 
+##  4 disp              4         0             1 105.    26.9    71.1   78.8 
+##  5 disp              6         0             1 183.    41.6   145    160   
+##  6 disp              8         0             1 353.    67.8   276.   302.  
+##  7 hp                4         0             1  82.6   20.9    52     65.5 
+##  8 hp                6         0             1 122.    24.3   105    110   
+##  9 hp                8         0             1 209.    51.0   150    176.  
+## 10 drat              4         0             1   4.07   0.365   3.69   3.81
+## 11 drat              6         0             1   3.59   0.476   2.76   3.35
+## 12 drat              8         0             1   3.23   0.372   2.76   3.07
+## 13 wt                4         0             1   2.29   0.570   1.51   1.88
+## 14 wt                6         0             1   3.12   0.356   2.62   2.82
+## 15 wt                8         0             1   4.00   0.759   3.17   3.53
+## 16 qsec              4         0             1  19.1    1.68   16.7   18.6 
+## 17 qsec              6         0             1  18.0    1.71   15.5   16.7 
+## 18 qsec              8         0             1  16.8    1.20   14.5   16.1 
+## 19 vs                4         0             1   0.909  0.302   0      1   
+## 20 vs                6         0             1   0.571  0.535   0      0   
+## 21 vs                8         0             1   0      0       0      0   
+## 22 am                4         0             1   0.727  0.467   0      0.5 
+## 23 am                6         0             1   0.429  0.535   0      0   
+## 24 am                8         0             1   0.143  0.363   0      0   
+## 25 gear              4         0             1   4.09   0.539   3      4   
+## 26 gear              6         0             1   3.86   0.690   3      3.5 
+## 27 gear              8         0             1   3.29   0.726   3      3   
+## 28 carb              4         0             1   1.55   0.522   1      1   
+## 29 carb              6         0             1   3.43   1.81    1      2.5 
+## 30 carb              8         0             1   3.5    1.56    2      2.25
+##       p50    p75   p100 hist 
+##  1  26     30.4   33.9  ▇▃▂▃▃
+##  2  19.7   21     21.4  ▅▂▂▁▇
+##  3  15.2   16.2   19.2  ▂▁▇▃▂
+##  4 108    121.   147.   ▇▂▂▆▃
+##  5 168.   196.   258    ▇▁▁▂▂
+##  6 350.   390    472    ▇▅▃▂▅
+##  7  91     96    113    ▃▆▁▇▃
+##  8 110    123    175    ▇▃▁▁▂
+##  9 192.   241.   335    ▇▂▃▁▁
+## 10   4.08   4.16   4.93 ▇▅▃▁▂
+## 11   3.9    3.91   3.92 ▂▂▁▂▇
+## 12   3.12   3.22   4.22 ▃▇▁▁▁
+## 13   2.2    2.62   3.19 ▇▅▇▂▅
+## 14   3.22   3.44   3.46 ▅▂▁▂▇
+## 15   3.76   4.01   5.42 ▇▇▁▁▃
+## 16  18.9   20.0   22.9  ▃▇▇▁▂
+## 17  18.3   19.2   20.2  ▃▇▃▃▇
+## 18  17.2   17.6   18    ▂▂▁▅▇
+## 19   1      1      1    ▁▁▁▁▇
+## 20   1      1      1    ▆▁▁▁▇
+## 21   0      0      0    ▁▁▇▁▁
+## 22   1      1      1    ▃▁▁▁▇
+## 23   0      1      1    ▇▁▁▁▆
+## 24   0      0      1    ▇▁▁▁▁
+## 25   4      4      5    ▁▁▇▁▂
+## 26   4      4      5    ▃▁▇▁▂
+## 27   3      3      5    ▇▁▁▁▁
+## 28   2      2      2    ▇▁▁▁▇
+## 29   4      4      6    ▃▁▇▁▂
+## 30   3.5    4      8    ▇▇▁▁▁</code></pre>
+</div>
+<div id="modifying-the-skim-output" class="section level3" number="8.1.2">
+<h3><span class="header-section-number">8.1.2</span> Modifying the <code>skim()</code> output</h3>
+<p>You can also limit the variables that should be described in the call:</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="descriptives.html#cb408-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb408-2"><a href="descriptives.html#cb408-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb408-3"><a href="descriptives.html#cb408-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(mpg, hp, wt)</span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values    
+## Name                       Piped data
+## Number of rows             32        
+## Number of columns          11        
+## _______________________              
+## Column type frequency:               
+##   numeric                  3         
+## ________________________             
+## Group variables            cyl       
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable   cyl n_missing complete_rate   mean     sd     p0    p25    p50
+## 1 mpg               4         0             1  26.7   4.51   21.4   22.8   26   
+## 2 mpg               6         0             1  19.7   1.45   17.8   18.6   19.7 
+## 3 mpg               8         0             1  15.1   2.56   10.4   14.4   15.2 
+## 4 hp                4         0             1  82.6  20.9    52     65.5   91   
+## 5 hp                6         0             1 122.   24.3   105    110    110   
+## 6 hp                8         0             1 209.   51.0   150    176.   192.  
+## 7 wt                4         0             1   2.29  0.570   1.51   1.88   2.2 
+## 8 wt                6         0             1   3.12  0.356   2.62   2.82   3.22
+## 9 wt                8         0             1   4.00  0.759   3.17   3.53   3.76
+##      p75   p100 hist 
+## 1  30.4   33.9  ▇▃▂▃▃
+## 2  21     21.4  ▅▂▂▁▇
+## 3  16.2   19.2  ▂▁▇▃▂
+## 4  96    113    ▃▆▁▇▃
+## 5 123    175    ▇▃▁▁▂
+## 6 241.   335    ▇▂▃▁▁
+## 7   2.62   3.19 ▇▅▇▂▅
+## 8   3.44   3.46 ▅▂▁▂▇
+## 9   4.01   5.42 ▇▇▁▁▃</code></pre>
+<p>When you transform the <code>skim_df</code> into a normal tibble, you can see that additional columns are added:</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="descriptives.html#cb410-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb410-2"><a href="descriptives.html#cb410-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb410-3"><a href="descriptives.html#cb410-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(mpg, hp, wt) <span class="sc">%&gt;%</span> </span>
+<span id="cb410-4"><a href="descriptives.html#cb410-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 9 × 13
+##   skim_type skim_variable   cyl n_missing complete_rate numeric.mean numeric.sd
+##   &lt;chr&gt;     &lt;chr&gt;         &lt;dbl&gt;     &lt;int&gt;         &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+## 1 numeric   mpg               4         0             1        26.7       4.51 
+## 2 numeric   mpg               6         0             1        19.7       1.45 
+## 3 numeric   mpg               8         0             1        15.1       2.56 
+## 4 numeric   hp                4         0             1        82.6      20.9  
+## 5 numeric   hp                6         0             1       122.       24.3  
+## 6 numeric   hp                8         0             1       209.       51.0  
+## 7 numeric   wt                4         0             1         2.29      0.570
+## 8 numeric   wt                6         0             1         3.12      0.356
+## 9 numeric   wt                8         0             1         4.00      0.759
+## # … with 6 more variables: numeric.p0 &lt;dbl&gt;, numeric.p25 &lt;dbl&gt;,
+## #   numeric.p50 &lt;dbl&gt;, numeric.p75 &lt;dbl&gt;, numeric.p100 &lt;dbl&gt;,
+## #   numeric.hist &lt;chr&gt;</code></pre>
+<p>Those are: <code>skim_type</code> which denotes the type of variable (usually “categorical” or “numeric”) and <code>skim_variable</code> containing the name of the variable that is summarized. If there are grouping variables, those are included with their original name (in this case, the number of cylinder, “cyl”).</p>
+<p>Therefore, normal <code>dplyr</code> syntax works in a pipeline with a <code>skim_df</code>:</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="descriptives.html#cb412-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb412-2"><a href="descriptives.html#cb412-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(cyl) <span class="sc">%&gt;%</span> </span>
+<span id="cb412-3"><a href="descriptives.html#cb412-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>(mpg, hp, wt) <span class="sc">%&gt;%</span></span>
+<span id="cb412-4"><a href="descriptives.html#cb412-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(skim_type<span class="sc">:</span>numeric.sd)</span></code></pre></div>
+<pre><code>## ── Data Summary ────────────────────────
+##                            Values    
+## Name                       Piped data
+## Number of rows             32        
+## Number of columns          11        
+## _______________________              
+## Column type frequency:               
+##   numeric                  3         
+## ________________________             
+## Group variables            cyl       
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable   cyl n_missing complete_rate   mean     sd
+## 1 mpg               4         0             1  26.7   4.51 
+## 2 mpg               6         0             1  19.7   1.45 
+## 3 mpg               8         0             1  15.1   2.56 
+## 4 hp                4         0             1  82.6  20.9  
+## 5 hp                6         0             1 122.   24.3  
+## 6 hp                8         0             1 209.   51.0  
+## 7 wt                4         0             1   2.29  0.570
+## 8 wt                6         0             1   3.12  0.356
+## 9 wt                8         0             1   4.00  0.759</code></pre>
+<p>There are also two handy shortcuts to distinguish between the different types of data. <code>partition()</code> takes a <code>skim_df</code> object and returns a list containing tibbles for each variable type. <code>yank()</code> can be used to deliberately choose a variable type upfront.</p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="descriptives.html#cb414-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb414-2"><a href="descriptives.html#cb414-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb414-3"><a href="descriptives.html#cb414-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">partition</span>()</span></code></pre></div>
+<pre><code>## $character
+## 
+## ── Variable type: character ────────────────────────────────────────────────────
+##   skim_variable n_missing complete_rate   min   max empty n_unique whitespace
+## 1 Title                 0             1     2    61     0      999          0
+## 2 Genre                 0             1     5    26     0      207          0
+## 3 Description           0             1    42   421     0     1000          0
+## 4 Director              0             1     3    32     0      644          0
+## 5 Actors                0             1    43    77     0      996          0
+## 
+## $numeric
+## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable      n_missing complete_rate      mean         sd     p0     p25
+## 1 Rank                       0         1        500.      289.       1     251. 
+## 2 Year                       0         1       2013.        3.21  2006    2010  
+## 3 Runtime (Minutes)          0         1        113.       18.8     66     100  
+## 4 Rating                     0         1          6.72      0.945    1.9     6.2
+## 5 Votes                      0         1     169808.   188763.      61   36309  
+## 6 Revenue (Millions)       128         0.872     83.0     103.       0      13.3
+## 7 Metascore                 64         0.936     59.0      17.2     11      47  
+##        p50      p75     p100 hist 
+## 1    500.     750.     1000  ▇▇▇▇▇
+## 2   2014     2016      2016  ▃▂▂▃▇
+## 3    111      123       191  ▂▇▅▁▁
+## 4      6.8      7.4       9  ▁▁▃▇▃
+## 5 110799   239910.  1791916  ▇▁▁▁▁
+## 6     48.0    114.      937. ▇▁▁▁▁
+## 7     59.5     72       100  ▁▅▇▇▂</code></pre>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="descriptives.html#cb416-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb416-2"><a href="descriptives.html#cb416-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb416-3"><a href="descriptives.html#cb416-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">yank</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Variable type: numeric ──────────────────────────────────────────────────────
+##   skim_variable      n_missing complete_rate      mean         sd     p0     p25
+## 1 Rank                       0         1        500.      289.       1     251. 
+## 2 Year                       0         1       2013.        3.21  2006    2010  
+## 3 Runtime (Minutes)          0         1        113.       18.8     66     100  
+## 4 Rating                     0         1          6.72      0.945    1.9     6.2
+## 5 Votes                      0         1     169808.   188763.      61   36309  
+## 6 Revenue (Millions)       128         0.872     83.0     103.       0      13.3
+## 7 Metascore                 64         0.936     59.0      17.2     11      47  
+##        p50      p75     p100 hist 
+## 1    500.     750.     1000  ▇▇▇▇▇
+## 2   2014     2016      2016  ▃▂▂▃▇
+## 3    111      123       191  ▂▇▅▁▁
+## 4      6.8      7.4       9  ▁▁▃▇▃
+## 5 110799   239910.  1791916  ▇▁▁▁▁
+## 6     48.0    114.      937. ▇▁▁▁▁
+## 7     59.5     72       100  ▁▅▇▇▂</code></pre>
+</div>
+<div id="further-descriptives" class="section level3" number="8.1.3">
+<h3><span class="header-section-number">8.1.3</span> Further descriptives</h3>
+<p>Note that <code>skimr</code> only supports a limited number of measures. If you want to add further descriptives, you can use <code>dplyr::summarize()</code> combined with the <code>across()</code> function to compute the measures. Then you would have to spread the tibbles using <code>tidyr::pivot_longer()</code> and <code>tidyr::pivot_wider()</code> and, finally, join together the tibbles. For the imdb data set and the measures median and variance, this would look like as follows:</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="descriptives.html#cb418-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb418-2"><a href="descriptives.html#cb418-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), </span>
+<span id="cb418-3"><a href="descriptives.html#cb418-3" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">list</span>(</span>
+<span id="cb418-4"><a href="descriptives.html#cb418-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">median =</span> <span class="sc">~</span><span class="fu">median</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb418-5"><a href="descriptives.html#cb418-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">variance =</span> <span class="sc">~</span><span class="fu">var</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb418-6"><a href="descriptives.html#cb418-6" aria-hidden="true" tabindex="-1"></a>  ))) <span class="sc">%&gt;%</span> </span>
+<span id="cb418-7"><a href="descriptives.html#cb418-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb418-8"><a href="descriptives.html#cb418-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">everything</span>(),</span>
+<span id="cb418-9"><a href="descriptives.html#cb418-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;skim_variable&quot;</span>, <span class="st">&quot;.value&quot;</span>),</span>
+<span id="cb418-10"><a href="descriptives.html#cb418-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_sep =</span> <span class="st">&quot;_&quot;</span></span>
+<span id="cb418-11"><a href="descriptives.html#cb418-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb418-12"><a href="descriptives.html#cb418-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(imdb_raw <span class="sc">%&gt;%</span> <span class="fu">skim</span>())</span></code></pre></div>
+<pre><code>## Joining, by = &quot;skim_variable&quot;</code></pre>
+<pre><code>## # A tibble: 12 × 19
+##    skim_variable        median  variance skim_type n_missing complete_rate
+##    &lt;chr&gt;                 &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;         &lt;int&gt;         &lt;dbl&gt;
+##  1 Rank                  500.   8.34e+ 4 numeric           0         1    
+##  2 Year                 2014    1.03e+ 1 numeric           0         1    
+##  3 Runtime (Minutes)     111    3.54e+ 2 numeric           0         1    
+##  4 Rating                  6.8  8.94e- 1 numeric           0         1    
+##  5 Votes              110799    3.56e+10 numeric           0         1    
+##  6 Revenue (Millions)     48.0  1.07e+ 4 numeric         128         0.872
+##  7 Metascore              59.5  2.96e+ 2 numeric          64         0.936
+##  8 Title                  NA   NA        character         0         1    
+##  9 Genre                  NA   NA        character         0         1    
+## 10 Description            NA   NA        character         0         1    
+## 11 Director               NA   NA        character         0         1    
+## 12 Actors                 NA   NA        character         0         1    
+## # … with 13 more variables: character.min &lt;int&gt;, character.max &lt;int&gt;,
+## #   character.empty &lt;int&gt;, character.n_unique &lt;int&gt;,
+## #   character.whitespace &lt;int&gt;, numeric.mean &lt;dbl&gt;, numeric.sd &lt;dbl&gt;,
+## #   numeric.p0 &lt;dbl&gt;, numeric.p25 &lt;dbl&gt;, numeric.p50 &lt;dbl&gt;, numeric.p75 &lt;dbl&gt;,
+## #   numeric.p100 &lt;dbl&gt;, numeric.hist &lt;chr&gt;</code></pre>
+</div>
+</div>
+<div id="communicating-results" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Communicating results</h2>
+<p>By default, when used in RMarkdown documents, <code>skimr</code> outputs quite decent looking tables which look like this:</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="descriptives.html#cb421-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb421-2"><a href="descriptives.html#cb421-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">skim</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb421-3"><a href="descriptives.html#cb421-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">yank</span>(<span class="st">&quot;numeric&quot;</span>)</span></code></pre></div>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<colgroup>
+<col width="16%" />
+<col width="8%" />
+<col width="12%" />
+<col width="8%" />
+<col width="8%" />
+<col width="6%" />
+<col width="7%" />
+<col width="8%" />
+<col width="8%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rank</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">500.50</td>
+<td align="right">288.82</td>
+<td align="right">1.0</td>
+<td align="right">250.75</td>
+<td align="right">500.50</td>
+<td align="right">750.25</td>
+<td align="right">1000.00</td>
+<td align="left">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td align="left">Year</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">2012.78</td>
+<td align="right">3.21</td>
+<td align="right">2006.0</td>
+<td align="right">2010.00</td>
+<td align="right">2014.00</td>
+<td align="right">2016.00</td>
+<td align="right">2016.00</td>
+<td align="left">▃▂▂▃▇</td>
+</tr>
+<tr class="odd">
+<td align="left">Runtime (Minutes)</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">113.17</td>
+<td align="right">18.81</td>
+<td align="right">66.0</td>
+<td align="right">100.00</td>
+<td align="right">111.00</td>
+<td align="right">123.00</td>
+<td align="right">191.00</td>
+<td align="left">▂▇▅▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">Rating</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">6.72</td>
+<td align="right">0.95</td>
+<td align="right">1.9</td>
+<td align="right">6.20</td>
+<td align="right">6.80</td>
+<td align="right">7.40</td>
+<td align="right">9.00</td>
+<td align="left">▁▁▃▇▃</td>
+</tr>
+<tr class="odd">
+<td align="left">Votes</td>
+<td align="right">0</td>
+<td align="right">1.00</td>
+<td align="right">169808.26</td>
+<td align="right">188762.65</td>
+<td align="right">61.0</td>
+<td align="right">36309.00</td>
+<td align="right">110799.00</td>
+<td align="right">239909.75</td>
+<td align="right">1791916.00</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="even">
+<td align="left">Revenue (Millions)</td>
+<td align="right">128</td>
+<td align="right">0.87</td>
+<td align="right">82.96</td>
+<td align="right">103.25</td>
+<td align="right">0.0</td>
+<td align="right">13.27</td>
+<td align="right">47.98</td>
+<td align="right">113.72</td>
+<td align="right">936.63</td>
+<td align="left">▇▁▁▁▁</td>
+</tr>
+<tr class="odd">
+<td align="left">Metascore</td>
+<td align="right">64</td>
+<td align="right">0.94</td>
+<td align="right">58.99</td>
+<td align="right">17.19</td>
+<td align="right">11.0</td>
+<td align="right">47.00</td>
+<td align="right">59.50</td>
+<td align="right">72.00</td>
+<td align="right">100.00</td>
+<td align="left">▁▅▇▇▂</td>
+</tr>
+</tbody>
+</table>
+<p>In the RMarkdown chunks above, I had to set my chunk options to <code>render = knitr::normal_print</code> to avoid this behavior.</p>
+<div id="tables-with-knitrkable-and-kableextra" class="section level3" number="8.2.1">
+<h3><span class="header-section-number">8.2.1</span> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></h3>
+<p>The problem with the default output is the lack of modifiability. The column names, for instance, would suffice for small reports but are inappropriate for something you would want to hand in somewhere or even publish. In RMarkdown, the proper tool for modifying and printing tables is the <code>knitr::kable()</code> function with extended functionalities from the <code>kableExtra</code> package. In the following, I will provide a brief and coarse introduction to the package. It is so coarse that you basically will have to work through the vignettes yourself as for the tables everything is relevant and I am not willing to copy the entire vignettes. So, hit the internet and look at the <a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html#Column__Row_Specification">kableExtra vignette for html</a> and <a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_pdf.pdf">pdf</a>.</p>
+<p>I will exemplify how it can look like to make a table with descriptives in an HTML-document. I will also add a description for how you can get this into a Word or <span class="math inline">\(\LaTeX\)</span> document so that you are not limited to RMarkdown when reporting results.</p>
+<p>The <code>kableExtra</code> package needs to be loaded (or even installed) first:</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="descriptives.html#cb422-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">&quot;kableExtra&quot;</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]) <span class="fu">install.packages</span>(<span class="st">&quot;kableExtra&quot;</span>)</span>
+<span id="cb422-2"><a href="descriptives.html#cb422-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;kableExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     group_rows</code></pre>
+<p>The basic command is <code>kable()</code>. It takes a tibble and outputs it as an html-table. It looks disgusting.</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="descriptives.html#cb425-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> <span class="fu">kable</span>()</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+mpg
+</th>
+<th style="text-align:right;">
+cyl
+</th>
+<th style="text-align:right;">
+disp
+</th>
+<th style="text-align:right;">
+hp
+</th>
+<th style="text-align:right;">
+drat
+</th>
+<th style="text-align:right;">
+wt
+</th>
+<th style="text-align:right;">
+qsec
+</th>
+<th style="text-align:right;">
+vs
+</th>
+<th style="text-align:right;">
+am
+</th>
+<th style="text-align:right;">
+gear
+</th>
+<th style="text-align:right;">
+carb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mazda RX4
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+160.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.90
+</td>
+<td style="text-align:right;">
+2.620
+</td>
+<td style="text-align:right;">
+16.46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mazda RX4 Wag
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+160.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.90
+</td>
+<td style="text-align:right;">
+2.875
+</td>
+<td style="text-align:right;">
+17.02
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Datsun 710
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+108.0
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+3.85
+</td>
+<td style="text-align:right;">
+2.320
+</td>
+<td style="text-align:right;">
+18.61
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hornet 4 Drive
+</td>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+258.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.08
+</td>
+<td style="text-align:right;">
+3.215
+</td>
+<td style="text-align:right;">
+19.44
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hornet Sportabout
+</td>
+<td style="text-align:right;">
+18.7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+360.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.15
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+17.02
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Valiant
+</td>
+<td style="text-align:right;">
+18.1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+225.0
+</td>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:right;">
+2.76
+</td>
+<td style="text-align:right;">
+3.460
+</td>
+<td style="text-align:right;">
+20.22
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Duster 360
+</td>
+<td style="text-align:right;">
+14.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+360.0
+</td>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:right;">
+3.21
+</td>
+<td style="text-align:right;">
+3.570
+</td>
+<td style="text-align:right;">
+15.84
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 240D
+</td>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+146.7
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+3.69
+</td>
+<td style="text-align:right;">
+3.190
+</td>
+<td style="text-align:right;">
+20.00
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 230
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+140.8
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.150
+</td>
+<td style="text-align:right;">
+22.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 280
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+167.6
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+18.30
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 280C
+</td>
+<td style="text-align:right;">
+17.8
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+167.6
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+18.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SE
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+4.070
+</td>
+<td style="text-align:right;">
+17.40
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SL
+</td>
+<td style="text-align:right;">
+17.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+3.730
+</td>
+<td style="text-align:right;">
+17.60
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SLC
+</td>
+<td style="text-align:right;">
+15.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+3.780
+</td>
+<td style="text-align:right;">
+18.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cadillac Fleetwood
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+472.0
+</td>
+<td style="text-align:right;">
+205
+</td>
+<td style="text-align:right;">
+2.93
+</td>
+<td style="text-align:right;">
+5.250
+</td>
+<td style="text-align:right;">
+17.98
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lincoln Continental
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+460.0
+</td>
+<td style="text-align:right;">
+215
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+5.424
+</td>
+<td style="text-align:right;">
+17.82
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chrysler Imperial
+</td>
+<td style="text-align:right;">
+14.7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+440.0
+</td>
+<td style="text-align:right;">
+230
+</td>
+<td style="text-align:right;">
+3.23
+</td>
+<td style="text-align:right;">
+5.345
+</td>
+<td style="text-align:right;">
+17.42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fiat 128
+</td>
+<td style="text-align:right;">
+32.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+78.7
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+4.08
+</td>
+<td style="text-align:right;">
+2.200
+</td>
+<td style="text-align:right;">
+19.47
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Honda Civic
+</td>
+<td style="text-align:right;">
+30.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+75.7
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+4.93
+</td>
+<td style="text-align:right;">
+1.615
+</td>
+<td style="text-align:right;">
+18.52
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Toyota Corolla
+</td>
+<td style="text-align:right;">
+33.9
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+71.1
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+4.22
+</td>
+<td style="text-align:right;">
+1.835
+</td>
+<td style="text-align:right;">
+19.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Toyota Corona
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+120.1
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+3.70
+</td>
+<td style="text-align:right;">
+2.465
+</td>
+<td style="text-align:right;">
+20.01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dodge Challenger
+</td>
+<td style="text-align:right;">
+15.5
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+318.0
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+2.76
+</td>
+<td style="text-align:right;">
+3.520
+</td>
+<td style="text-align:right;">
+16.87
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMC Javelin
+</td>
+<td style="text-align:right;">
+15.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+304.0
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+3.15
+</td>
+<td style="text-align:right;">
+3.435
+</td>
+<td style="text-align:right;">
+17.30
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Camaro Z28
+</td>
+<td style="text-align:right;">
+13.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+350.0
+</td>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:right;">
+3.73
+</td>
+<td style="text-align:right;">
+3.840
+</td>
+<td style="text-align:right;">
+15.41
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pontiac Firebird
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+400.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.08
+</td>
+<td style="text-align:right;">
+3.845
+</td>
+<td style="text-align:right;">
+17.05
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fiat X1-9
+</td>
+<td style="text-align:right;">
+27.3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+79.0
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+4.08
+</td>
+<td style="text-align:right;">
+1.935
+</td>
+<td style="text-align:right;">
+18.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Porsche 914-2
+</td>
+<td style="text-align:right;">
+26.0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+120.3
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:right;">
+4.43
+</td>
+<td style="text-align:right;">
+2.140
+</td>
+<td style="text-align:right;">
+16.70
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lotus Europa
+</td>
+<td style="text-align:right;">
+30.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+95.1
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+3.77
+</td>
+<td style="text-align:right;">
+1.513
+</td>
+<td style="text-align:right;">
+16.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ford Pantera L
+</td>
+<td style="text-align:right;">
+15.8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+351.0
+</td>
+<td style="text-align:right;">
+264
+</td>
+<td style="text-align:right;">
+4.22
+</td>
+<td style="text-align:right;">
+3.170
+</td>
+<td style="text-align:right;">
+14.50
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ferrari Dino
+</td>
+<td style="text-align:right;">
+19.7
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+145.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.62
+</td>
+<td style="text-align:right;">
+2.770
+</td>
+<td style="text-align:right;">
+15.50
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maserati Bora
+</td>
+<td style="text-align:right;">
+15.0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+301.0
+</td>
+<td style="text-align:right;">
+335
+</td>
+<td style="text-align:right;">
+3.54
+</td>
+<td style="text-align:right;">
+3.570
+</td>
+<td style="text-align:right;">
+14.60
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Volvo 142E
+</td>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+121.0
+</td>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:right;">
+4.11
+</td>
+<td style="text-align:right;">
+2.780
+</td>
+<td style="text-align:right;">
+18.60
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is where <code>kable_styling()</code> comes into play. It gives your table the so-called “twitter bootstrap style” (for html outputs) and allows you to take over control. Read the above-mentioned vignettes for more information on how to use them properly.</p>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="descriptives.html#cb426-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb426-2"><a href="descriptives.html#cb426-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb426-3"><a href="descriptives.html#cb426-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>()</span></code></pre></div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+mpg
+</th>
+<th style="text-align:right;">
+cyl
+</th>
+<th style="text-align:right;">
+disp
+</th>
+<th style="text-align:right;">
+hp
+</th>
+<th style="text-align:right;">
+drat
+</th>
+<th style="text-align:right;">
+wt
+</th>
+<th style="text-align:right;">
+qsec
+</th>
+<th style="text-align:right;">
+vs
+</th>
+<th style="text-align:right;">
+am
+</th>
+<th style="text-align:right;">
+gear
+</th>
+<th style="text-align:right;">
+carb
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Mazda RX4
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+160.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.90
+</td>
+<td style="text-align:right;">
+2.620
+</td>
+<td style="text-align:right;">
+16.46
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Mazda RX4 Wag
+</td>
+<td style="text-align:right;">
+21.0
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+160.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.90
+</td>
+<td style="text-align:right;">
+2.875
+</td>
+<td style="text-align:right;">
+17.02
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Datsun 710
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+108.0
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+3.85
+</td>
+<td style="text-align:right;">
+2.320
+</td>
+<td style="text-align:right;">
+18.61
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hornet 4 Drive
+</td>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+258.0
+</td>
+<td style="text-align:right;">
+110
+</td>
+<td style="text-align:right;">
+3.08
+</td>
+<td style="text-align:right;">
+3.215
+</td>
+<td style="text-align:right;">
+19.44
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hornet Sportabout
+</td>
+<td style="text-align:right;">
+18.7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+360.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.15
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+17.02
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Valiant
+</td>
+<td style="text-align:right;">
+18.1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+225.0
+</td>
+<td style="text-align:right;">
+105
+</td>
+<td style="text-align:right;">
+2.76
+</td>
+<td style="text-align:right;">
+3.460
+</td>
+<td style="text-align:right;">
+20.22
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Duster 360
+</td>
+<td style="text-align:right;">
+14.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+360.0
+</td>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:right;">
+3.21
+</td>
+<td style="text-align:right;">
+3.570
+</td>
+<td style="text-align:right;">
+15.84
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 240D
+</td>
+<td style="text-align:right;">
+24.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+146.7
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+3.69
+</td>
+<td style="text-align:right;">
+3.190
+</td>
+<td style="text-align:right;">
+20.00
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 230
+</td>
+<td style="text-align:right;">
+22.8
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+140.8
+</td>
+<td style="text-align:right;">
+95
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.150
+</td>
+<td style="text-align:right;">
+22.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 280
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+167.6
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+18.30
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 280C
+</td>
+<td style="text-align:right;">
+17.8
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+167.6
+</td>
+<td style="text-align:right;">
+123
+</td>
+<td style="text-align:right;">
+3.92
+</td>
+<td style="text-align:right;">
+3.440
+</td>
+<td style="text-align:right;">
+18.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SE
+</td>
+<td style="text-align:right;">
+16.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+4.070
+</td>
+<td style="text-align:right;">
+17.40
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SL
+</td>
+<td style="text-align:right;">
+17.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+3.730
+</td>
+<td style="text-align:right;">
+17.60
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Merc 450SLC
+</td>
+<td style="text-align:right;">
+15.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+275.8
+</td>
+<td style="text-align:right;">
+180
+</td>
+<td style="text-align:right;">
+3.07
+</td>
+<td style="text-align:right;">
+3.780
+</td>
+<td style="text-align:right;">
+18.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Cadillac Fleetwood
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+472.0
+</td>
+<td style="text-align:right;">
+205
+</td>
+<td style="text-align:right;">
+2.93
+</td>
+<td style="text-align:right;">
+5.250
+</td>
+<td style="text-align:right;">
+17.98
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lincoln Continental
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+460.0
+</td>
+<td style="text-align:right;">
+215
+</td>
+<td style="text-align:right;">
+3.00
+</td>
+<td style="text-align:right;">
+5.424
+</td>
+<td style="text-align:right;">
+17.82
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Chrysler Imperial
+</td>
+<td style="text-align:right;">
+14.7
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+440.0
+</td>
+<td style="text-align:right;">
+230
+</td>
+<td style="text-align:right;">
+3.23
+</td>
+<td style="text-align:right;">
+5.345
+</td>
+<td style="text-align:right;">
+17.42
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fiat 128
+</td>
+<td style="text-align:right;">
+32.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+78.7
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+4.08
+</td>
+<td style="text-align:right;">
+2.200
+</td>
+<td style="text-align:right;">
+19.47
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Honda Civic
+</td>
+<td style="text-align:right;">
+30.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+75.7
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+4.93
+</td>
+<td style="text-align:right;">
+1.615
+</td>
+<td style="text-align:right;">
+18.52
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Toyota Corolla
+</td>
+<td style="text-align:right;">
+33.9
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+71.1
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+4.22
+</td>
+<td style="text-align:right;">
+1.835
+</td>
+<td style="text-align:right;">
+19.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Toyota Corona
+</td>
+<td style="text-align:right;">
+21.5
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+120.1
+</td>
+<td style="text-align:right;">
+97
+</td>
+<td style="text-align:right;">
+3.70
+</td>
+<td style="text-align:right;">
+2.465
+</td>
+<td style="text-align:right;">
+20.01
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Dodge Challenger
+</td>
+<td style="text-align:right;">
+15.5
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+318.0
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+2.76
+</td>
+<td style="text-align:right;">
+3.520
+</td>
+<td style="text-align:right;">
+16.87
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMC Javelin
+</td>
+<td style="text-align:right;">
+15.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+304.0
+</td>
+<td style="text-align:right;">
+150
+</td>
+<td style="text-align:right;">
+3.15
+</td>
+<td style="text-align:right;">
+3.435
+</td>
+<td style="text-align:right;">
+17.30
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Camaro Z28
+</td>
+<td style="text-align:right;">
+13.3
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+350.0
+</td>
+<td style="text-align:right;">
+245
+</td>
+<td style="text-align:right;">
+3.73
+</td>
+<td style="text-align:right;">
+3.840
+</td>
+<td style="text-align:right;">
+15.41
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pontiac Firebird
+</td>
+<td style="text-align:right;">
+19.2
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+400.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.08
+</td>
+<td style="text-align:right;">
+3.845
+</td>
+<td style="text-align:right;">
+17.05
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fiat X1-9
+</td>
+<td style="text-align:right;">
+27.3
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+79.0
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+4.08
+</td>
+<td style="text-align:right;">
+1.935
+</td>
+<td style="text-align:right;">
+18.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Porsche 914-2
+</td>
+<td style="text-align:right;">
+26.0
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+120.3
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:right;">
+4.43
+</td>
+<td style="text-align:right;">
+2.140
+</td>
+<td style="text-align:right;">
+16.70
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Lotus Europa
+</td>
+<td style="text-align:right;">
+30.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+95.1
+</td>
+<td style="text-align:right;">
+113
+</td>
+<td style="text-align:right;">
+3.77
+</td>
+<td style="text-align:right;">
+1.513
+</td>
+<td style="text-align:right;">
+16.90
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ford Pantera L
+</td>
+<td style="text-align:right;">
+15.8
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+351.0
+</td>
+<td style="text-align:right;">
+264
+</td>
+<td style="text-align:right;">
+4.22
+</td>
+<td style="text-align:right;">
+3.170
+</td>
+<td style="text-align:right;">
+14.50
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Ferrari Dino
+</td>
+<td style="text-align:right;">
+19.7
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+145.0
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+3.62
+</td>
+<td style="text-align:right;">
+2.770
+</td>
+<td style="text-align:right;">
+15.50
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Maserati Bora
+</td>
+<td style="text-align:right;">
+15.0
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+301.0
+</td>
+<td style="text-align:right;">
+335
+</td>
+<td style="text-align:right;">
+3.54
+</td>
+<td style="text-align:right;">
+3.570
+</td>
+<td style="text-align:right;">
+14.60
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Volvo 142E
+</td>
+<td style="text-align:right;">
+21.4
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+121.0
+</td>
+<td style="text-align:right;">
+109
+</td>
+<td style="text-align:right;">
+4.11
+</td>
+<td style="text-align:right;">
+2.780
+</td>
+<td style="text-align:right;">
+18.60
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="use-case-reporting-skimr-results" class="section level3" number="8.2.2">
+<h3><span class="header-section-number">8.2.2</span> Use case: reporting <code>skimr</code> results</h3>
+<div id="basics-for-html-and-pdf" class="section level4" number="8.2.2.1">
+<h4><span class="header-section-number">8.2.2.1</span> Basics for HTML and PDF</h4>
+<p>First, I need to get the results in a proper tibble. I use the <code>mtcars</code> data set.</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="descriptives.html#cb427-1" aria-hidden="true" tabindex="-1"></a>desc_mtcars <span class="ot">&lt;-</span> <span class="fu">skim</span>(mtcars) <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>()</span></code></pre></div>
+<p>First, I select and rename the variables I deem interesting. To save myself some time, I choose variables based on their position:</p>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="descriptives.html#cb428-1" aria-hidden="true" tabindex="-1"></a>for_table <span class="ot">&lt;-</span> desc_mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb428-2"><a href="descriptives.html#cb428-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">Variable =</span> <span class="dv">2</span>,</span>
+<span id="cb428-3"><a href="descriptives.html#cb428-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">Mean =</span> <span class="dv">5</span>,</span>
+<span id="cb428-4"><a href="descriptives.html#cb428-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">SD =</span> <span class="dv">6</span>,</span>
+<span id="cb428-5"><a href="descriptives.html#cb428-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">Minimum =</span> <span class="dv">7</span>,</span>
+<span id="cb428-6"><a href="descriptives.html#cb428-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">Maximum =</span> <span class="dv">11</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb428-7"><a href="descriptives.html#cb428-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span><span class="fu">round</span>(., <span class="dv">1</span>))) <span class="co"># round the output</span></span></code></pre></div>
+<p>Now, I have put it into a tibble that, in theory, be just printed down as a table (you might wish to change the names of the variables, but let’s save this for another time; if you’re willing to: <code>case_when()</code> might be your best shot). I proceed with the <code>kable()</code> call.</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="descriptives.html#cb429-1" aria-hidden="true" tabindex="-1"></a>for_table <span class="sc">%&gt;%</span> </span>
+<span id="cb429-2"><a href="descriptives.html#cb429-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">&quot;Example for a table with some descriptives&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb429-3"><a href="descriptives.html#cb429-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb429-4"><a href="descriptives.html#cb429-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="st">&quot;striped&quot;</span>, <span class="co"># several design options</span></span>
+<span id="cb429-5"><a href="descriptives.html#cb429-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>, <span class="co"># defaults to TRUE</span></span>
+<span id="cb429-6"><a href="descriptives.html#cb429-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;center&quot;</span>, <span class="co"># where is it positioned?</span></span>
+<span id="cb429-7"><a href="descriptives.html#cb429-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">fixed_thead =</span> <span class="cn">TRUE</span> <span class="co"># whether header is fixed when scrolling through -- only for longer tables</span></span>
+<span id="cb429-8"><a href="descriptives.html#cb429-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb429-9"><a href="descriptives.html#cb429-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">column_spec</span>(<span class="dv">1</span>, <span class="at">bold =</span> <span class="cn">TRUE</span>, <span class="at">border_right =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># column specifications can be easily modified</span></span>
+<span id="cb429-10"><a href="descriptives.html#cb429-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">footnote</span>(<span class="at">general =</span> <span class="st">&quot;You can add some footnotes with certain signs, too.&quot;</span>, <span class="co"># this is how you add a footnote</span></span>
+<span id="cb429-11"><a href="descriptives.html#cb429-11" aria-hidden="true" tabindex="-1"></a>           <span class="at">number =</span> <span class="fu">c</span>(<span class="st">&quot;Footnote 1; &quot;</span>, <span class="st">&quot;Footnote 2; &quot;</span>),</span>
+<span id="cb429-12"><a href="descriptives.html#cb429-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">alphabet =</span> <span class="fu">c</span>(<span class="st">&quot;Footnote A; &quot;</span>, <span class="st">&quot;Footnote B; &quot;</span>),</span>
+<span id="cb429-13"><a href="descriptives.html#cb429-13" aria-hidden="true" tabindex="-1"></a>           <span class="at">symbol =</span> <span class="fu">c</span>(<span class="st">&quot;Footnote Symbol 1; &quot;</span>, <span class="st">&quot;Footnote Symbol 2&quot;</span>),</span>
+<span id="cb429-14"><a href="descriptives.html#cb429-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">general_title =</span> <span class="st">&quot;General: &quot;</span>, <span class="at">number_title =</span> <span class="st">&quot;Type I: &quot;</span>,</span>
+<span id="cb429-15"><a href="descriptives.html#cb429-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">alphabet_title =</span> <span class="st">&quot;Type II: &quot;</span>, <span class="at">symbol_title =</span> <span class="st">&quot;Type III: &quot;</span>,</span>
+<span id="cb429-16"><a href="descriptives.html#cb429-16" aria-hidden="true" tabindex="-1"></a>           <span class="at">footnote_as_chunk =</span> T, <span class="at">title_format =</span> <span class="fu">c</span>(<span class="st">&quot;italic&quot;</span>, <span class="st">&quot;underline&quot;</span>)</span>
+<span id="cb429-17"><a href="descriptives.html#cb429-17" aria-hidden="true" tabindex="-1"></a>           )</span></code></pre></div>
+<table class="table table-striped" style="width: auto !important; margin-left: auto; margin-right: auto;border-bottom: 0;">
+<caption>
+<span id="tab:unnamed-chunk-181">Table 8.1: </span>Example for a table with some descriptives
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+Variable
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Mean
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+SD
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Minimum
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+Maximum
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+mpg
+</td>
+<td style="text-align:right;">
+20.1
+</td>
+<td style="text-align:right;">
+6.0
+</td>
+<td style="text-align:right;">
+10.4
+</td>
+<td style="text-align:right;">
+33.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+cyl
+</td>
+<td style="text-align:right;">
+6.2
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+disp
+</td>
+<td style="text-align:right;">
+230.7
+</td>
+<td style="text-align:right;">
+123.9
+</td>
+<td style="text-align:right;">
+71.1
+</td>
+<td style="text-align:right;">
+472.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+hp
+</td>
+<td style="text-align:right;">
+146.7
+</td>
+<td style="text-align:right;">
+68.6
+</td>
+<td style="text-align:right;">
+52.0
+</td>
+<td style="text-align:right;">
+335.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+drat
+</td>
+<td style="text-align:right;">
+3.6
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+4.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+wt
+</td>
+<td style="text-align:right;">
+3.2
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+<td style="text-align:right;">
+5.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+qsec
+</td>
+<td style="text-align:right;">
+17.8
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+14.5
+</td>
+<td style="text-align:right;">
+22.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+vs
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+am
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+gear
+</td>
+<td style="text-align:right;">
+3.7
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+<td style="text-align:right;">
+5.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;font-weight: bold;border-right:1px solid;">
+carb
+</td>
+<td style="text-align:right;">
+2.8
+</td>
+<td style="text-align:right;">
+1.6
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+8.0
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;text-decoration: underline;">General: </span> <sup></sup> You can add some footnotes with certain signs, too.
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;text-decoration: underline;">Type I: </span> <sup>1</sup> Footnote 1; <sup>2</sup> Footnote 2;
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;text-decoration: underline;">Type II: </span> <sup>a</sup> Footnote A; <sup>b</sup> Footnote B;
+</td>
+</tr>
+<tr>
+<td style="padding: 0; " colspan="100%">
+<span style="font-style: italic;text-decoration: underline;">Type III: </span> <sup>*</sup> Footnote Symbol 1; <sup>†</sup> Footnote Symbol 2
+</td>
+</tr>
+</tfoot>
+</table>
+<p>For <span class="math inline">\(\LaTeX\)</span> tables this would generally look the same. Depending on whether you knit the RMarkdown file to PDF or HTML, the output will change. You also have some different specification options for <span class="math inline">\(\LaTeX\)</span> output.</p>
+</div>
+<div id="getting-it-into-a-word-file" class="section level4" number="8.2.2.2">
+<h4><span class="header-section-number">8.2.2.2</span> Getting it into a Word file</h4>
+<p>Unfortunately, you cannot yet output the tables produced with <code>kable</code> into a proper Word file. In order to achieve this, however, you can use <code>flextable</code> and then export the tables in different formats. <code>flextable</code> is similarly capable as <code>kable</code>. An introduction can be found <a href="https://ardata-fr.github.io/flextable-book/">here</a>.</p>
+<p>A coarse example follows.</p>
+<p>First, it needs to be loaded.</p>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="descriptives.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="st">&quot;flextable&quot;</span> <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]) <span class="fu">install.packages</span>(<span class="st">&quot;flextable&quot;</span>)</span>
+<span id="cb430-2"><a href="descriptives.html#cb430-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;flextable&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:kableExtra&#39;:
+## 
+##     as_image, footnote</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     compose</code></pre>
+<p>Then, I can produce the table and export it to DOCX or PPTX format using the <code>save_as_*()</code> function.</p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="descriptives.html#cb434-1" aria-hidden="true" tabindex="-1"></a>for_table <span class="sc">%&gt;%</span> </span>
+<span id="cb434-2"><a href="descriptives.html#cb434-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb434-3"><a href="descriptives.html#cb434-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">save_as_docx</span>(<span class="at">path =</span> <span class="st">&quot;example_table_docx.docx&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span>
+<span id="cb434-4"><a href="descriptives.html#cb434-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb434-5"><a href="descriptives.html#cb434-5" aria-hidden="true" tabindex="-1"></a>for_table <span class="sc">%&gt;%</span> </span>
+<span id="cb434-6"><a href="descriptives.html#cb434-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb434-7"><a href="descriptives.html#cb434-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">save_as_pptx</span>(<span class="at">path =</span> <span class="st">&quot;example_table_pptx.pptx&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;/&quot;</span>)</span></code></pre></div>
+<p>Then, further manipulations can be performed in MS Word or PowerPoint (or LibreOffice or whatever).</p>
+<p>Also, if you have a working version of Word or PowerPoint on your machine, you can use the following commands to start up an interactive session:</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="descriptives.html#cb435-1" aria-hidden="true" tabindex="-1"></a>for_table <span class="sc">%&gt;%</span> </span>
+<span id="cb435-2"><a href="descriptives.html#cb435-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb435-3"><a href="descriptives.html#cb435-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">preview =</span> <span class="st">&quot;docx&quot;</span>)</span>
+<span id="cb435-4"><a href="descriptives.html#cb435-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb435-5"><a href="descriptives.html#cb435-5" aria-hidden="true" tabindex="-1"></a>for_table <span class="sc">%&gt;%</span> </span>
+<span id="cb435-6"><a href="descriptives.html#cb435-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">flextable</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb435-7"><a href="descriptives.html#cb435-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="at">preview =</span> <span class="st">&quot;pptx&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="further-links-7" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Further links</h2>
+<ul>
+<li>An <a href="https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html">exhaustive introduction to <code>skimr</code></a>.</li>
+<li><a href="https://davidgohel.github.io/flextable/">Intro to <code>flextable</code></a>.</li>
+<li>More <a href="https://bookdown.org/yihui/rmarkdown-cookbook/kable.html">on <code>kable</code></a>.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="workwithfactors.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="visualization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
