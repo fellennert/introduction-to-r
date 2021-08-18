@@ -1,5 +1,4 @@
 book_filename: "introduction-to-r"
-output_dir: "docs"
 delete_merged_file: true
 language:
   ui:
