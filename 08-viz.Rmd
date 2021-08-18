@@ -321,8 +321,26 @@ socviz::county_data %>%
 
 … or just use `facet_wrap()`.
 
+## Exporting graphics
+
+If you include the graphics in an RMarkdown document, make sure you use the proper chunk options (i.e., `{r echo=FALSE, message=FALSE, warning=FALSE}`).
+
+If you, however, want to export it and put it into an MS Word document or so, you can just use the `ggsave()` function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, `ggsave()` just uses this one. 
+
+```{r eval=FALSE}
+ggplot(mtcars, aes(mpg, wt)) +
+  geom_point()
+
+ggsave("mtcars.pdf") #save it to pdf
+ggsave("mtcars.png") #save it to png
+
+ggsave("mtcars.pdf", width = 4, height = 4) #specify width and height -- in inches by default
+ggsave("mtcars.pdf", width = 20, height = 20, units = "cm") #change unit using the units argument
+```
+
 ## Further readings
 
 * [ggplot2 -- the book.](https://ggplot2-book.org)
 * The [graphic cookbook for R](http://www.cookbook-r.com/Graphs/).
 * Another [tutorial](http://r-statistics.co/ggplot2-Tutorial-With-R.html).
+* The `ggsave()` function [in further detail](https://ggplot2.tidyverse.org/reference/ggsave.html).

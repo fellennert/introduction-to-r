@@ -24,7 +24,7 @@
 <meta name="author" content="Felix Lennert" />
 
 
-<meta name="date" content="2021-08-17" />
+<meta name="date" content="2021-08-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -315,7 +315,8 @@ div.csl-indent {
 <li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
 <li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.2</b> Further readings</a></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#exporting-graphics"><i class="fa fa-check"></i><b>9.2</b> Exporting graphics</a></li>
+<li class="chapter" data-level="9.3" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.3</b> Further readings</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
 <ul>
@@ -353,7 +354,6 @@ div.csl-indent {
 <li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
 <li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="exercises-functions.html"><a href="exercises-functions.html"><i class="fa fa-check"></i><b>14</b> Exercises functions</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -630,12 +630,26 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<div id="further-readings-1" class="section level2" number="9.2">
-<h2><span class="header-section-number">9.2</span> Further readings</h2>
+<div id="exporting-graphics" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Exporting graphics</h2>
+<p>If you include the graphics in an RMarkdown document, make sure you use the proper chunk options (i.e., <code>{r echo=FALSE, message=FALSE, warning=FALSE}</code>).</p>
+<p>If you, however, want to export it and put it into an MS Word document or so, you can just use the <code>ggsave()</code> function. By default, it just takes the last plot that has been created and saves it to a path that needs to be specified. If it contains a file extension, <code>ggsave()</code> just uses this one.</p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb468-1"><a href="visualization.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(mpg, wt)) <span class="sc">+</span></span>
+<span id="cb468-2"><a href="visualization.html#cb468-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span>
+<span id="cb468-3"><a href="visualization.html#cb468-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-4"><a href="visualization.html#cb468-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>) <span class="co">#save it to pdf</span></span>
+<span id="cb468-5"><a href="visualization.html#cb468-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.png&quot;</span>) <span class="co">#save it to png</span></span>
+<span id="cb468-6"><a href="visualization.html#cb468-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb468-7"><a href="visualization.html#cb468-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">4</span>) <span class="co">#specify width and height -- in inches by default</span></span>
+<span id="cb468-8"><a href="visualization.html#cb468-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;mtcars.pdf&quot;</span>, <span class="at">width =</span> <span class="dv">20</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>) <span class="co">#change unit using the units argument</span></span></code></pre></div>
+</div>
+<div id="further-readings-1" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Further readings</h2>
 <ul>
 <li><a href="https://ggplot2-book.org">ggplot2 – the book.</a></li>
 <li>The <a href="http://www.cookbook-r.com/Graphs/">graphic cookbook for R</a>.</li>
 <li>Another <a href="http://r-statistics.co/ggplot2-Tutorial-With-R.html">tutorial</a>.</li>
+<li>The <code>ggsave()</code> function <a href="https://ggplot2.tidyverse.org/reference/ggsave.html">in further detail</a>.</li>
 </ul>
 
 </div>

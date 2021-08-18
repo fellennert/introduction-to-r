@@ -78,7 +78,7 @@ Note: this is challenging, absolutely. If you have problems, try to google the d
 <details>
   <summary>Solution. Click to expand!</summary>
 
-```{r message=FALSE, warning=FALSE}
+```{r eval=FALSE}
 library(tidyverse)
 library(readxl)
 

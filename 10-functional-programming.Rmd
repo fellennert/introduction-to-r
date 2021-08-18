@@ -224,7 +224,7 @@ play_roulette_basic <- function(bet = 1, number) {
   if (number > 36) stop("You can only bet on numbers between 0 and 36.")
   draw <- sample(0:36, 1)
   if (number == draw) {
-    return(paste("Nice, you won", as.character(bet * 36), "Dollars"), sep = " ")
+    return(str_c("Nice, you won", as.character(bet * 36), "Dollars", sep = " "))
   } else {
     return("I'm sorry, you lost.")
   }

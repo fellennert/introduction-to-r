@@ -24,7 +24,7 @@
 <meta name="author" content="Felix Lennert" />
 
 
-<meta name="date" content="2021-08-17" />
+<meta name="date" content="2021-08-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -315,7 +315,8 @@ div.csl-indent {
 <li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
 <li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
 </ul></li>
-<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.2</b> Further readings</a></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#exporting-graphics"><i class="fa fa-check"></i><b>9.2</b> Exporting graphics</a></li>
+<li class="chapter" data-level="9.3" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.3</b> Further readings</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
 <ul>
@@ -353,7 +354,6 @@ div.csl-indent {
 <li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
 <li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
 </ul></li>
-<li class="chapter" data-level="14" data-path="exercises-functions.html"><a href="exercises-functions.html"><i class="fa fa-check"></i><b>14</b> Exercises functions</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -570,9 +570,7 @@ div.csl-indent {
 <span id="cb336-3"><a href="stringregex.html#cb336-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(american_phone_number, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">([0-9]{3}</span><span class="sc">\\</span><span class="st">) [0-9]{3}-[0-9]{4}&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-2514ce28ae593bde0f73" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-2514ce28ae593bde0f73">{"x":{"html":"<ul>\n  <li><span class='match'>(555) 555-1234<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>exercise: write a regex for the phone numbers in your area</p>
-<p>There are also predefined sets of characters, for instance digits or letters, which are called <em>character classes</em>. You can find them on the <a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf"><code>stringr</code> cheatsheet</a>.
-exercise: write the regex expression for the character classes alnum, alpha, digit, lower, upper, and space.</p>
+<p>There are also predefined sets of characters, for instance digits or letters, which are called <em>character classes</em>. You can find them on the <a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf"><code>stringr</code> cheatsheet</a>.</p>
 <p>Furthermore, you can put almost every metacharacter inside the square brackets without escaping them. This does not apply to the the caret (<code>^</code>) in first position, the dash <code>-</code>, the closing square bracket <code>]</code>, and the backslash <code>\</code>.</p>
 <div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="stringregex.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(vector_of_strings, <span class="st">&quot;[.]&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-5d05eac75555269eefd0" style="width:960px;height:100%;" class="str_view html-widget"></div>
@@ -613,13 +611,12 @@ exercise: write the regex expression for the character classes alnum, alpha, dig
 <h4><span class="header-section-number">6.2.2.6</span> Lookarounds</h4>
 <p>A final common task is to extract certain words or values based on what comes before or after them. Look at the following example:</p>
 <div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="stringregex.html#cb343-1" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1m30cm&quot;</span>, <span class="st">&quot;2m01cm&quot;</span>, <span class="st">&quot;3m10cm&quot;</span>)</span></code></pre></div>
-<p>exercise: bring that into numeric format (hint: str_c %&gt;% as.numeric)</p>
 <p>Here, in order to identify the height in meters, the first task is to identify all the numbers that are followed by an “m.” The regex syntax for this looks like this: <code>A(?=pattern)</code> with <code>A</code> being the entity that is supposed to be found (hence, in this case, [0-9]+).</p>
 <div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="stringregex.html#cb344-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?=m)&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-cbd3ad10bd2d35a2e76d" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-cbd3ad10bd2d35a2e76d">{"x":{"html":"<ul>\n  <li><span class='match'>1<\/span>m30cm<\/li>\n  <li><span class='match'>2<\/span>m01cm<\/li>\n  <li><span class='match'>3<\/span>m10cm<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>The second step now is to identify the centimeters. This could of corse be achieved using the same regex and replacing <code>m</code> by <code>cm</code>. However, we can also harness a so-called negative look ahead <code>A(?!pattern)</code>, a so-called look behind <code>(?&lt;=pattern)A</code>. The negative counterpart, the negative look behind <code>(?&lt;!pattern)A</code> could be used to extract the meters.</p>
-<p>The negative look ahead basically returns everything that is not followed by the defined pattern. The look behind returns everything that is preceded by the pattern, the negative loook behind returns everything that is not preceded by the pattern.</p>
+<p>The second step now is to identify the centimeters. This could of coumrse be achieved using the same regex and replacing <code>m</code> by <code>cm</code>. However, we can also harness a so-called negative look ahead <code>A(?!pattern)</code>, a so-called look behind <code>(?&lt;=pattern)A</code>. The negative counterpart, the negative look behind <code>(?&lt;!pattern)A</code> could be used to extract the meters.</p>
+<p>The negative look ahead basically returns everything that is not followed by the defined pattern. The look behind returns everything that is preceded by the pattern, the negative look behind returns everything that is not preceded by the pattern.</p>
 <p>In the following, I demonstrate how you could extract the centimeters using negative look ahead and look behind.</p>
 <div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="stringregex.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?!m)&quot;</span>) <span class="co"># negative look ahead</span></span></code></pre></div>
 <div id="htmlwidget-f25d4e1770d66a86dcce" style="width:960px;height:100%;" class="str_view html-widget"></div>
@@ -627,7 +624,6 @@ exercise: write the regex expression for the character classes alnum, alpha, dig
 <div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="stringregex.html#cb346-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;(?&lt;=m)[0-9]+&quot;</span>) <span class="co"># look behind</span></span></code></pre></div>
 <div id="htmlwidget-969965edfe9f869aa904" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-969965edfe9f869aa904">{"x":{"html":"<ul>\n  <li>1m<span class='match'>30<\/span>cm<\/li>\n  <li>2m<span class='match'>01<\/span>cm<\/li>\n  <li>3m<span class='match'>10<\/span>cm<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>exercise: how can you extract the meters using the negative look behind?</p>
 </div>
 </div>
 </div>
@@ -659,7 +655,6 @@ exercise: write the regex expression for the character classes alnum, alpha, dig
 ## 10    30 Assas… Actio… When Callu… Justin … Micha…  2016              115    5.9
 ## # … with 293 more rows, and 3 more variables: Votes &lt;dbl&gt;,
 ## #   Revenue (Millions) &lt;dbl&gt;, Metascore &lt;dbl&gt;</code></pre>
-<p>Exercise: find sci-fi movies</p>
 <p>If you want to know whether there are multiple matches present in each string, you can use <code>str_count</code>. Here, it might by advisable to set the <code>ignore_case</code> option to <code>TRUE</code>:</p>
 <div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="stringregex.html#cb351-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_count</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <pre><code>##  [1] 2 2 1 0 0 1 2 1 0 0</code></pre>
