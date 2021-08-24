@@ -1,8 +1,12 @@
 # Working with data {#workingwithdata}
 
-Today, we will take a first dive into data wrangling. First of all, we need to read in the data into our R session. I will talk about that maybe longer than I should. Thereafter, we need to make sure that the data is in the right format. You probably have not really thought about how a data set is supposed to look like. The concept of tidy data provides you an idea for this.
+Now we can take a first dive into data wrangling. First of all, we need to read in the data into our R session. I will talk about that maybe longer than I should. Thereafter, we need to make sure that the data is in the right format. You probably have not really thought about how a data set is supposed to look like. The concept of tidy data provides you an idea for this.
 
 ## Reading in data sets
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("rMJGqH_GrNk")
+```
 
 First, the `readr` package [@hester2018] will be introduced. It can be used for the import of the majority of files you will ever want to import and export. If the files become larger, `vroom` [@hester2020] is a viable alternative. Beyond that, there exist some more packages for other types such as Excel or Stata files. I will provide you with a basic tutorial on how to deal with them, too. 
 
@@ -62,7 +66,7 @@ But how does parsing actually look like. Well, `readr`'s parsing functions take 
 parse_double(c("1", "2", "3"))
 ```
 
-So far so good. What `readr`does when it reads in your data sets is that it takes the first 1,000 values of every column and tries to guess the correct data type. This can be emulated using `guess_parser()` and `parse_guess()`. Both functions take a character vector as input. The former one returns the guessed type, the latter returns a vector which is parsed to the type it has guessed. 
+So far so good. What `readr` does when it reads in your data sets is that it tries to guess the correct data type. This can be emulated using `guess_parser()` and `parse_guess()`. Both functions take a character vector as input. The former one returns the guessed type, the latter returns a vector which is parsed to the type it has guessed. 
 
 ```{r}
 guess_parser("2009-04-23")
@@ -81,7 +85,7 @@ Well…
 * Special characters ($, %, §, €)   
 * So-called grouping characters such as 1,000,000 (USA) or 1.000.000 (Germany) or 1'000'000 (Switzerland)    
 
-The problem with decimal points (-- and commas) can be addresses by specifying a `locale`. Compare:
+The problem with decimal points (-- and commas) can be addressed by specifying a `locale`. Compare:
 
 ```{r}
 parse_double("1,3")
@@ -154,17 +158,9 @@ Now you know how to parse number and date vectors yourself. This is nice, but no
 
 #### Parsing entire files
 
-As mentioned earlier, the `read_*` functions take the first 1000 rows and then guess the columns format. I emulated this using the `guess_parser()` function.
+As mentioned earlier, the `read_*` functions guess the columns format. I emulated this using the `guess_parser()` function.
 
-If `readr` finds values in a column that do not match the type of the column which it has guessed in first place, or entirely fails to parse a column (e.g., because it only consists of `NAs`), it returns parsing failures. They can be obtained using `problems()`. 
-
-```{r}
-challenge <- read_csv(readr_example("challenge.csv"))
-head(challenge)
-problems(challenge)
-```
-
-When looking at the parsing failures here, what catches the eye is that the first 1000 values of `challenge$y` seem to be NA. Because `readr` only takes the first 1000 rows into account, it parses `challenge$y` as `logical`. However, it should be considered a `date` column. You can specify this using `col_types =`:
+If you want to specify the column types yourself, you can use the `col_types =` argument:
 
 ```{r}
 challenge_w_date <- read_csv(readr_example("challenge.csv"),
@@ -176,73 +172,11 @@ challenge_w_date <- read_csv(readr_example("challenge.csv"),
 
 In general, every `parse_*` function has its `col_*` counterpart.
 
-If you want to read in data and change the column specifications, there is a little shortcut:
-
-First, read in your data set:
-
-```{r}
-challenge <- read_csv(readr_example("challenge.csv"))
-```
-
-Second, you can copy the column specification from the output to your clipboard:
-
-```{r}
-#This part: 
-#cols(
-#  x = col_double(),
-#  y = col_logical()
-#)
-```
-
-Third, provide it your `read_csv()` call as a `col_types =` argument (by simply pasting it):
-
-```{r}
-#challenge <- read_csv(readr_example("challenge.csv"),
-#                     col_types = cols(
-#                       x = col_double(),
-#  needs to be modified --> y = col_logical()
-#                            ))
-```
-
-Fourth, modify the argument:
-
-```{r}
-#challenge_w_date <- read_csv(readr_example("challenge.csv"),
-#                             col_types = cols(
-#                               x = col_number(),
-#  modified -->                 y = col_date()
-#                            ))
-```
-
-Fifth, read it in:
-
-```{r}
-challenge_w_date <- read_csv(readr_example("challenge.csv"),
-                      col_types = cols(
-                        x = col_number(),
-                        y = col_date()
-                      ))
-```
-
-### `.rds` and `.RData`files
-
-`.rds` files can be used to store singular R-specific objects (such as lists), `.RData` files can be used to store multiple R-specific objects. The former can be read in using `read_rds("file.rds")`, the latter with `load("file.RData")`. More on `read_rds()` [here](https://readr.tidyverse.org/reference/read_rds.html) and `.RData` [here](http://www.sthda.com/english/wiki/saving-data-into-r-data-format-rds-and-rdata)
-
-## Write data 
-
-### `write_csv()`
-
-Writing data is fairly straight-forward. Most of the times, you will work with plain Tibbles which consist of different kinds of vectors except for lists. If you want to store them, I recommend you to simply use `write_csv(tibble, path = "file.csv")`. If you plan on working on the `.csv` file in Excel, use `write_excel_csv(tibble, path = "file.csv")`
-
-### `write_rds()`
-
-Sometimes, however, it might be impossible to create a `.csv` file of your data -- e.g., if you want to store a list. This is what you can use `write_rds(r_specific_object, path = "file.rds")` for. 
-
-### `save()`
-
-Akin to `.rds` files are `.RData` files. They can contain multiple objects and be written using `save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")`. You can save your entire work space as well by calling `save.image(file = "file.RData")`.
-
 ## Alternative ways to read in and write data
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("ehvhPQRUlWY")
+```
 
 There do also other packages exist for different data types. I will explain the ones which might be of particular use for you and their main-functions only briefly.
 
@@ -252,7 +186,7 @@ You can use `haven` [@wickham2020c] for reading and writing SAS (suffixes `.sas7
 
 The functions then are:   
 
-* `read_sas("file.sas7bdate"` and `write_sas(tibble, "file.sas7bdat")` for both `.sas7bdat` and `.sas7bcat` files. `read_xpt("file.xpt")` reads `.xpt` files    
+* `read_sas("file.sas7bdate")` and `write_sas(tibble, "file.sas7bdat")` for both `.sas7bdat` and `.sas7bcat` files. `read_xpt("file.xpt")` reads `.xpt` files    
 * `read_sav("file.sav")` and `read_por("file.por")` for `.sav` and `.por` files. `write_sav(tibble, "file.sav"` writes a the Tibble `tibble` to the file `file.sav`   
 * `read_dta("file.dta")` and `write_dta(tibble, "file.dta")` read and write `.dta` files
 
@@ -270,6 +204,28 @@ More on the `readxl` package can be found [here](https://readxl.tidyverse.org).
 
 More on `vroom` [here](https://vroom.r-lib.org/reference/vroom.html) and [here](https://dcl-wrangle.stanford.edu/read-write.html).
 
+### `.rds` and `.RData`files
+
+`.rds` files can be used to store singular R-specific objects (such as lists), `.RData` files can be used to store multiple R-specific objects. The former can be read in using `read_rds("file.rds")`, the latter with `load("file.RData")`. More on `read_rds()` [here](https://readr.tidyverse.org/reference/read_rds.html) and `.RData` [here](http://www.sthda.com/english/wiki/saving-data-into-r-data-format-rds-and-rdata)
+
+## Write data 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("Tg5ZAhkqLM0")
+```
+
+### `write_csv()`
+
+Writing data is fairly straight-forward. Most of the times, you will work with plain Tibbles which consist of different kinds of vectors except for lists. If you want to store them, I recommend you to simply use `write_csv(tibble, path = "file.csv")`. If you plan on working on the `.csv` file in Excel, use `write_excel_csv(tibble, path = "file.csv")`
+
+### `write_rds()`
+
+Sometimes, however, it might be impossible to create a `.csv` file of your data -- e.g., if you want to store a list. This is what you can use `write_rds(r_specific_object, path = "file.rds")` for. 
+
+### `save()`
+
+Akin to `.rds` files are `.RData` files. They can contain multiple objects and be written using `save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")`. You can save your entire work space as well by calling `save.image(file = "file.RData")`.
+
 ### Further readings
 
 * [Information on working directories](https://support.rstudio.com/hc/en-us/articles/200711843-Working-Directories-and-Workspaces)    
@@ -278,6 +234,10 @@ More on `vroom` [here](https://vroom.r-lib.org/reference/vroom.html) and [here](
 * Chapter in R for Data Science [@wickham2016a] regarding [data import](https://r4ds.had.co.nz/data-import.html)
 
 ## Tidy data
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("4MoLNYuHirA")
+```
 
 Before you learn how to tidy and wrangle data, you need to know how you want your data set to actually look like, i.e., what the desired outcome of the entire process of tidying your data set is. The `tidyverse` is a collection of packages which share an underlying philosophy: they are tidy. This means, that they (preferably) take tidy data as inputs and output tidy data. In the following, I will, first, introduce you to the concept of tidy data as developed by Hadley Wickham [@wickham2014]. Second, `tidyr` is introduced [@wickham2020b]. Its goal is to provide you with functions that facilitate tidying data sets. Beyond, I will provide you some examples of how to create tibbles using functions from the `tibble` package [@muller2020]. Moreover, the pipe from the `magrittr` package is introduced.
 
@@ -390,7 +350,7 @@ On the other hand, we can also use a handy function from `tidyr` called `separat
 
 ```{r}
 ger_car_manufacturer_longer_sep_cyl <- ger_car_manufacturer_longer %>% # first, take the tibble
-  separate(cylinders, into = c("cylinders", "drop_it"), sep = " ") %>% # and then split the column "cylinders" into two
+  separate(ger_car_manufacturer_longer, cylinders, into = c("cylinders", "drop_it"), sep = " ") %>% # and then split the column "cylinders" into two
   select(-drop_it) # you will learn about this in the lesson on dplyr  # and then drop one column from the tibble
 ```
 
@@ -442,7 +402,7 @@ ger_car_manufacturer_longer_sep_cyl %>%
   summary()
 ```
 
-As ` %>% ` is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.
+As ` %>% ` is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-ctrl-m on a Windows machine.
 
 #### Further functionalities
 
@@ -460,7 +420,7 @@ tidy_german_cars_tbl <- german_cars_tbl %>%
 
 `enframe()` enables you to create a tibble from a (named) vector. It outputs a tibble with two columns (`name` and `value` by default): `name` contains the names of the elements (if the elements are unnamed, it contains a serial number), `value` the element. Both can be renamed in the function call by providing a character vector.
 
-If you want to achieve the opposite, i.e., merge cells' content, you can use the counterpart, `unite()`. Let's take the following data frame which consists of the names of the professors of the Institute for Political Science:
+If you want to achieve the opposite, i.e., merge cells' content, you can use the counterpart, `unite()`. Let's take the following data frame which consists of the names of the professors of the Institute for Political Science at the University of Regensburg:
 
 ```{r}
 professor_names_df <- data.frame(first_name = c("Karlfriedrich", "Martin", "Jerzy", "Stephan", "Melanie"),

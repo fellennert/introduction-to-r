@@ -4,12 +4,16 @@ I can recall vividly how I started learning R as an undergrad and I told a frien
 
 Today, you are going to make your first steps with R. In the following, you will learn how to use R as a fancy calculator. This encompasses that you can extend its functionality by installing packages, the possibility to do all kinds of calculations, storing data in objects of several kinds, and accessing them.  
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("3pabK-rFISs")
+```
+
 ## Installing packages
 
 Being a fancy calculator implies that you can extend it as you want. One of the big upsides of using R is that due to its active community, whose members are permanently striving to make it a bit better, we useRs are basically standing on the shoulders of giants. You can install packages from CRAN by using the `install.packages()` command.
 
 ```{r}
-# install.packages("tidyverse") # installs the tidyverse package
+#install.packages("tidyverse") # installs the tidyverse package
 # insert '#' if you want R not to execute the things that stand to its right; pretty useful for annotating code
 ```
 
@@ -34,9 +38,13 @@ Using R as a calculator looks like this:
 sqrt(9)
 ```
 
-The latter, `sqrt()`, is no classic arithmetic operation but a function. It takes a non-negative number as input and returns its square root.  
+The latter, `sqrt()`, is no classic arithmetic operation but a function. It takes a non-negative number as input and returns its square root.
 
 ## Vectors
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("irtyY6uBgJo")
+```
 
 R is vector-based. That implies that we can store multiple values in vectors and perform operations on them *by element*. This is pretty handy and distinguishes it from other languages like, for instance, C or Python (without NumPy). 
 
@@ -105,7 +113,7 @@ new_sequence
 typeof(new_sequence)
 ```
 
-Note that doubles are only approximate, since they represent floating point numbers. In your every-day coding, you should not worry too much about it. However, keep it in mind later on. You can read more about it [here (page 9)](http://www.burns-stat.com/pages/Tutor/R_inferno.pdf).  
+Note that doubles are only approximate, since they represent floating point numbers. In your every-day coding, you should not worry too much about it. However, keep it in mind later on. You can read more about it [here (page 9)](http://www.burns-stat.com/pages/Tutor/R_inferno.pdf).
 
 Beyond that, Integers only have one special value -- `NA`, implying a missing value. Doubles have four: `NA` -- missing value, `NaN` -- not a number, and `Inf` and `-Inf` -- infinite values. The latter three can be illustrated with the following example:
 
@@ -131,6 +139,7 @@ You cannot really "do" anything with character vectors, except for comparison.
 ```{r}
 #text_character + direct_speech # remove '#' if you want to try
 text_character == text_character
+"b" > "a"
 ```
 
 ### Working with atomic vectors
@@ -189,7 +198,7 @@ named_vector[named_vector %in% c(1, 2, 3)] # named_vectors that also are in anot
 named_vector[named_vector > 2] # values that are bigger than 2
 rev(named_vector) # reverse vector -- using a function
 named_vector[c(1, 1, 1, 2, 3, 3, 3)] # first first first second third third third element
-named_vector[c(TRUE, TRUE, TRUE, FALSE, TRUE)] # subsetting with a logical vector -- true = value at the corresponding position is retained, FALSE = value at the corresponding position is dropped
+named_vector[c(TRUE, TRUE, TRUE, FALSE, TRUE)] # subsetting with a logical vector -- TRUE = value at the corresponding position is retained, FALSE = value at the corresponding position is dropped
 named_vector[c("one", "three")] # if the vector is named, you can also select the correspondingly named elements with a character vector
 ```
 
@@ -250,6 +259,10 @@ typeof(vector_of_numbers)
 
 ### Augmented vectors
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("guFW9ijtdb4")
+```
+
 In R, there are also other vector types. They are built upon the basic vectors -- atomic vectors and lists. The most important ones are *factors* (built upon integers), *date*/*date-time* (built upon doubles), and *data frames*/*tibbles* (built upon lists).
 
 #### Factors
@@ -266,11 +279,11 @@ typeof(mdbs)
 mdbs
 ```
 
-In our daily workflow, we normally convert character vectors to factors using `as.factor()`. We will learn more about factors -- and the `forcats` package which has been dedicated to them -- in the session about data wrangling.
+In our daily workflow, we normally convert character vectors to factors using `as.factor()`. We will learn more about factors -- and the `forcats` package which has been dedicated to them.
 
 #### Date and date-time
 
-Dates are simply numeric vectors that indicate the number of days that have passed since 1970-01-01. We will work with dates using the `lubridate` package,
+Dates are simply numeric vectors that indicate the number of days that have passed since 1970-01-01. We will work with dates using the `lubridate` package.
 
 ```{r}
 library(lubridate)
@@ -284,7 +297,6 @@ Date-times work analogously: a numeric vector that represents the number of seco
 ```{r}
 datetime <- ymd_hms("1970-01-01 01:00:00")
 unclass(datetime)
-
 ```
 
 If you want to learn more on dates and times, have a look at the `lubridate` package which has been dedicated to them.

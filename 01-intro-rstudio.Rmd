@@ -59,11 +59,15 @@ More inspiration can be found [here](https://drdoane.com/my-rstudio-configuratio
 
 ## Some remarks on your daily workflow
 
-As some of you are beginners, it might be hard for you to see the point in setting up projects and a GitHub account already. The intermediate and advanced users among you, who are not familiar with projects and GitHub yet though, might also wonder what they would need it for: working with R has gone pretty well in the past, so why should you change this running system?  
+As some of you are beginners, it might be hard for you to see the point in setting up projects already. The intermediate and advanced users among you, who are not familiar with projects yet though, might also wonder what they would need it for: working with R has gone pretty well in the past, so why should you change this running system?  
 
 I start out making points on why using Projects is useful. Then, I will provide step-by-step guidance on how to set them up. Since using GitHub is not that straight-forward, I will motivate why to use it and then link to a bigger tutorial covering the setup process (again by Jennifer Bryan, a statistic professor who also works at RStudio).
 
 ### RStudio Projects
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("-coGSeoNlB0")
+```
 
 #### Motivation
 
@@ -87,6 +91,10 @@ I strongly suggest that you set up a project which is dedicated to this course.
 5. When you write code for our course in the future, you *first* open the R project -- by double-clicking the .Rproj file -- and then create either a new script or open a former one (e.g., by going through the "Files" tab in the respective pane which will show the right directory already.)
 
 ## R scripts and RMarkdown
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("SkX3XrYqtbc")
+```
 
 In this course, you will work with two sorts of documents to store your code in: R scripts (suffix `.R`) and RMarkdown documents (suffix `.Rmd`). In the following, I will briefly introduce you to both of them.
 

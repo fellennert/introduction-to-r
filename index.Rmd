@@ -17,7 +17,11 @@ Dear student,
 in the following, you will receive a gentle introduction to R and how you can use it to work with data. This tutorial was heavily inspired by Richard Cotton's "Learning R" [@cotton2013] and Hadley Wickham's and Garrett Grolemund's "R for Data Science" (abbreviated with R4DS). The latter can be found [online](https://r4ds.had.co.nz) [@wickham2016a]. We will not immediately start out with the packages from the `tidyverse` (although [some strong points](http://varianceexplained.org/r/teach-tidyverse/) have been made in favor of doing so right from the start). I will rather try to build some sort of foundation from where we can proceed to the tidy packages in the following lessons. Hence, one can also understand this tutorial as an introduction to the `tidyverse` [@wickham2019d] (or `hadleyverse`, as it was named originally), even though I will not introduce it in this very first part. 
 When it comes to what I would refer to as the "daily workflow" with R and RStudio, Jennifer Bryan's blog articles have been a big inspiration for me. When looking at RMarkdown, I will mainly build on "R Markdown: The Definitive Guide" -- which is also freely available online [@xie2018].
 
-Note that you will find all of the chapters as executable RMarkdown documents (on which you will learn more in the following chapter) in the dedicated [GitHub repository](https://github.com/fellennert/introduction-to-r).
+Note that you will find all of the chapters as executable RMarkdown documents (on which you will learn more in the following chapter) in the dedicated [GitHub repository](https://github.com/fellennert/introduction-to-r). Moreover, I will record videos for each chapter and embed them in this online script, just like this:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+vembedr::embed_youtube("glLfmvwz0qA")
+```
 
 ## Course outline
 
@@ -77,9 +81,7 @@ Each chapter will contain a *Further links* section, where I include useful onli
 
 ## Last but not least
 
-Learning R -- and programming in general -- is tough. More often than not, things will not go the way you want them to go. Mostly, this is due to minor typos or the fact that R is case-sensitive. However, don't fret. Only practice makes perfekt. It is perfectly normal to not comprehend error messages. The following video illustrates this:
-
-```{r echo=FALSE}
+Learning R -- and programming in general -- is tough. More often than not, things will not go the way you want them to go. Mostly, this is due to minor typos or the fact that R is case-sensitive. However, don't fret. Only practice makes perfekt. It is perfectly normal to not comprehend error messages. The following video illustrates this:```{r echo=FALSE}
 vembedr::embed_youtube("HluANRwPyNo")
 ```
 

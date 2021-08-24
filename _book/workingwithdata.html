@@ -740,11 +740,11 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <pre><code>## # A tibble: 5 × 9
 ##   manufacturer `3 cyl` `4 cyl` `5 cyl` `6 cyl` `8 cyl` `10 cyl` `12 cyl`
 ##   &lt;chr&gt;          &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
-## 1 Audi               7      71       3      46      27        8       10
-## 2 BMW                9      58       2      45      23        2       12
-## 3 Mercedes           9      97       3      30      30        5       11
-## 4 Opel               5      64       2      40      33        2        8
-## 5 VW                10      73       9      46      33        3        7
+## 1 Audi               8      89       5      38      27       10       15
+## 2 BMW                8      74       4      44      29        1        9
+## 3 Mercedes           4      79       5      50      20        2       14
+## 4 Opel              10      53      10      46      40        5        9
+## 5 VW                 2      88       7      33      31        5       12
 ## # … with 1 more variable: 16 cyl &lt;dbl&gt;</code></pre>
 <p>You can create a tibble <em>by column</em> using the <code>tibble</code> function. Column names need to be specified and linked to vectors of either the same length or length one.</p>
 <p>This data set basically consists of three variables: <code>German car manufacturer</code>, <code>number of cylinders</code>, and <code>frequency</code>. To make the data set tidy, it has to consist of three columns depicting the three respective variables. This operation is called pivoting the non-variable columns into two-column key-value pairs. As the data set will thereafter contain fewer columns and more rows than before, it will have become longer (or taller). Hence, the tidyr function is called <code>pivot_longer()</code>.</p>
@@ -754,16 +754,16 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <pre><code>## # A tibble: 40 × 3
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
-##  1 Audi         3 cyl             7
-##  2 Audi         4 cyl            71
-##  3 Audi         5 cyl             3
-##  4 Audi         6 cyl            46
+##  1 Audi         3 cyl             8
+##  2 Audi         4 cyl            89
+##  3 Audi         5 cyl             5
+##  4 Audi         6 cyl            38
 ##  5 Audi         8 cyl            27
-##  6 Audi         10 cyl            8
-##  7 Audi         12 cyl           10
+##  6 Audi         10 cyl           10
+##  7 Audi         12 cyl           15
 ##  8 Audi         16 cyl            0
-##  9 BMW          3 cyl             9
-## 10 BMW          4 cyl            58
+##  9 BMW          3 cyl             8
+## 10 BMW          4 cyl            74
 ## # … with 30 more rows</code></pre>
 <p>In the function call, you need to specify the following: if you were not to use the pipe, the first argument would be the tibble you are manipulating. Then, you look at the column you want to <strong>keep</strong>. Here, it is the car manufacturer. This means that all columns but <code>manufacturer</code> will be crammed into two new ones: one will contain the columns’ names, the other one their values. How are those new column supposed to be named? That can be specified in the <code>names_to =</code> and <code>values_to =</code>arguments. Please note that you need to provide them a character vector, hence, surround your parameters with quotation marks. As a rule of thumb for all <code>tidyverse</code> packages: If it is a new column name you provide, surround it with quotation marks. If it is one that already exists – like, here, manufacturer, then you do not need the quotation marks.</p>
 </div>
@@ -813,16 +813,16 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <pre><code>## # A tibble: 40 × 3
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
-##  1 Audi                 3         7
-##  2 BMW                  3         9
-##  3 Mercedes             3         9
-##  4 Opel                 3         5
-##  5 VW                   3        10
-##  6 Audi                 4        71
-##  7 BMW                  4        58
-##  8 Mercedes             4        97
-##  9 Opel                 4        64
-## 10 VW                   4        73
+##  1 Audi                 3         8
+##  2 BMW                  3         8
+##  3 Mercedes             3         4
+##  4 Opel                 3        10
+##  5 VW                   3         2
+##  6 Audi                 4        89
+##  7 BMW                  4        74
+##  8 Mercedes             4        79
+##  9 Opel                 4        53
+## 10 VW                   4        88
 ## # … with 30 more rows</code></pre>
 </div>
 <div id="insertion-the-pipe" class="section level4" number="4.4.2.4">
@@ -836,32 +836,32 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <pre><code>## # A tibble: 40 × 3
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
-##  1 Audi                 3         7
-##  2 BMW                  3         9
-##  3 Mercedes             3         9
-##  4 Opel                 3         5
-##  5 VW                   3        10
-##  6 Audi                 4        71
-##  7 BMW                  4        58
-##  8 Mercedes             4        97
-##  9 Opel                 4        64
-## 10 VW                   4        73
+##  1 Audi                 3         8
+##  2 BMW                  3         8
+##  3 Mercedes             3         4
+##  4 Opel                 3        10
+##  5 VW                   3         2
+##  6 Audi                 4        89
+##  7 BMW                  4        74
+##  8 Mercedes             4        79
+##  9 Opel                 4        53
+## 10 VW                   4        88
 ## # … with 30 more rows</code></pre>
 <p>could have also been written like this</p>
 <div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="workingwithdata.html#cb188-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(cylinders)</span></code></pre></div>
 <pre><code>## # A tibble: 40 × 3
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
-##  1 Audi                 3         7
-##  2 BMW                  3         9
-##  3 Mercedes             3         9
-##  4 Opel                 3         5
-##  5 VW                   3        10
-##  6 Audi                 4        71
-##  7 BMW                  4        58
-##  8 Mercedes             4        97
-##  9 Opel                 4        64
-## 10 VW                   4        73
+##  1 Audi                 3         8
+##  2 BMW                  3         8
+##  3 Mercedes             3         4
+##  4 Opel                 3        10
+##  5 VW                   3         2
+##  6 Audi                 4        89
+##  7 BMW                  4        74
+##  8 Mercedes             4        79
+##  9 Opel                 4        53
+## 10 VW                   4        88
 ## # … with 30 more rows</code></pre>
 <p>because the tibble is the first argument in the function call.</p>
 <p>Because <code>magrittr</code> really has gained traction in the R community, many functions are now optimized for being used with the pipe. However, there are still some around which are not. A function for fitting a basic linear model with one dependent and one independent variable which are both stored in a tibble looks like this: <code>lm(formula = dv ~ iv, data = tibble)</code>. Here, the tibble is not the first argument. To be able to fit a linear model in a “pipeline,” you need to employ a little hack: you can use a dot <code>.</code> as a placeholder.</p>
@@ -874,19 +874,19 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ## lm(formula = frequency ~ cylinders, data = .)
 ## 
 ## Residuals:
-##    Min     1Q Median     3Q    Max 
-## -29.78 -15.27   0.85  11.93  64.96 
+##     Min      1Q  Median      3Q     Max 
+## -34.099 -16.808   0.169   9.205  55.691 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  42.9996     7.5531   5.693  1.5e-06 ***
-## cylinders    -2.7406     0.8379  -3.271  0.00229 ** 
+## (Intercept)  44.4688     7.9032   5.627 1.85e-06 ***
+## cylinders    -2.7899     0.8768  -3.182  0.00291 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 22.01 on 38 degrees of freedom
-## Multiple R-squared:  0.2197, Adjusted R-squared:  0.1991 
-## F-statistic:  10.7 on 1 and 38 DF,  p-value: 0.002286</code></pre>
+## Residual standard error: 23.03 on 38 degrees of freedom
+## Multiple R-squared:  0.2104, Adjusted R-squared:  0.1896 
+## F-statistic: 10.12 on 1 and 38 DF,  p-value: 0.002913</code></pre>
 <p>As <code>%&gt;%</code> is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.</p>
 </div>
 <div id="further-functionalities" class="section level4" number="4.4.2.5">
