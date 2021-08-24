@@ -475,13 +475,14 @@ means_tbl <- mtcars %>%
     a. using a `for` loop
     b. using a `while` loop
     c. using `map()` (e.g., by storing them in a vector and then calling `enframe()`)
-7. Extend the Roulette function (colors!). You will need a lot of if...else. Try to split it up into several functions (e.g., `determine_color`, `determine_return`, etc.). Make it "bullet-proof" -- how should you go across cases where people bet on a number and a color? 
+7. Extend the Roulette function (colors!). You will need a lot of if...else. Try to split it up into functions (e.g., `determine_color`). Make it "bullet-proof" -- how should you go across cases where people bet on a number and a color? 
+
 You can use the following code chunk to determine the values and their colors:
 
 ```{r eval=FALSE}
-red_fields <- c(32, 19, 21, 25, 34, 27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3)
-black_fields <- setdiff(1:36, red_fields)
-zero <- 0
+black <- c(seq(2, 10, by = 2), seq(20, 28, by = 2), seq(11, 18, by = 2), seq(29, 36, by = 2))
+red <- seq(1, 36)[!(1:36) %in% black]
+green <- 0
 ```
 
 <details>
@@ -562,7 +563,40 @@ results_tbl_map <- map_chr(1:10, play_roulette_basic, n = 1) %>%
   enframe(name = NULL, value = "result")
 
 #7 to be done later
+
+determine_color <- function(draw){
+  black <- c(seq(2, 10, by = 2), seq(20, 28, by = 2), seq(11, 18, by = 2), seq(29, 36, by = 2))
+  red <- seq(1, 36)[!(1:36) %in% black]
+  green <- 0
+  if (draw %in% black) return("black")
+  if (draw %in% red) return("red")
+  if (draw %in% green) return("green")
+}
+
+play_roulette <- function(bet = 1, number = NA, color = NA) {
+  
+  if (number > 36 & is.na(number) == FALSE) stop("You can only bet on numbers between 0 and 36.")
+  if (!color %in% c("green", "red", "black") & is.na(color) == FALSE) stop("You can only bet on certain colors")
+  if (is.na(color) == FALSE & is.na(number) == FALSE) stop("You can either bet on numbers or colors.")
+  
+  if(is.na(color)) color <- "not applicable"
+  if(is.na(number)) number <- "not applicable"
+  
+  draw <- sample(0:36, 1)
+  color_draw <- determine_color(draw) 
+  
+  if (color == color_draw) return(str_c("Nice, you won", as.character(bet * 2), "Dollars", sep = " "))
+  if (number == draw) return(str_c("Nice, you won", as.character(bet * 36), "Dollars", sep = " "))
+  
+  return("Sorry, you lost.")
+}
+
+play_roulette(color = "green")
+
 ```
+
+
+
 
 </details>
   

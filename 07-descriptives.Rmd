@@ -29,7 +29,7 @@ Of course, the type of variable determines the type of operation that can be per
 
 ### Grouped descriptives
 
-You can look at certain descriptives by group. Then, `skim()` will return descriptives for each group in a rowwise fashion. Just call `group_by()` before passing the tibble to the `skim()` call
+You can look at certain descriptives by group. Then, `skim()` will return descriptives for each group in a row-wise fashion. Just call `group_by()` before passing the tibble to the `skim()` call
 
 ```{r, render = knitr::normal_print}
 mtcars %>% 

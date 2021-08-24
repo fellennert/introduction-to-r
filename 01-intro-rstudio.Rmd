@@ -27,7 +27,7 @@ After installing RStudio, you can open it just like every other application on y
 
 ![RStudio; obtained from @grolemund2014](figures/rstudio.png)
 
-As you can see, there are three panes. When you open a script (for instance, by clicking File >> New File >> R Script), a fourth one will appear in the upper part on the left side. If you open multiple scripts, they will be organized in tabs as well^[more on scripts at the end of session 1.2.].  
+As you can see, there are three panes. When you open a script (for instance, by clicking File >> New File >> R Script), a fourth one will appear in the upper part on the left side. If you open multiple scripts, they will be organized in tabs as well.
 
 Every pane contains different things:    
 
@@ -92,7 +92,8 @@ In this course, you will work with two sorts of documents to store your code in:
 
 ### R scripts
 
-The console, where you can only execute your code, is great for experimenting with R. If you want to store it -- e.g., for sharing -- you need something different. This is where R scripts come in handy. When you are in RStudio, you create a new script by either clicking `File >> New File >> R Script` or ctrl/cmd+shift+n. There are multiple ways to run code in the script:   
+The console, where you can only execute your code, is great for experimenting with R. If you want to store it -- e.g., for sharing -- you need something different. This is where R scripts come in handy. When you are in RStudio, you create a new script by either clicking `File >> New File >> R Script` or ctrl/cmd+shift+n. There are multiple ways to run code in the script:
+
 * cmd/ctrl+return (Mac/Windows) -- execute entire expression and jump to next line   
 * option/alt+return (Mac/Windows) -- execute entire expression and remain in line   
 * cmd/ctrl+shift+return (Mac/Windows) -- execute entire script from the beginning to the end (rule: every script you hand in or send to somebody else should run smoothly from the beginning to the end)   
@@ -101,17 +102,20 @@ If you want to make annotations to your code (which you should do because it mak
 
 ### RMarkdown
 
-A time will come where you will not just do analyses for yourself in R, but you will also have to communicate them. Let's take a master's thesis as an example: you need a type of document that is able to encapsulate: text (properly formatted), visualizations (tables, graphs, maybe images), and references. An RMarkdown document can do it all, plus, your entire analysis can live in there as well. So there is no need anymore for the cumbersome process of copying data from MS Excel or IBM SPSS into an MS Word table. You just tell RMarkdown what it should communicate and what not. (Note that all the project work for this course has to be handed in using R Markdown files.) In the following, I will not provide you with an exhaustive introduction to RMarkdown. Instead, I will focus on getting you started and then referring you to better, more exhaustive resources. It is not that I am too lazy to write a big tutorial, but there are state-of-the-art tutorials and resources (which mainly come straight from people who work on the forefront of the development of these tools) which are available for free. By linking to them, I want to encourage you to get involved and dig into this stuff. So, let's get you started!
+A time will come where you will not just do analyses for yourself in R, but you will also have to communicate them. Let's take a master's thesis as an example: you need a type of document that is able to encapsulate: text (properly formatted), visualizations (tables, graphs, maybe images), and references. An RMarkdown document can do it all, plus, your entire analysis can live in there as well. So there is no need anymore for the cumbersome process of copying data from MS Excel or IBM SPSS into an MS Word table. You just tell RMarkdown what it should communicate and what not. 
+
+In the following, I will not provide you with an exhaustive introduction to RMarkdown. Instead, I will focus on getting you started and then referring you to better, more exhaustive resources. It is not that I am too lazy to write a big tutorial, but there are state-of-the-art tutorials and resources (which mainly come straight from people who work on the forefront of the development of these tools) which are available for free. By linking to them, I want to encourage you to get involved and dig into this stuff. So, let's get you started!
 
 You create an RMarkdown file by clicking `File >> New File >> R Markdown`…. Then, a window pops up that looks like this:
 
 ![New RMarkdown](figures/new_markdown_1.png)
 
 Note that you could also do a presentation (with the `beamer` package), a `shiny` app, or use templates. We will focus on simple RMarkdown documents^[but feel free to approach me if you want to get some additional resources on the other types.].
-Here, you can type in a title, the name(s) of the author(s), and choose the default output format. For now you have to choose one, but later you can switch to one of the others whenever you want to.   
+Here, you can type in a title, the name(s) of the author(s), and choose the default output format. For now you have to choose one, but later you can switch to one of the others whenever you want to.
+
 * *HTML* is handy for lightweight, quickly knitted files, or if you want to publish it on a website.   
 * *PDF* is good if you are experienced with $\LaTeX$ and want to further modify it in terms of formatting etc., or simply want to get a more formally looking document (I use it if I need to hand in something that is supposed to be graded). If you want to knit to PDF, you need a running $\LaTeX$ version on your machine. If you do not have one, I recommend you to install `tinytex.` I linked installation instructions down below.
-* *Word* puts out an MS Word document -- especially handy if you collaborate with people who are either not experienced in R, like older faculty, or want some parts to be proof-read (remember the Track-Changes function?). Note that you need to have MS Word installed on your machine.   
+* *Word* puts out an MS Word document -- especially handy if you collaborate with people who are either not experienced in R, like older faculty, or want some parts to be proof-read (remember the Track-Changes function?). Note that you need to have MS Word or LibreOffice installed on your machine.   
 
 Did you notice the term "knit"? The logic behind RMarkdown documents is that you edit them in RStudio and then "knit" them. This means that it calls the `knitr` package. Thereby, all the code you include into the document is executed from scratch. If the code does not work and throws an error, the document will not knit -- hence, it needs to be properly written to avoid head-scratching. The `knitr` package creates a markdown file (suffix: .md). This is then processed by `pandoc`, a universal document converter. The big advantage of this two-step approach is that it enables a wide range of output formats.
 

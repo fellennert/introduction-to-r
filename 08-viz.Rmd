@@ -1,6 +1,6 @@
 # Visualizations with `ggplot2` {#visualization}
 
-> "The purpoose of visualization is insight, not pictures." -- Ben A. Shneiderman
+> "The purpose of visualization is insight, not pictures." -- Ben A. Shneiderman
 
 In R, the dominant package for visualizing data is `ggplot2` which belongs to the tidyverse.
 
@@ -116,7 +116,7 @@ county_data_midwest <- socviz::county_data %>%
   drop_na()
 ```
 
-If both variables are continuous, the easiest option is to use a scatterplot. 
+If both variables are continuous, the easiest option is to use a scatter plot. 
 
 ```{r}
 ggplot(data = county_data_midwest) +
@@ -264,7 +264,7 @@ socviz::county_data %>%
 
 #### Facets
 
-The original dataset consists of four different census regions. If I were to compare them, I could color them accordingly. 
+The original data set consists of four different census regions. If I were to compare them, I could color them accordingly. 
 
 ```{r}
 socviz::county_data %>% 

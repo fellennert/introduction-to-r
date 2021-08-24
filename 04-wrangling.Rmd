@@ -1,6 +1,6 @@
 # Manipulation with `dplyr` {#wrangling}
 
-The last sessions (3.1--3.3) showed you four things: how you get datasets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (`%>%`), and an introduction to tidy data and how to make datasets tidy using the `tidyr` package [@wickham2020b]. 
+The last sessions (3.1--3.3) showed you four things: how you get data sets into R, a couple of ways to create tibbles, how to pass data to functions using the pipe (`%>%`), and an introduction to tidy data and how to make data sets tidy using the `tidyr` package [@wickham2020b]. 
 What you haven't learned was how you can actually manipulate the data itself. In the `tidyverse` framework [@wickham2019d], the package which enables you to accomplish those tasks is `dplyr` [@wickham2020].
 
 `dplyr` joined the party in 2014, building upon the `plyr` package. The d in `dplyr` stands for data set and `dplyr` works with tibbles (or data frames) only. 
@@ -237,7 +237,7 @@ imdb_selected %>%
   glimpse()
 ```
 
-`mutate()` uses so-called *window functions*. They take one vector of values and return another vector of values. An overview -- again, from the cheatsheet:
+`mutate()` uses so-called *window functions*. They take one vector of values and return another vector of values. An overview -- again, from the cheat sheet:
 
 ![Window functions](figures/window functions.png)
 
@@ -409,7 +409,7 @@ glimpse(election_data)
 
 Now, the data set is ready for cleaning and tidying. Feel free to do this is as a take-home exercise. 
 
-However, the topic of this script is different joins. The `dplyr` package offers six different joins: `left_join()`, `right_join()`, `inner_join()`, `full_join()`, `semi_join()`, and `anti_join()`. The former four are mutating joins, they add columns. The latter two can be used to filter rows in a data set. Below is an overview from the `dplyr` cheatsheet:
+However, the topic of this script is different joins. The `dplyr` package offers six different joins: `left_join()`, `right_join()`, `inner_join()`, `full_join()`, `semi_join()`, and `anti_join()`. The former four are mutating joins, they add columns. The latter two can be used to filter rows in a data set. Below is an overview from the `dplyr` cheat sheet:
 
 ![Overview of the different joins](figures/joins.png) 
 

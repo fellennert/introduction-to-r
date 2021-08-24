@@ -409,7 +409,7 @@ while (condition) {
 
 What could an example look like?[^1] The following loop keeps running until three heads appeared in a row and the condition is met.
 
-[^1]: I have taken this example from the R for Data Science book. I hardly ever work with `while loops` -- it's handy for web-scraping, for instance, if you want to loop over pages until a certain date is reached, and, therefore, I could not really come up with an example myself.
+[^1]: I have taken this example from the R for Data Science book. I hardly ever work with `while loops`. The only use case from my day-to-day work is web-scraping, where I want to loop over pages until a certain threshold is reached. Therefore, I could not really come up with an example myself.
 
 Please note that both vectors which are to be modified within the loop -- `indicator` and `head` -- need to be created beforehand. If I had not created `head` beforehand, the loop would not have started because there would not have been any vector to assess the length.
 
@@ -536,7 +536,7 @@ tibble(
   pmap(rnorm)
 ```
 
-### Further links
+## Further links
 
 -   [Chapter about loops in Hands-on Programming with R](https://rstudio-education.github.io/hopr/loops.html#for-loops)
 -   On [control flow](https://resbaz.github.io/2014-r-materials/lessons/30-control-flow/)

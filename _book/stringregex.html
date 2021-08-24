@@ -24,7 +24,7 @@
 <meta name="author" content="Felix Lennert" />
 
 
-<meta name="date" content="2021-08-18" />
+<meta name="date" content="2021-08-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -162,7 +162,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">An intro to R, RStudio, and the tidyverse</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
@@ -263,7 +263,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
 <ul>
 <li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
-<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#determining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Determining a string’s length</a></li>
 <li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
 <li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
 <li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
@@ -337,8 +337,8 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
 <li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
-<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
 </ul></li>
+<li class="chapter" data-level="11.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.4</b> Further links</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
 <li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
@@ -377,10 +377,9 @@ div.csl-indent {
 <div id="stringregex" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> String manipulation with <code>stringr</code> and <code>regular expressions</code></h1>
 <p>When analyzing data, a significant number of variables will be in some sort of text format. When you want to manipulate those variables, an easy approach would be exporting the data to MS Excel and then just perform those manipulations by hand. This is very time-consuming, though, and, hence, I rather recommend the R way, which scales well and works fast for data sets of varying sizes.</p>
-<p>Quick reminder: a string is an element of a character vector and can be created by simply wrapping some text in backticks:</p>
+<p>Quick reminder: a string is an element of a character vector and can be created by simply wrapping some text in back ticks:</p>
 <div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="stringregex.html#cb280-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">&quot;Hi, how are you doing?&quot;</span></span>
 <span id="cb280-2"><a href="stringregex.html#cb280-2" aria-hidden="true" tabindex="-1"></a>vector_of_strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Hi, how are you doing?&quot;</span>, <span class="st">&quot;I&#39;m doing well, HBY?&quot;</span>, <span class="st">&quot;Me too, thanks for asking.&quot;</span>)</span></code></pre></div>
-<p>(Question: how would you go about quotes in strings?)</p>
 <p>The <code>stringr</code> package contains a multitude of commands (49 in total) which can be used to achieve a couple of things: manipulating character vectors; operations which are sensitive to different locales; matching patterns. Basically, those goals can also be achieved with base R functions, but <code>stringr</code>’s advantage is its consistency. The makers of <code>stringr</code> describe it as</p>
 <blockquote>
 <p>A consistent, simple and easy to use set of wrappers around the fantastic ‘stringi’ package. All function and argument names (and positions) are consistent, all functions deal with “NA”’s and zero length vectors in the same way, and the output from one function is easy to feed into the input of another.</p>
@@ -406,8 +405,8 @@ div.csl-indent {
 <pre><code>## [1] &quot;Hi, how are you doing?&quot;     &quot;I&#39;m doing well, hby?&quot;      
 ## [3] &quot;Me too, thanks for asking.&quot;</code></pre>
 </div>
-<div id="deternining-a-strings-length" class="section level3" number="6.1.2">
-<h3><span class="header-section-number">6.1.2</span> Deternining a string’s length</h3>
+<div id="determining-a-strings-length" class="section level3" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Determining a string’s length</h3>
 <p>Determining the string’s number of characters goes as follows:</p>
 <div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="stringregex.html#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_length</span>(vector_of_strings)</span></code></pre></div>
 <pre><code>## [1] 22 20 26</code></pre>
@@ -490,41 +489,40 @@ div.csl-indent {
 <div id="literal-characters" class="section level3" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Literal characters</h3>
 <p>The most basic regex patterns consist of literal characters only. <code>str_view()</code> tells you which parts of a string match a pattern is present in the element.</p>
-<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="stringregex.html#cb322-1" aria-hidden="true" tabindex="-1"></a>five_largest_cities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Stockholm&quot;</span>, <span class="st">&quot;Göteborg&quot;</span>, <span class="st">&quot;Malmö&quot;</span>, <span class="st">&quot;Uppsala&quot;</span>, <span class="st">&quot;Västerås&quot;</span>)</span>
-<span id="cb322-2"><a href="stringregex.html#cb322-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb322-3"><a href="stringregex.html#cb322-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;stockholm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="stringregex.html#cb322-1" aria-hidden="true" tabindex="-1"></a>five_largest_cities <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Stockholm&quot;</span>, <span class="st">&quot;Göteborg&quot;</span>, <span class="st">&quot;Malmö&quot;</span>, <span class="st">&quot;Uppsala&quot;</span>, <span class="st">&quot;Västerås&quot;</span>)</span></code></pre></div>
+<p>Note that regexes are case-sensitive.</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="stringregex.html#cb323-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;stockholm&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-f30d7598595affc4f25a" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-f30d7598595affc4f25a">{"x":{"html":"<ul>\n  <li>Stockholm<\/li>\n  <li>Göteborg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>Note that regexes are case-sensitive.</p>
-<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="stringregex.html#cb323-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;Stockholm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="stringregex.html#cb324-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;Stockholm&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-b85bf888dc62471906a9" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-b85bf888dc62471906a9">{"x":{"html":"<ul>\n  <li><span class='match'>Stockholm<\/span><\/li>\n  <li>Göteborg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>They also match parts of words:</p>
-<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="stringregex.html#cb324-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;borg&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="stringregex.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;borg&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-88fdd2a34d502a66744b" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-88fdd2a34d502a66744b">{"x":{"html":"<ul>\n  <li>Stockholm<\/li>\n  <li>Göte<span class='match'>borg<\/span><\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>Moreover, they are “greedy,” they only match the first occurrence (in “Stockholm”):</p>
-<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="stringregex.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="stringregex.html#cb326-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;o&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-8e1fe96c0688a849169a" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-8e1fe96c0688a849169a">{"x":{"html":"<ul>\n  <li>St<span class='match'>o<\/span>ckholm<\/li>\n  <li>Göteb<span class='match'>o<\/span>rg<\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>This can be addressed in the <code>stringr</code> package by using <code>str_._all()</code> function – but more on that later.</p>
-<p>If you want to match multiple literal characters (or words, for that sake), you can connect them using the <code>|</code> metacharacter (more on metacharacters later).</p>
-<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="stringregex.html#cb326-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;Stockholm|Göteborg&quot;</span>)</span></code></pre></div>
+<p>If you want to match multiple literal characters (or words, for that sake), you can connect them using the <code>|</code> meta character (more on meta characters later).</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="stringregex.html#cb327-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(five_largest_cities, <span class="st">&quot;Stockholm|Göteborg&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-bb3486349adfa5d821dc" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-bb3486349adfa5d821dc">{"x":{"html":"<ul>\n  <li><span class='match'>Stockholm<\/span><\/li>\n  <li><span class='match'>Göteborg<\/span><\/li>\n  <li>Malmö<\/li>\n  <li>Uppsala<\/li>\n  <li>Västerås<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>question: automate the pattern-generating process using str_c – hint: collapse = “|”</p>
-<p>Every letter of the English alphabet (or number/or combination of those) can serve as a literal character. Those literal characters <em>match themselves</em>. This is, however, not the case with the other sort of characters, so-called metacharacters.</p>
+<p>Every letter of the English alphabet (or number/or combination of those) can serve as a literal character. Those literal characters <em>match themselves</em>. This is, however, not the case with the other sort of characters, so-called meta characters.</p>
 </div>
 <div id="metacharacters" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Metacharacters</h3>
-<p>When using regexes, the following characters are considered metacharacters and have a special meaning:</p>
+<p>When using regexes, the following characters are considered meta characters and have a special meaning:</p>
 <p><code>. \ | ( ) { } [ ] ^ $ - * + ?</code></p>
 <div id="the-wildcard" class="section level4" number="6.2.2.1">
 <h4><span class="header-section-number">6.2.2.1</span> The wildcard</h4>
 <p>Did you notice how I used the dot to refer to the entirety of the <code>str_._all()</code> functions? This is basically what the <code>.</code> meta-character does: it matches every character except for a new line. The first call extracts all function names from the <code>stringr</code> package, the second one shows the matches (i.e., the elements of the vector where it can find the pattern).</p>
-<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="stringregex.html#cb327-1" aria-hidden="true" tabindex="-1"></a>stringr_functions <span class="ot">&lt;-</span> <span class="fu">ls</span>(<span class="st">&quot;package:stringr&quot;</span>)</span>
-<span id="cb327-2"><a href="stringregex.html#cb327-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb327-3"><a href="stringregex.html#cb327-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_._all&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="stringregex.html#cb328-1" aria-hidden="true" tabindex="-1"></a>stringr_functions <span class="ot">&lt;-</span> <span class="fu">ls</span>(<span class="st">&quot;package:stringr&quot;</span>)</span>
+<span id="cb328-2"><a href="stringregex.html#cb328-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb328-3"><a href="stringregex.html#cb328-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_._all&quot;</span>)</span></code></pre></div>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
@@ -540,59 +538,59 @@ div.csl-indent {
 <li><code>{n,m}</code> – between n and m</li>
 </ul>
 <p>In our case, the appropriate one is <code>+</code>:</p>
-<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="stringregex.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_.+_all&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="stringregex.html#cb330-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(stringr_functions, <span class="st">&quot;str_.+_all&quot;</span>)</span></code></pre></div>
 <pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
 ## [13] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE
 ## [25]  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE
 ## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
 ## [49] FALSE FALSE FALSE FALSE</code></pre>
-<p>However, if you want to match the character dot? This probkem might arise when searching for clock time. A naive regex might look like this:</p>
-<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="stringregex.html#cb331-1" aria-hidden="true" tabindex="-1"></a>vectors_with_time <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;13500&quot;</span>, <span class="st">&quot;13M00&quot;</span>, <span class="st">&quot;13.00&quot;</span>)</span>
-<span id="cb331-2"><a href="stringregex.html#cb331-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb331-3"><a href="stringregex.html#cb331-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13.00&quot;</span>)</span></code></pre></div>
+<p>However, if you want to match the character dot? This problem may arise when searching for clock time. A naive regex might look like this:</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="stringregex.html#cb332-1" aria-hidden="true" tabindex="-1"></a>vectors_with_time <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;13500&quot;</span>, <span class="st">&quot;13M00&quot;</span>, <span class="st">&quot;13.00&quot;</span>)</span>
+<span id="cb332-2"><a href="stringregex.html#cb332-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb332-3"><a href="stringregex.html#cb332-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13.00&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] TRUE TRUE TRUE</code></pre>
-<p>Yet, it matches everything. We need some sort of literal dot. Here, the escape character <code>\</code> comes in handy. By putting it in front of the metacharacter, it does no longer has its special meaning, and is interpreted as a literal character. This procedure is referred to as “escaping.” Note that you will need to escape <code>\</code> as well.</p>
-<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="stringregex.html#cb333-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13</span><span class="sc">\\</span><span class="st">.00&quot;</span>)</span></code></pre></div>
+<p>Yet, it matches everything. We need some sort of literal dot. Here, the meta character <code>\</code> comes in handy. By putting it in front of the meta character, it does no longer has its special meaning, and is interpreted as a literal character. This procedure is referred to as “escaping.” Hence, <code>\</code> is also referred to as the “escape character.” Note that you will need to escape <code>\</code> as well, and therefore it will look like this: <code>\\.</code>.</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="stringregex.html#cb334-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(vectors_with_time, <span class="st">&quot;13</span><span class="sc">\\</span><span class="st">.00&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] FALSE FALSE  TRUE</code></pre>
 </div>
 <div id="sets-of-characters" class="section level4" number="6.2.2.2">
 <h4><span class="header-section-number">6.2.2.2</span> Sets of characters</h4>
-<p>You can also define sets of multiple characters using the <code>[ ]</code> metacharacters. This can be used to define multiple possible characters that can appear in the same place.</p>
-<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="stringregex.html#cb335-1" aria-hidden="true" tabindex="-1"></a>sp_ce <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spice&quot;</span>, <span class="st">&quot;space&quot;</span>)</span>
-<span id="cb335-2"><a href="stringregex.html#cb335-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb335-3"><a href="stringregex.html#cb335-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(sp_ce, <span class="st">&quot;sp[ai]ce&quot;</span>)</span></code></pre></div>
+<p>You can also define sets of multiple characters using the <code>[ ]</code> meta characters. This can be used to define multiple possible characters that can appear in the same place.</p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="stringregex.html#cb336-1" aria-hidden="true" tabindex="-1"></a>sp_ce <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;spice&quot;</span>, <span class="st">&quot;space&quot;</span>)</span>
+<span id="cb336-2"><a href="stringregex.html#cb336-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb336-3"><a href="stringregex.html#cb336-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(sp_ce, <span class="st">&quot;sp[ai]ce&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-44474b3e8cd160f85a98" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-44474b3e8cd160f85a98">{"x":{"html":"<ul>\n  <li><span class='match'>spice<\/span><\/li>\n  <li><span class='match'>space<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>You can also define certain ranges of characters using the <code>-</code> metacharacter:</p>
+<p>You can also define certain ranges of characters using the <code>-</code> meta character:</p>
 <p>Same holds for numbers:</p>
-<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="stringregex.html#cb336-1" aria-hidden="true" tabindex="-1"></a>american_phone_number <span class="ot">&lt;-</span> <span class="st">&quot;(555) 555-1234&quot;</span></span>
-<span id="cb336-2"><a href="stringregex.html#cb336-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb336-3"><a href="stringregex.html#cb336-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(american_phone_number, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">([0-9]{3}</span><span class="sc">\\</span><span class="st">) [0-9]{3}-[0-9]{4}&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="stringregex.html#cb337-1" aria-hidden="true" tabindex="-1"></a>american_phone_number <span class="ot">&lt;-</span> <span class="st">&quot;(555) 555-1234&quot;</span></span>
+<span id="cb337-2"><a href="stringregex.html#cb337-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb337-3"><a href="stringregex.html#cb337-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(american_phone_number, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">([0-9]{3}</span><span class="sc">\\</span><span class="st">) [0-9]{3}-[0-9]{4}&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-2514ce28ae593bde0f73" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-2514ce28ae593bde0f73">{"x":{"html":"<ul>\n  <li><span class='match'>(555) 555-1234<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>There are also predefined sets of characters, for instance digits or letters, which are called <em>character classes</em>. You can find them on the <a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf"><code>stringr</code> cheatsheet</a>.</p>
-<p>Furthermore, you can put almost every metacharacter inside the square brackets without escaping them. This does not apply to the the caret (<code>^</code>) in first position, the dash <code>-</code>, the closing square bracket <code>]</code>, and the backslash <code>\</code>.</p>
-<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="stringregex.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(vector_of_strings, <span class="st">&quot;[.]&quot;</span>)</span></code></pre></div>
+<p>Furthermore, you can put almost every meta character inside the square brackets without escaping them. This does not apply to the the caret (<code>^</code>) in first position, the dash <code>-</code>, the closing square bracket <code>]</code>, and the backslash <code>\</code>.</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="stringregex.html#cb338-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(vector_of_strings, <span class="st">&quot;[.]&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-5d05eac75555269eefd0" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-5d05eac75555269eefd0">{"x":{"html":"<ul>\n  <li>Hi, how are you doing<span class='match'>.<\/span><\/li>\n  <li>I'm doing well, HBY<span class='match'>.<\/span><\/li>\n  <li>Me too, thanks for asking<span class='match'>.<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="negating-sets-of-characters" class="section level4" number="6.2.2.3">
 <h4><span class="header-section-number">6.2.2.3</span> Negating sets of characters</h4>
-<p>Sometimes you will also want to exclude certain sets of characters or words. In order to achieve this, you can use the <code>^</code> metacharacter at the beginning of the range or set you are defining.</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="stringregex.html#cb338-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(sp_ce, <span class="st">&quot;sp[^i]ce&quot;</span>)</span></code></pre></div>
+<p>Sometimes you will also want to exclude certain sets of characters or words. In order to achieve this, you can use the <code>^</code> meta character at the beginning of the range or set you are defining.</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="stringregex.html#cb339-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(sp_ce, <span class="st">&quot;sp[^i]ce&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-7531f021030c44f57ef2" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-7531f021030c44f57ef2">{"x":{"html":"<ul>\n  <li>spice<\/li>\n  <li><span class='match'>space<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="anchors" class="section level4" number="6.2.2.4">
 <h4><span class="header-section-number">6.2.2.4</span> Anchors</h4>
 <p>There is also a way to define whether you want the pattern to be present in the beginning <code>^</code> or at the end <code>$</code> of a string. <code>sentences</code> are a couple of (i.e., 720) predefined example sentences. If I were now interested in the number of sentences that begin with a “the,” I could write the following regex:</p>
-<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="stringregex.html#cb339-1" aria-hidden="true" tabindex="-1"></a>shortened_sentences <span class="ot">&lt;-</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
-<span id="cb339-2"><a href="stringregex.html#cb339-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb339-3"><a href="stringregex.html#cb339-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="stringregex.html#cb340-1" aria-hidden="true" tabindex="-1"></a>shortened_sentences <span class="ot">&lt;-</span> sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb340-2"><a href="stringregex.html#cb340-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb340-3"><a href="stringregex.html#cb340-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The&quot;</span>) </span></code></pre></div>
 <div id="htmlwidget-983315589fed18d622a7" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-983315589fed18d622a7">{"x":{"html":"<ul>\n  <li><span class='match'>The<\/span> birch canoe slid on the smooth planks.<\/li>\n  <li>Glue the sheet to the dark blue background.<\/li>\n  <li>It's easy to tell the depth of a well.<\/li>\n  <li><span class='match'>The<\/span>se days a chicken leg is a rare dish.<\/li>\n  <li>Rice is often served in round bowls.<\/li>\n  <li><span class='match'>The<\/span> juice of lemons makes fine punch.<\/li>\n  <li><span class='match'>The<\/span> box was thrown beside the parked truck.<\/li>\n  <li><span class='match'>The<\/span> hogs were fed chopped corn and garbage.<\/li>\n  <li>Four hours of steady work faced us.<\/li>\n  <li>Large size in stockings is hard to sell.<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 <p>If I wanted to know how many start with a “The” and end with a full stop, I could do this one:</p>
-<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="stringregex.html#cb340-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="stringregex.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
 <div id="htmlwidget-6f1d8b9e786d9d3fe28d" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-6f1d8b9e786d9d3fe28d">{"x":{"html":"<ul>\n  <li><span class='match'>The birch canoe slid on the smooth planks.<\/span><\/li>\n  <li>Glue the sheet to the dark blue background.<\/li>\n  <li>It's easy to tell the depth of a well.<\/li>\n  <li><span class='match'>These days a chicken leg is a rare dish.<\/span><\/li>\n  <li>Rice is often served in round bowls.<\/li>\n  <li><span class='match'>The juice of lemons makes fine punch.<\/span><\/li>\n  <li><span class='match'>The box was thrown beside the parked truck.<\/span><\/li>\n  <li><span class='match'>The hogs were fed chopped corn and garbage.<\/span><\/li>\n  <li>Four hours of steady work faced us.<\/li>\n  <li>Large size in stockings is hard to sell.<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -600,28 +598,28 @@ div.csl-indent {
 <h4><span class="header-section-number">6.2.2.5</span> Boundaries</h4>
 <p>Note that right now, the regex also matches the sentence which starts with a “These.” In order to address this, I need to tell the machine that it should only accept a “The” if there starts a new word thereafter. In regex syntax, this is done using so-called boundaries. Those are defined as <code>\b</code> as a word boundary and <code>\B</code> as no word boundary. (Note that you will need an additional escape character as you will have to escape the escape character itself.)</p>
 <p>In my example, I would include the former if I were to search for sentences that begin with a single “The” and the latter if I were to search for sentences that begin with a word that starts with a “The” but are not “The” – such as “These.”</p>
-<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb341-1"><a href="stringregex.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The</span><span class="sc">\\</span><span class="st">b.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="stringregex.html#cb342-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The</span><span class="sc">\\</span><span class="st">b.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
 <div id="htmlwidget-dcdfc64296f5794e54a4" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-dcdfc64296f5794e54a4">{"x":{"html":"<ul>\n  <li><span class='match'>The birch canoe slid on the smooth planks.<\/span><\/li>\n  <li>Glue the sheet to the dark blue background.<\/li>\n  <li>It's easy to tell the depth of a well.<\/li>\n  <li>These days a chicken leg is a rare dish.<\/li>\n  <li>Rice is often served in round bowls.<\/li>\n  <li><span class='match'>The juice of lemons makes fine punch.<\/span><\/li>\n  <li><span class='match'>The box was thrown beside the parked truck.<\/span><\/li>\n  <li><span class='match'>The hogs were fed chopped corn and garbage.<\/span><\/li>\n  <li>Four hours of steady work faced us.<\/li>\n  <li>Large size in stockings is hard to sell.<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="stringregex.html#cb342-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The</span><span class="sc">\\</span><span class="st">B.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="stringregex.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(shortened_sentences, <span class="st">&quot;^The</span><span class="sc">\\</span><span class="st">B.+</span><span class="sc">\\</span><span class="st">.$&quot;</span>) </span></code></pre></div>
 <div id="htmlwidget-873249b169eb6149d57e" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-873249b169eb6149d57e">{"x":{"html":"<ul>\n  <li>The birch canoe slid on the smooth planks.<\/li>\n  <li>Glue the sheet to the dark blue background.<\/li>\n  <li>It's easy to tell the depth of a well.<\/li>\n  <li><span class='match'>These days a chicken leg is a rare dish.<\/span><\/li>\n  <li>Rice is often served in round bowls.<\/li>\n  <li>The juice of lemons makes fine punch.<\/li>\n  <li>The box was thrown beside the parked truck.<\/li>\n  <li>The hogs were fed chopped corn and garbage.<\/li>\n  <li>Four hours of steady work faced us.<\/li>\n  <li>Large size in stockings is hard to sell.<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
 <div id="lookarounds" class="section level4" number="6.2.2.6">
 <h4><span class="header-section-number">6.2.2.6</span> Lookarounds</h4>
 <p>A final common task is to extract certain words or values based on what comes before or after them. Look at the following example:</p>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="stringregex.html#cb343-1" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1m30cm&quot;</span>, <span class="st">&quot;2m01cm&quot;</span>, <span class="st">&quot;3m10cm&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="stringregex.html#cb344-1" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1m30cm&quot;</span>, <span class="st">&quot;2m01cm&quot;</span>, <span class="st">&quot;3m10cm&quot;</span>)</span></code></pre></div>
 <p>Here, in order to identify the height in meters, the first task is to identify all the numbers that are followed by an “m.” The regex syntax for this looks like this: <code>A(?=pattern)</code> with <code>A</code> being the entity that is supposed to be found (hence, in this case, [0-9]+).</p>
-<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="stringregex.html#cb344-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?=m)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="stringregex.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?=m)&quot;</span>)</span></code></pre></div>
 <div id="htmlwidget-cbd3ad10bd2d35a2e76d" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-cbd3ad10bd2d35a2e76d">{"x":{"html":"<ul>\n  <li><span class='match'>1<\/span>m30cm<\/li>\n  <li><span class='match'>2<\/span>m01cm<\/li>\n  <li><span class='match'>3<\/span>m10cm<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<p>The second step now is to identify the centimeters. This could of coumrse be achieved using the same regex and replacing <code>m</code> by <code>cm</code>. However, we can also harness a so-called negative look ahead <code>A(?!pattern)</code>, a so-called look behind <code>(?&lt;=pattern)A</code>. The negative counterpart, the negative look behind <code>(?&lt;!pattern)A</code> could be used to extract the meters.</p>
+<p>The second step now is to identify the centimeters. This could of course be achieved using the same regex and replacing <code>m</code> by <code>cm</code>. However, we can also harness a so-called negative look ahead <code>A(?!pattern)</code>, a so-called look behind <code>(?&lt;=pattern)A</code>. The negative counterpart, the negative look behind <code>(?&lt;!pattern)A</code> could be used to extract the meters.</p>
 <p>The negative look ahead basically returns everything that is not followed by the defined pattern. The look behind returns everything that is preceded by the pattern, the negative look behind returns everything that is not preceded by the pattern.</p>
 <p>In the following, I demonstrate how you could extract the centimeters using negative look ahead and look behind.</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="stringregex.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?!m)&quot;</span>) <span class="co"># negative look ahead</span></span></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="stringregex.html#cb346-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;[0-9]+(?!m)&quot;</span>) <span class="co"># negative look ahead</span></span></code></pre></div>
 <div id="htmlwidget-f25d4e1770d66a86dcce" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-f25d4e1770d66a86dcce">{"x":{"html":"<ul>\n  <li>1m<span class='match'>30<\/span>cm<\/li>\n  <li>2m<span class='match'>01<\/span>cm<\/li>\n  <li>3m<span class='match'>10<\/span>cm<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
-<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="stringregex.html#cb346-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;(?&lt;=m)[0-9]+&quot;</span>) <span class="co"># look behind</span></span></code></pre></div>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="stringregex.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(heights, <span class="st">&quot;(?&lt;=m)[0-9]+&quot;</span>) <span class="co"># look behind</span></span></code></pre></div>
 <div id="htmlwidget-969965edfe9f869aa904" style="width:960px;height:100%;" class="str_view html-widget"></div>
 <script type="application/json" data-for="htmlwidget-969965edfe9f869aa904">{"x":{"html":"<ul>\n  <li>1m<span class='match'>30<\/span>cm<\/li>\n  <li>2m<span class='match'>01<\/span>cm<\/li>\n  <li>3m<span class='match'>10<\/span>cm<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 </div>
@@ -631,15 +629,15 @@ div.csl-indent {
 <h2><span class="header-section-number">6.3</span> More advanced string manipulation</h2>
 <p>Yow that you have learned about regexes, you can unleash the full power of <code>stringr</code>.</p>
 <p>The basic syntax of a <code>stringr</code> function looks as follows: <code>str_*(string, regex(""))</code>. Some <code>stringr</code> functions also have the suffix <code>_all</code> which implies that they perform the operation not only on the first match (“greedy”) but on every match.</p>
-<p>In order to demonstrate the different functionalities, I will again rely on the subset of example sentences.</p>
+<p>In order to demonstrate the different functions, I will again rely on the subset of example sentences.</p>
 <div id="detect-matches" class="section level3" number="6.3.1">
 <h3><span class="header-section-number">6.3.1</span> Detect matches</h3>
 <p><code>str_detect</code> can be used whether a certain pattern is present in the string.</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="stringregex.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(shortened_sentences, <span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="stringregex.html#cb348-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(shortened_sentences, <span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>)</span></code></pre></div>
 <pre><code>##  [1]  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE</code></pre>
 <p>This also works very well in a <code>dplyr::filter()</code> call. Finding all action movies in the IMDB data set can be solved like this:</p>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="stringregex.html#cb349-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
-<span id="cb349-2"><a href="stringregex.html#cb349-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Genre, <span class="st">&quot;Action&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="stringregex.html#cb350-1" aria-hidden="true" tabindex="-1"></a>imdb_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb350-2"><a href="stringregex.html#cb350-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(Genre, <span class="st">&quot;Action&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 303 × 12
 ##     Rank Title  Genre  Description Director Actors  Year `Runtime (Minut… Rating
 ##    &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;  &lt;dbl&gt;            &lt;dbl&gt;  &lt;dbl&gt;
@@ -656,10 +654,10 @@ div.csl-indent {
 ## # … with 293 more rows, and 3 more variables: Votes &lt;dbl&gt;,
 ## #   Revenue (Millions) &lt;dbl&gt;, Metascore &lt;dbl&gt;</code></pre>
 <p>If you want to know whether there are multiple matches present in each string, you can use <code>str_count</code>. Here, it might by advisable to set the <code>ignore_case</code> option to <code>TRUE</code>:</p>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="stringregex.html#cb351-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_count</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="stringregex.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_count</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <pre><code>##  [1] 2 2 1 0 0 1 2 1 0 0</code></pre>
 <p>If you want to locate the match in the string, use <code>str_locate</code>. This returns a matrix, which is basically a vector of multiple dimensions.</p>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="stringregex.html#cb353-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_locate</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="stringregex.html#cb354-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_locate</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <pre><code>##       start end
 ##  [1,]     1   3
 ##  [2,]     6   8
@@ -672,7 +670,7 @@ div.csl-indent {
 ##  [9,]    NA  NA
 ## [10,]    NA  NA</code></pre>
 <p>Moreover, this is a good example for the greediness of <code>stringr</code> functions. Hence, it is advisable to use <code>str_locate_all</code> which returns a list with one matrix for each element of the original vector:</p>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="stringregex.html#cb355-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_locate_all</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="stringregex.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_locate_all</span>(shortened_sentences, <span class="fu">regex</span>(<span class="st">&quot;The</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">ignore_case =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
 <pre><code>## [[1]]
 ##      start end
 ## [1,]     1   3
@@ -716,13 +714,13 @@ div.csl-indent {
 <h3><span class="header-section-number">6.3.2</span> Mutating strings</h3>
 <p>Mutating strings usually implies the replacement of certain elements (e.g., words) with other elements (or removing them, which is basically a special case of replacing them). In <code>stringr</code> this is performed using <code>str_replace(string, pattern, replacement)</code> and <code>str_replace_all(string, pattern, replacement)</code>.</p>
 <p>If I wanted, for instance, replace all “m” letters by “meters,” I would go about this the following way:</p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="stringregex.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(heights, <span class="st">&quot;m&quot;</span>, <span class="st">&quot;meters&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="stringregex.html#cb358-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(heights, <span class="st">&quot;m&quot;</span>, <span class="st">&quot;meters&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;1meters30cm&quot; &quot;2meters01cm&quot; &quot;3meters10cm&quot;</code></pre>
-<p>Note that <code>str_replace_all</code> woukd have lead to the following outcome:</p>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="stringregex.html#cb359-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="st">&quot;m&quot;</span>, <span class="st">&quot;meters&quot;</span>)</span></code></pre></div>
+<p>Note that <code>str_replace_all</code> would have lead to the following outcome:</p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="stringregex.html#cb360-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="st">&quot;m&quot;</span>, <span class="st">&quot;meters&quot;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;1meters30cmeters&quot; &quot;2meters01cmeters&quot; &quot;3meters10cmeters&quot;</code></pre>
 <p>However, I also want to replace the “cm” with “centimeters,” hence, I can harness another feature of <code>str_replace_all()</code>:</p>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="stringregex.html#cb361-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="fu">c</span>(<span class="st">&quot;m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;cm&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeters&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="stringregex.html#cb362-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="fu">c</span>(<span class="st">&quot;m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;cm&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeters&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;1meters30centimeterseters&quot; &quot;2meters01centimeterseters&quot;
 ## [3] &quot;3meters10centimeterseters&quot;</code></pre>
 <p>What becomes obvious is that a “simple” regex containing just literal characters more often than not does not suffice. It will be your task to fix this. And while on it, you can also address the meter/meters problem – a “1” needs meter instead of meters. Another feature is that the replacements are performed in order. You can harness this for solving the problem.</p>
@@ -731,16 +729,16 @@ div.csl-indent {
 Solution. Click to expand!
 </summary>
 <p>Solution:</p>
-<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="stringregex.html#cb363-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="fu">c</span>(<span class="st">&quot;(?&lt;=[2-9]{1})m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;(?&lt;=[0-9]{2})m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;(?&lt;=1)m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meter&quot;</span>, <span class="st">&quot;(?&lt;=01)cm$&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeter&quot;</span>, <span class="st">&quot;cm$&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeters&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="stringregex.html#cb364-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(heights, <span class="fu">c</span>(<span class="st">&quot;(?&lt;=[2-9]{1})m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;(?&lt;=[0-9]{2})m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meters&quot;</span>, <span class="st">&quot;(?&lt;=1)m&quot;</span> <span class="ot">=</span> <span class="st">&quot;meter&quot;</span>, <span class="st">&quot;(?&lt;=01)cm$&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeter&quot;</span>, <span class="st">&quot;cm$&quot;</span> <span class="ot">=</span> <span class="st">&quot;centimeters&quot;</span>))</span></code></pre></div>
 <pre><code>## [1] &quot;1meter30centimeters&quot;  &quot;2meters01centimeter&quot;  &quot;3meters10centimeters&quot;</code></pre>
 </details>
 </div>
 <div id="extracting-text" class="section level3" number="6.3.3">
 <h3><span class="header-section-number">6.3.3</span> Extracting text</h3>
 <p><code>str_extract(_all)()</code> can be used to extract matching strings. In the <code>mtcars</code> data set, the first word describes the car brand. Here, I harness another regexp, the <code>\\w</code> which stands for any word character. Its opponent is <code>\\W</code> for any non-word character.</p>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="stringregex.html#cb365-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
-<span id="cb365-2"><a href="stringregex.html#cb365-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;car_model&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb365-3"><a href="stringregex.html#cb365-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">manufacturer =</span> <span class="fu">str_extract</span>(car_model, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">b&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="stringregex.html#cb366-1" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb366-2"><a href="stringregex.html#cb366-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">&quot;car_model&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb366-3"><a href="stringregex.html#cb366-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(<span class="at">manufacturer =</span> <span class="fu">str_extract</span>(car_model, <span class="st">&quot;^</span><span class="sc">\\</span><span class="st">w+</span><span class="sc">\\</span><span class="st">b&quot;</span>))</span></code></pre></div>
 <pre><code>##    manufacturer
 ## 1         Mazda
 ## 2         Mazda
@@ -778,9 +776,9 @@ Solution. Click to expand!
 <div id="split-vectors" class="section level3" number="6.3.4">
 <h3><span class="header-section-number">6.3.4</span> Split vectors</h3>
 <p>Another use case here would have been to split it into two columns: manufacturer and model. One approach would be to use <code>str_split()</code>. This function splits the string at every occurrence of the predefined patter. In this example, I use a word boundary as the pattern:</p>
-<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="stringregex.html#cb367-1" aria-hidden="true" tabindex="-1"></a>manufacturer_model <span class="ot">&lt;-</span> <span class="fu">rownames</span>(mtcars)</span>
-<span id="cb367-2"><a href="stringregex.html#cb367-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split</span>(manufacturer_model, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb367-3"><a href="stringregex.html#cb367-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="stringregex.html#cb368-1" aria-hidden="true" tabindex="-1"></a>manufacturer_model <span class="ot">&lt;-</span> <span class="fu">rownames</span>(mtcars)</span>
+<span id="cb368-2"><a href="stringregex.html#cb368-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split</span>(manufacturer_model, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">b&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb368-3"><a href="stringregex.html#cb368-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] &quot;&quot;      &quot;Mazda&quot; &quot; &quot;     &quot;RX4&quot;   &quot;&quot;     
 ## 
@@ -798,11 +796,11 @@ Solution. Click to expand!
 ## 
 ## [[6]]
 ## [1] &quot;&quot;        &quot;Valiant&quot; &quot;&quot;</code></pre>
-<p>This outputs a list containing the different singular words/special characters. This doesn’t make sense in this case. Here, however, the structure of the string is always roughly the same: “\[manufacturer\]\[ \]\[model description\].” Moreover, the manufacturer is only one word. Hence, the task can be fixed by splitting the string after the first word, which should indicate the manufacturer. This can be accomplished using <code>str_split_fixed()</code>. Fixed means that the number of splits is predefined. This returns a metrix that can easily become a tibble.</p>
-<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="stringregex.html#cb369-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split_fixed</span>(manufacturer_model, <span class="st">&quot;(?&lt;=</span><span class="sc">\\</span><span class="st">w)</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb369-2"><a href="stringregex.html#cb369-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb369-3"><a href="stringregex.html#cb369-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">manufacturer =</span> V1,</span>
-<span id="cb369-4"><a href="stringregex.html#cb369-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">model =</span> V2)</span></code></pre></div>
+<p>This outputs a list containing the different singular words/special characters. This doesn’t make sense in this case. Here, however, the structure of the string is always roughly the same: “\[manufacturer\]\[ \]\[model description\].” Moreover, the manufacturer is only one word. Hence, the task can be fixed by splitting the string after the first word, which should indicate the manufacturer. This can be accomplished using <code>str_split_fixed()</code>. Fixed means that the number of splits is predefined. This returns a metric that can easily become a tibble.</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="stringregex.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split_fixed</span>(manufacturer_model, <span class="st">&quot;(?&lt;=</span><span class="sc">\\</span><span class="st">w)</span><span class="sc">\\</span><span class="st">b&quot;</span>, <span class="at">n =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb370-2"><a href="stringregex.html#cb370-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb370-3"><a href="stringregex.html#cb370-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">manufacturer =</span> V1,</span>
+<span id="cb370-4"><a href="stringregex.html#cb370-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">model =</span> V2)</span></code></pre></div>
 <pre><code>## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
 ## Using compatibility `.name_repair`.</code></pre>
 <pre><code>## # A tibble: 32 × 2
@@ -825,7 +823,7 @@ Solution. Click to expand!
 <h2><span class="header-section-number">6.4</span> Further links</h2>
 <ul>
 <li>The <a href="https://github.com/rstudio/cheatsheets/blob/master/strings.pdf"><code>stringr</code> cheatsheet</a>.</li>
-<li>A <a href="https://www.youtube.com/watch?v=NvHjYOilOf8">YouTube video</a> on Regexes by Johns Hopkins professor Roger Peng.</li>
+<li>A <a href="https://www.youtube.com/watch?v=NvHjYOilOf8">YouTube video</a> on regexes by Johns Hopkins professor Roger Peng.</li>
 <li>And a <a href="https://bookdown.org/rdpeng/rprogdatascience/regular-expressions.html#the-stringr-package">chapter</a> by Roger Peng.</li>
 <li>A <a href="https://regexone.com">website for practicing regexes</a>.</li>
 </ul>

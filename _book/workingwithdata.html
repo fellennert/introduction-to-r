@@ -24,7 +24,7 @@
 <meta name="author" content="Felix Lennert" />
 
 
-<meta name="date" content="2021-08-18" />
+<meta name="date" content="2021-08-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -162,7 +162,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">An intro to R, RStudio, and the tidyverse</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
@@ -263,7 +263,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
 <ul>
 <li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
-<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#deternining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Deternining a string’s length</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#determining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Determining a string’s length</a></li>
 <li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
 <li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
 <li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
@@ -337,8 +337,8 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
 <li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
-<li class="chapter" data-level="11.3.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.3.3</b> Further links</a></li>
 </ul></li>
+<li class="chapter" data-level="11.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.4</b> Further links</a></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
 <li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
@@ -384,10 +384,10 @@ div.csl-indent {
 <div id="the-working-directory-in-r" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> The working directory in R</h3>
 <p>As mentioned when introducing RStudio Projects, there are two kinds of file paths you can provide R with: absolute and relative paths.</p>
-<p>The absolute path for this script on my machine looks like this: “/Users/felixlennert/Documents/Studium/WHK Regensburg/Kurse/SS 2020/Big Data Analysis using R/big-data-analysis-with-r-2020/scripts/script_pt3.Rmd.”<br />
+<p>The absolute path for this script on my machine looks like this: “/Users/felixlennert/Documents/phd/teaching/introduction-to-r/03-tidying.Rmd.”<br />
 If you are on a Windows machine and copy file paths: R uses the file path separator <code>\</code> as a so-called escape character – hence, it does not recognize it as a file path separator. You can address this problem by either using double back-slashes <code>\\</code> or using a normal slash, <code>/</code>, instead.</p>
 <p>There is always a working directory you are in. You can obtain your working directory using <code>getwd()</code>. Relative paths then just build upon it. If you want to change your working directory, use <code>setwd()</code>.</p>
-<p><em>Please note that I included the former two paragraphs just for the record. You should never use absolute paths, except for if you are planning to keep the same machine for the rest of your life and never change any of your file structure. You are not. Hence, please use RStudio Projects.</em><a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<p><em>Please note that I included the former two paragraphs just for the record. You should never use absolute paths, except for if you are planning to keep the same machine for the rest of your life and never change any of your file structure. You are not. Hence, please use RStudio Projects.</em><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 <p>If you are using RStudio Projects, your working directory defaults to the folder your <code>.Rproj</code> file is stored in.<br />
 If you are working in RMarkdown, the working directory is where your RMarkdown document is stored in.</p>
 </div>
@@ -404,7 +404,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </li>
 <li><code>read_fwf("file.fwf", col_positions = c(1, 3, 5))</code> reads fixed width files. Here, some sort of data on the columns must be provided, e.g., their positions in the file<br />
 </li>
-<li>If the values are separated by whitespace, you can also use <code>read_tsv("file.tsv")</code> or <code>read_table("file.tsv")</code></li>
+<li>If the values are separated by white space, you can also use <code>read_tsv("file.tsv")</code> or <code>read_table("file.tsv")</code></li>
 </ul>
 </div>
 <div id="and-their-additional-arguments" class="section level3" number="4.1.3">
@@ -419,7 +419,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </li>
 <li>Sometimes the original creator of your data set might go across missing values differently than you would want it to. <code>na =</code> can be used to specify which values shall be considered missing. If your missings are coded as 99 and 999, for instance, you can address that in the read-in process already by using <code>read_csv("file.csv", na = c("99", "999"))</code>. Please note that it takes a character vector as argument<br />
 </li>
-<li>In some data sets, the first rows consists of comments that start with particular signs or special characters. Using <code>comment =</code> allows you to skip these lines. For instance, <code>read_csv("file.csv", comment = "#")</code> drops all the rows that beginn with a hash.</li>
+<li>In some data sets, the first rows consists of comments that start with particular signs or special characters. Using <code>comment =</code> allows you to skip these lines. For instance, <code>read_csv("file.csv", comment = "#")</code> drops all the rows that begin with a hash.</li>
 </ul>
 </div>
 <div id="column-types" class="section level3" number="4.1.4">
@@ -457,7 +457,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </li>
 <li>So-called grouping characters such as 1,000,000 (USA) or 1.000.000 (Germany) or 1’000’000 (Switzerland)</li>
 </ul>
-<p>The problem with decimale points (– and commas) can be addresses by specifying a <code>locale</code>. Compare:</p>
+<p>The problem with decimal points (– and commas) can be addresses by specifying a <code>locale</code>. Compare:</p>
 <div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="workingwithdata.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">parse_double</span>(<span class="st">&quot;1,3&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: 1 parsing failure.
 ## row col               expected actual
@@ -631,7 +631,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </div>
 <div id="save" class="section level3" number="4.2.3">
 <h3><span class="header-section-number">4.2.3</span> <code>save()</code></h3>
-<p>Akin to <code>.rds</code> files are <code>.RData</code> files. They can contain multiple objects and be written using <code>save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")</code>. You can save your entire workspace as well by calling <code>save.image(file = "file.RData")</code>.</p>
+<p>Akin to <code>.rds</code> files are <code>.RData</code> files. They can contain multiple objects and be written using <code>save(r_specific_object_1, r_specific_object_2, r_specific_object_n, file = "file.RData")</code>. You can save your entire work space as well by calling <code>save.image(file = "file.RData")</code>.</p>
 </div>
 </div>
 <div id="alternative-ways-to-read-in-and-write-data" class="section level2" number="4.3">
@@ -657,7 +657,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </div>
 <div id="vroom" class="section level3" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> <code>vroom</code></h3>
-<p><code>vroom</code> has been introduced recently. It claims to be able to read in delimited files with up to 1.4 GB/s. Regarding its arguments, <code>vroom</code> works in the same way as the <code>read_*()</code> functions from the <code>readr</code> package. I would recommend you to use <code>vroom</code> as soon as your dataset’s size exceeds ~100 MB.</p>
+<p><code>vroom</code> has been introduced recently. It claims to be able to read in delimited files with up to 1.4 GB/s. Regarding its arguments, <code>vroom</code> works in the same way as the <code>read_*()</code> functions from the <code>readr</code> package. I would recommend you to use <code>vroom</code> as soon as your data set’s size exceeds ~100 MB.</p>
 <p>More on <code>vroom</code> <a href="https://vroom.r-lib.org/reference/vroom.html">here</a> and <a href="https://dcl-wrangle.stanford.edu/read-write.html">here</a>.</p>
 </div>
 <div id="further-readings" class="section level3" number="4.3.4">
@@ -675,11 +675,11 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </div>
 <div id="tidy-data" class="section level2" number="4.4">
 <h2><span class="header-section-number">4.4</span> Tidy data</h2>
-<p>Before you learn how to tidy and wrangle data, you need to know how you want your dataset to actually look like, i.e., what the desired outcome of the entire process of tidying your dataset is. The <code>tidyverse</code> is a collection of packages which share an underlying philosophy: they are tidy. This means, that they (preferably) take tidy data as inputs and output tidy data. In the following, I will, first, introduce you to the concept of tidy data as developed by Hadley Wickham <span class="citation">(<a href="#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>. Second, <code>tidyr</code> is introduced <span class="citation">(<a href="#ref-wickham2020b" role="doc-biblioref">Wickham 2020b</a>)</span>. Its goal is to provide you with functions that facilitate tidying datasets. Beyond, I will provide you some examples of how to create tibbles using functions from the <code>tibble</code> package <span class="citation">(<a href="#ref-muller2020" role="doc-biblioref">Müller, Wickham, and François 2020</a>)</span>. Moreover, the pipe from the <code>magrittr</code> package is introduced.</p>
+<p>Before you learn how to tidy and wrangle data, you need to know how you want your data set to actually look like, i.e., what the desired outcome of the entire process of tidying your data set is. The <code>tidyverse</code> is a collection of packages which share an underlying philosophy: they are tidy. This means, that they (preferably) take tidy data as inputs and output tidy data. In the following, I will, first, introduce you to the concept of tidy data as developed by Hadley Wickham <span class="citation">(<a href="#ref-wickham2014" role="doc-biblioref">Wickham 2014</a>)</span>. Second, <code>tidyr</code> is introduced <span class="citation">(<a href="#ref-wickham2020b" role="doc-biblioref">Wickham 2020b</a>)</span>. Its goal is to provide you with functions that facilitate tidying data sets. Beyond, I will provide you some examples of how to create tibbles using functions from the <code>tibble</code> package <span class="citation">(<a href="#ref-muller2020" role="doc-biblioref">Müller, Wickham, and François 2020</a>)</span>. Moreover, the pipe from the <code>magrittr</code> package is introduced.</p>
 <p>Please note that tidying and cleaning data are not equivalent: I refer to tidying data as to bringing data in a tidy format. Cleaning data, however, can encompass way more than this: parsing columns in the right format (using <code>readr</code>, for instance), imputation of missing values, address the problem of typos, etc.</p>
 <div id="in-theory" class="section level3" number="4.4.1">
 <h3><span class="header-section-number">4.4.1</span> In theory</h3>
-<p>Datasets can be structured in many ways. To make them tidy, they must be organized in the following way (this is taken from the R for Data Science book <span class="citation">(<a href="#ref-wickham2016a" role="doc-biblioref">Wickham and Grolemund 2016</a>)</span>):</p>
+<p>Data sets can be structured in many ways. To make them tidy, they must be organized in the following way (this is taken from the R for Data Science book <span class="citation">(<a href="#ref-wickham2016a" role="doc-biblioref">Wickham and Grolemund 2016</a>)</span>):</p>
 <ol style="list-style-type: decimal">
 <li>Each variable must have its own column.<br />
 </li>
@@ -689,7 +689,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </ol>
 <p>They can even be boiled further down:</p>
 <ol style="list-style-type: decimal">
-<li>Put each dataset in a tibble.</li>
+<li>Put each data set in a tibble.</li>
 <li>Put each variable in a column.</li>
 </ol>
 <p>This can also be visually depicted:</p>
@@ -706,7 +706,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 </div>
 <div id="in-practice" class="section level3" number="4.4.2">
 <h3><span class="header-section-number">4.4.2</span> In practice</h3>
-<p>So what are the most common problems with data sets? The following list is taken from the <code>tidyr</code> vignette<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>:</p>
+<p>So what are the most common problems with data sets? The following list is taken from the <code>tidyr</code> vignette<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>:</p>
 <ul>
 <li>Column headers are values, not variable names.<br />
 </li>
@@ -740,11 +740,11 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <pre><code>## # A tibble: 5 × 9
 ##   manufacturer `3 cyl` `4 cyl` `5 cyl` `6 cyl` `8 cyl` `10 cyl` `12 cyl`
 ##   &lt;chr&gt;          &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;    &lt;int&gt;    &lt;int&gt;
-## 1 Audi               7      60       2      47      38        3       20
-## 2 BMW               19      72       7      30      21        6        1
-## 3 Mercedes          17      60       7      48      32        7       14
-## 4 Opel               8      76       1      32      25        2        5
-## 5 VW                16      88       5      45      22        6        8
+## 1 Audi               7      71       3      46      27        8       10
+## 2 BMW                9      58       2      45      23        2       12
+## 3 Mercedes           9      97       3      30      30        5       11
+## 4 Opel               5      64       2      40      33        2        8
+## 5 VW                10      73       9      46      33        3        7
 ## # … with 1 more variable: 16 cyl &lt;dbl&gt;</code></pre>
 <p>You can create a tibble <em>by column</em> using the <code>tibble</code> function. Column names need to be specified and linked to vectors of either the same length or length one.</p>
 <p>This data set basically consists of three variables: <code>German car manufacturer</code>, <code>number of cylinders</code>, and <code>frequency</code>. To make the data set tidy, it has to consist of three columns depicting the three respective variables. This operation is called pivoting the non-variable columns into two-column key-value pairs. As the data set will thereafter contain fewer columns and more rows than before, it will have become longer (or taller). Hence, the tidyr function is called <code>pivot_longer()</code>.</p>
@@ -755,15 +755,15 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;
 ##  1 Audi         3 cyl             7
-##  2 Audi         4 cyl            60
-##  3 Audi         5 cyl             2
-##  4 Audi         6 cyl            47
-##  5 Audi         8 cyl            38
-##  6 Audi         10 cyl            3
-##  7 Audi         12 cyl           20
+##  2 Audi         4 cyl            71
+##  3 Audi         5 cyl             3
+##  4 Audi         6 cyl            46
+##  5 Audi         8 cyl            27
+##  6 Audi         10 cyl            8
+##  7 Audi         12 cyl           10
 ##  8 Audi         16 cyl            0
-##  9 BMW          3 cyl            19
-## 10 BMW          4 cyl            72
+##  9 BMW          3 cyl             9
+## 10 BMW          4 cyl            58
 ## # … with 30 more rows</code></pre>
 <p>In the function call, you need to specify the following: if you were not to use the pipe, the first argument would be the tibble you are manipulating. Then, you look at the column you want to <strong>keep</strong>. Here, it is the car manufacturer. This means that all columns but <code>manufacturer</code> will be crammed into two new ones: one will contain the columns’ names, the other one their values. How are those new column supposed to be named? That can be specified in the <code>names_to =</code> and <code>values_to =</code>arguments. Please note that you need to provide them a character vector, hence, surround your parameters with quotation marks. As a rule of thumb for all <code>tidyverse</code> packages: If it is a new column name you provide, surround it with quotation marks. If it is one that already exists – like, here, manufacturer, then you do not need the quotation marks.</p>
 </div>
@@ -814,15 +814,15 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 Audi                 3         7
-##  2 BMW                  3        19
-##  3 Mercedes             3        17
-##  4 Opel                 3         8
-##  5 VW                   3        16
-##  6 Audi                 4        60
-##  7 BMW                  4        72
-##  8 Mercedes             4        60
-##  9 Opel                 4        76
-## 10 VW                   4        88
+##  2 BMW                  3         9
+##  3 Mercedes             3         9
+##  4 Opel                 3         5
+##  5 VW                   3        10
+##  6 Audi                 4        71
+##  7 BMW                  4        58
+##  8 Mercedes             4        97
+##  9 Opel                 4        64
+## 10 VW                   4        73
 ## # … with 30 more rows</code></pre>
 </div>
 <div id="insertion-the-pipe" class="section level4" number="4.4.2.4">
@@ -837,15 +837,15 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 Audi                 3         7
-##  2 BMW                  3        19
-##  3 Mercedes             3        17
-##  4 Opel                 3         8
-##  5 VW                   3        16
-##  6 Audi                 4        60
-##  7 BMW                  4        72
-##  8 Mercedes             4        60
-##  9 Opel                 4        76
-## 10 VW                   4        88
+##  2 BMW                  3         9
+##  3 Mercedes             3         9
+##  4 Opel                 3         5
+##  5 VW                   3        10
+##  6 Audi                 4        71
+##  7 BMW                  4        58
+##  8 Mercedes             4        97
+##  9 Opel                 4        64
+## 10 VW                   4        73
 ## # … with 30 more rows</code></pre>
 <p>could have also been written like this</p>
 <div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="workingwithdata.html#cb188-1" aria-hidden="true" tabindex="-1"></a>ger_car_manufacturer_longer_sep_cyl <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(cylinders)</span></code></pre></div>
@@ -853,15 +853,15 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ##    manufacturer cylinders frequency
 ##    &lt;chr&gt;            &lt;dbl&gt;     &lt;dbl&gt;
 ##  1 Audi                 3         7
-##  2 BMW                  3        19
-##  3 Mercedes             3        17
-##  4 Opel                 3         8
-##  5 VW                   3        16
-##  6 Audi                 4        60
-##  7 BMW                  4        72
-##  8 Mercedes             4        60
-##  9 Opel                 4        76
-## 10 VW                   4        88
+##  2 BMW                  3         9
+##  3 Mercedes             3         9
+##  4 Opel                 3         5
+##  5 VW                   3        10
+##  6 Audi                 4        71
+##  7 BMW                  4        58
+##  8 Mercedes             4        97
+##  9 Opel                 4        64
+## 10 VW                   4        73
 ## # … with 30 more rows</code></pre>
 <p>because the tibble is the first argument in the function call.</p>
 <p>Because <code>magrittr</code> really has gained traction in the R community, many functions are now optimized for being used with the pipe. However, there are still some around which are not. A function for fitting a basic linear model with one dependent and one independent variable which are both stored in a tibble looks like this: <code>lm(formula = dv ~ iv, data = tibble)</code>. Here, the tibble is not the first argument. To be able to fit a linear model in a “pipeline,” you need to employ a little hack: you can use a dot <code>.</code> as a placeholder.</p>
@@ -874,19 +874,19 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 ## lm(formula = frequency ~ cylinders, data = .)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -29.073 -14.454   1.105  10.223  55.045 
+##    Min     1Q Median     3Q    Max 
+## -29.78 -15.27   0.85  11.93  64.96 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  44.4859     7.0975   6.268 2.44e-07 ***
-## cylinders    -2.8826     0.7874  -3.661 0.000761 ***
+## (Intercept)  42.9996     7.5531   5.693  1.5e-06 ***
+## cylinders    -2.7406     0.8379  -3.271  0.00229 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 20.68 on 38 degrees of freedom
-## Multiple R-squared:  0.2607, Adjusted R-squared:  0.2413 
-## F-statistic:  13.4 on 1 and 38 DF,  p-value: 0.0007612</code></pre>
+## Residual standard error: 22.01 on 38 degrees of freedom
+## Multiple R-squared:  0.2197, Adjusted R-squared:  0.1991 
+## F-statistic:  10.7 on 1 and 38 DF,  p-value: 0.002286</code></pre>
 <p>As <code>%&gt;%</code> is a bit tedious to type, there exist shortcuts: shift-ctrl-m on a Mac, shift-strg-m on a Windows machine.</p>
 </div>
 <div id="further-functionalities" class="section level4" number="4.4.2.5">
@@ -905,7 +905,7 @@ If you are working in RMarkdown, the working directory is where your RMarkdown d
 <div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="workingwithdata.html#cb194-1" aria-hidden="true" tabindex="-1"></a>tidy_german_cars_tbl <span class="ot">&lt;-</span> german_cars_tbl <span class="sc">%&gt;%</span> </span>
 <span id="cb194-2"><a href="workingwithdata.html#cb194-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(model, <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>)</span></code></pre></div>
 <p><code>enframe()</code> enables you to create a tibble from a (named) vector. It outputs a tibble with two columns (<code>name</code> and <code>value</code> by default): <code>name</code> contains the names of the elements (if the elements are unnamed, it contains a serial number), <code>value</code> the element. Both can be renamed in the function call by providing a character vector.</p>
-<p>If you want to achieve the opposite, i.e., merge cells’ content, you can use the counterpart, <code>unite()</code>. Let’s take the following dataframe which consists of the names of the professors of the Institute for Political Science:</p>
+<p>If you want to achieve the opposite, i.e., merge cells’ content, you can use the counterpart, <code>unite()</code>. Let’s take the following data frame which consists of the names of the professors of the Institute for Political Science:</p>
 <div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="workingwithdata.html#cb195-1" aria-hidden="true" tabindex="-1"></a>professor_names_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">first_name =</span> <span class="fu">c</span>(<span class="st">&quot;Karlfriedrich&quot;</span>, <span class="st">&quot;Martin&quot;</span>, <span class="st">&quot;Jerzy&quot;</span>, <span class="st">&quot;Stephan&quot;</span>, <span class="st">&quot;Melanie&quot;</span>),</span>
 <span id="cb195-2"><a href="workingwithdata.html#cb195-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">last_name =</span> <span class="fu">c</span>(<span class="st">&quot;Herb&quot;</span>, <span class="st">&quot;Sebaldt&quot;</span>, <span class="st">&quot;Maćków&quot;</span>, <span class="st">&quot;Bierling&quot;</span>, <span class="st">&quot;Walter-Rogg&quot;</span>))</span>
 <span id="cb195-3"><a href="workingwithdata.html#cb195-3" aria-hidden="true" tabindex="-1"></a>professor_names_tbl <span class="ot">&lt;-</span> professor_names_df <span class="sc">%&gt;%</span> </span>
@@ -968,9 +968,9 @@ Wickham, Hadley, and Evan Miller. 2020. <span>“Haven: <span>Import</span> and 
 </div>
 <div class="footnotes">
 <hr />
-<ol start="5">
-<li id="fn5"><p>you can find the thoughts of the of the main author of the <code>knitr</code> package on working directories <a href="https://groups.google.com/forum/#!topic/knitr/knM0VWoexT0">here</a><a href="workingwithdata.html#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p>which can be found <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">here</a> or using <code>vignette("tidy-data", package = "tidyr")</code><a href="workingwithdata.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<ol start="4">
+<li id="fn4"><p>you can find the thoughts of the of the main author of the <code>knitr</code> package on working directories <a href="https://groups.google.com/forum/#!topic/knitr/knM0VWoexT0">here</a><a href="workingwithdata.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>which can be found <a href="https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html">here</a> or using <code>vignette("tidy-data", package = "tidyr")</code><a href="workingwithdata.html#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

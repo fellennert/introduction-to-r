@@ -2,13 +2,12 @@
 
 When analyzing data, a significant number of variables will be in some sort of text format. When you want to manipulate those variables, an easy approach would be exporting the data to MS Excel and then just perform those manipulations by hand. This is very time-consuming, though, and, hence, I rather recommend the R way, which scales well and works fast for data sets of varying sizes.
 
-Quick reminder: a string is an element of a character vector and can be created by simply wrapping some text in backticks:
+Quick reminder: a string is an element of a character vector and can be created by simply wrapping some text in back ticks:
 
 ```{r}
 string <- "Hi, how are you doing?"
 vector_of_strings <- c("Hi, how are you doing?", "I'm doing well, HBY?", "Me too, thanks for asking.")
 ```
-(Question: how would you go about quotes in strings?)
 
 The `stringr` package contains a multitude of commands (49 in total) which can be used to achieve a couple of things: manipulating character vectors; operations which are sensitive to different locales; matching patterns. Basically, those goals can also be achieved with base R functions, but `stringr`'s advantage is its consistency. The makers of `stringr` describe it as
 
@@ -33,7 +32,7 @@ str_to_title(vector_of_strings)
 str_to_sentence(vector_of_strings)
 ```
 
-### Deternining a string's length
+### Determining a string's length
 
 Determining the string's number of characters goes as follows: 
 
@@ -133,11 +132,13 @@ The most basic regex patterns consist of literal characters only. `str_view()` t
 
 ```{r}
 five_largest_cities <- c("Stockholm", "Göteborg", "Malmö", "Uppsala", "Västerås")
-
-str_view(five_largest_cities, "stockholm")
 ```
 
 Note that regexes are case-sensitive.
+
+```{r}
+str_view(five_largest_cities, "stockholm")
+```
 
 ```{r}
 str_view(five_largest_cities, "Stockholm")
@@ -155,21 +156,20 @@ Moreover, they are "greedy," they only match the first occurrence (in "Stockholm
 str_view(five_largest_cities, "o")
 ```
 
-
 This can be addressed in the `stringr` package by using `str_._all()` function -- but more on that later.
 
-If you want to match multiple literal characters (or words, for that sake), you can connect them using the `|` metacharacter (more on metacharacters later).
+If you want to match multiple literal characters (or words, for that sake), you can connect them using the `|` meta character (more on meta characters later).
 
 ```{r}
 str_view(five_largest_cities, "Stockholm|Göteborg")
 ```
 question: automate the pattern-generating process using str_c -- hint: collapse = "|"
 
-Every letter of the English alphabet (or number/or combination of those) can serve as a literal character. Those literal characters *match themselves*. This is, however, not the case with the other sort of characters, so-called metacharacters.
+Every letter of the English alphabet (or number/or combination of those) can serve as a literal character. Those literal characters *match themselves*. This is, however, not the case with the other sort of characters, so-called meta characters.
 
 ### Metacharacters
 
-When using regexes, the following characters are considered metacharacters and have a special meaning:
+When using regexes, the following characters are considered meta characters and have a special meaning:
 
 `. \ | ( ) { } [ ] ^ $ - * + ?`
 
@@ -198,7 +198,7 @@ In our case, the appropriate one is `+`:
 str_detect(stringr_functions, "str_.+_all")
 ```
 
-However, if you want to match the character dot? This probkem might arise when searching for clock time. A naive regex might look like this:
+However, if you want to match the character dot? This problem may arise when searching for clock time. A naive regex might look like this:
 
 ```{r}
 vectors_with_time <- c("13500", "13M00", "13.00")
@@ -206,7 +206,7 @@ vectors_with_time <- c("13500", "13M00", "13.00")
 str_detect(vectors_with_time, "13.00")
 ```
 
-Yet, it matches everything. We need some sort of literal dot. Here, the escape character `\` comes in handy. By putting it in front of the metacharacter, it does no longer has its special meaning, and is interpreted as a literal character. This procedure is referred to as "escaping." Note that you will need to escape `\` as well. 
+Yet, it matches everything. We need some sort of literal dot. Here, the meta character `\` comes in handy. By putting it in front of the meta character, it does no longer has its special meaning, and is interpreted as a literal character. This procedure is referred to as "escaping." Hence, `\` is also referred to as the "escape character." Note that you will need to escape `\` as well, and therefore it will look like this: `\\.`. 
 
 ```{r}
 str_detect(vectors_with_time, "13\\.00")
@@ -214,7 +214,7 @@ str_detect(vectors_with_time, "13\\.00")
 
 #### Sets of characters
 
-You can also define sets of multiple characters using the `[ ]` metacharacters. This can be used to define multiple possible characters that can appear in the same place. 
+You can also define sets of multiple characters using the `[ ]` meta characters. This can be used to define multiple possible characters that can appear in the same place. 
 
 ```{r}
 sp_ce <- c("spice", "space")
@@ -222,7 +222,7 @@ sp_ce <- c("spice", "space")
 str_view(sp_ce, "sp[ai]ce")
 ```
 
-You can also define certain ranges of characters using the `-` metacharacter:
+You can also define certain ranges of characters using the `-` meta character:
 
 Same holds for numbers:
 
@@ -234,7 +234,7 @@ str_view(american_phone_number, "\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}")
 
 There are also predefined sets of characters, for instance digits or letters, which are called *character classes*. You can find them on the [`stringr` cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf). 
 
-Furthermore, you can put almost every metacharacter inside the square brackets without escaping them. This does not apply to the the caret (`^`) in first position, the dash `-`, the closing square bracket `]`, and the backslash `\`.
+Furthermore, you can put almost every meta character inside the square brackets without escaping them. This does not apply to the the caret (`^`) in first position, the dash `-`, the closing square bracket `]`, and the backslash `\`.
 
 ```{r}
 str_view(vector_of_strings, "[.]")
@@ -242,7 +242,7 @@ str_view(vector_of_strings, "[.]")
 
 #### Negating sets of characters
 
-Sometimes you will also want to exclude certain sets of characters or words. In order to achieve this, you can use the `^` metacharacter at the beginning of the range or set you are defining. 
+Sometimes you will also want to exclude certain sets of characters or words. In order to achieve this, you can use the `^` meta character at the beginning of the range or set you are defining. 
 
 ```{r}
 str_view(sp_ce, "sp[^i]ce")
@@ -289,7 +289,7 @@ Here, in order to identify the height in meters, the first task is to identify a
 str_view(heights, "[0-9]+(?=m)")
 ```
 
-The second step now is to identify the centimeters. This could of coumrse be achieved using the same regex and replacing `m` by `cm`. However, we can also harness a so-called negative look ahead `A(?!pattern)`, a so-called look behind `(?<=pattern)A`. The negative counterpart, the negative look behind `(?<!pattern)A` could be used to extract the meters.
+The second step now is to identify the centimeters. This could of course be achieved using the same regex and replacing `m` by `cm`. However, we can also harness a so-called negative look ahead `A(?!pattern)`, a so-called look behind `(?<=pattern)A`. The negative counterpart, the negative look behind `(?<!pattern)A` could be used to extract the meters.
 
 The negative look ahead basically returns everything that is not followed by the defined pattern. The look behind returns everything that is preceded by the pattern, the negative look behind returns everything that is not preceded by the pattern.
 
@@ -309,7 +309,7 @@ Yow that you have learned about regexes, you can unleash the full power of `stri
 
 The basic syntax of a `stringr` function looks as follows: `str_*(string, regex(""))`. Some `stringr` functions also have the suffix `_all` which implies that they perform the operation not only on the first match ("greedy") but on every match.
 
-In order to demonstrate the different functionalities, I will again rely on the subset of example sentences.
+In order to demonstrate the different functions, I will again rely on the subset of example sentences.
 
 ### Detect matches
 
@@ -325,9 +325,6 @@ This also works very well in a `dplyr::filter()` call. Finding all action movies
 imdb_raw %>% 
   filter(str_detect(Genre, "Action"))
 ```
-
-
-
 
 If you want to know whether there are multiple matches present in each string, you can use `str_count`. Here, it might by advisable to set the `ignore_case` option to `TRUE`:
 
@@ -357,7 +354,7 @@ If I wanted, for instance, replace all "m" letters by "meters," I would go about
 str_replace(heights, "m", "meters")
 ```
 
-Note that `str_replace_all` woukd have lead to the following outcome:
+Note that `str_replace_all` would have lead to the following outcome:
 
 ```{r}
 str_replace_all(heights, "m", "meters")
@@ -399,7 +396,7 @@ str_split(manufacturer_model, "\\b") %>%
   head()
 ```
 
-This outputs a list containing the different singular words/special characters. This doesn't make sense in this case. Here, however, the structure of the string is always roughly the same: "\\[manufacturer\\]\\[ \\]\\[model description\\]". Moreover, the manufacturer is only one word. Hence, the task can be fixed by splitting the string after the first word, which should indicate the manufacturer. This can be accomplished using `str_split_fixed()`. Fixed means that the number of splits is predefined. This returns a metrix that can easily become a tibble.
+This outputs a list containing the different singular words/special characters. This doesn't make sense in this case. Here, however, the structure of the string is always roughly the same: "\\[manufacturer\\]\\[ \\]\\[model description\\]". Moreover, the manufacturer is only one word. Hence, the task can be fixed by splitting the string after the first word, which should indicate the manufacturer. This can be accomplished using `str_split_fixed()`. Fixed means that the number of splits is predefined. This returns a metric that can easily become a tibble.
 
 ```{r}
 str_split_fixed(manufacturer_model, "(?<=\\w)\\b", n = 2) %>% 
@@ -411,6 +408,6 @@ str_split_fixed(manufacturer_model, "(?<=\\w)\\b", n = 2) %>%
 ## Further links
 
 * The [`stringr` cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/strings.pdf).
-* A [YouTube video](https://www.youtube.com/watch?v=NvHjYOilOf8) on Regexes by Johns Hopkins professor Roger Peng.
+* A [YouTube video](https://www.youtube.com/watch?v=NvHjYOilOf8) on regexes by Johns Hopkins professor Roger Peng.
 * And a [chapter](https://bookdown.org/rdpeng/rprogdatascience/regular-expressions.html#the-stringr-package) by Roger Peng.
 * A [website for practicing regexes](https://regexone.com).

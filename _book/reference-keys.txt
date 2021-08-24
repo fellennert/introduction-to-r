@@ -1,4 +1,4 @@
-tab:unnamed-chunk-181
+tab:unnamed-chunk-182
 prologue
 course-outline
 why-r
@@ -88,7 +88,7 @@ further-links-4
 stringregex
 basic-manipulations
 changing-the-case-of-the-words
-deternining-a-strings-length
+determining-a-strings-length
 extracting-particular-characters
 concatenating-strings
 repetition
