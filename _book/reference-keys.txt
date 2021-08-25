@@ -1,4 +1,4 @@
-tab:unnamed-chunk-182
+tab:unnamed-chunk-189
 prologue
 course-outline
 why-r
@@ -47,15 +47,15 @@ column-types
 numbers
 date-and-time
 parsing-entire-files
+alternative-ways-to-read-in-and-write-data
+haven
+readxl
+vroom
 rds-and-.rdatafiles
 write-data
 write_csv
 write_rds
 save
-alternative-ways-to-read-in-and-write-data
-haven
-readxl
-vroom
 further-readings
 tidy-data
 in-theory
@@ -84,6 +84,7 @@ inner_join
 full_join
 semi_join
 anti_join
+bind_rows-and-bind_cols
 further-links-4
 stringregex
 basic-manipulations

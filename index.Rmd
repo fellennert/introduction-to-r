@@ -78,6 +78,8 @@ Each chapter will contain a *Further links* section, where I include useful onli
 * Not convinced yet? If you strive for a carreer in business analytics, let [this article](https://www.business-science.io/business/2020/12/17/six-reasons-to-use-R-for-business-2021.html) sink in. 
 * If you worry about R being too complex as you're no computer scientist, read [here](https://www.dezyre.com/article/why-is-now-the-time-to-learn-r-programming/178). 
 * From an academia point of view, R is very likely to entirely take over the, at least, social sciences and you will be very likely to [encounter it in the future](https://campus.sagepub.com/blog/why-universities-are-switching-to-r-for-social-science).
+* Further material for learning covering basically each section of this script can be found on the [RStudio website](https://rstudio.cloud/learn/primers).
+* A more accessible guide to singular tidyverse packages can be found in the `introverse` R package. Find instructions for how to install and use it [online](https://spielmanlab.github.io/introverse/index.html).
 
 ## Last but not least
 

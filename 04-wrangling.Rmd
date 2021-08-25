@@ -525,3 +525,4 @@ election_data12 %>% bind_cols(election_data16)
 * A [tutorial on YouTube](https://www.youtube.com/watch?v=jWjqLW-u3hc)
 * Another introduction can be found [here](https://stat545.com/join-cheatsheet.html).
 * The [chapter in R4DS](https://r4ds.had.co.nz/relational-data.html) has some nice diagrams.
+* You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("dplyr")` will give you an overview of `dplyr`'s functions, and `get_help("name of function")` will help you with the respective function.

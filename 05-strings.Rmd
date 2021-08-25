@@ -411,3 +411,4 @@ str_split_fixed(manufacturer_model, "(?<=\\w)\\b", n = 2) %>%
 * A [YouTube video](https://www.youtube.com/watch?v=NvHjYOilOf8) on regexes by Johns Hopkins professor Roger Peng.
 * And a [chapter](https://bookdown.org/rdpeng/rprogdatascience/regular-expressions.html#the-stringr-package) by Roger Peng.
 * A [website for practicing regexes](https://regexone.com).
+* You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("strngr")` will give you an overview of the `stringr` package's functions, and `get_help("name of function")` will help you with the respective function.

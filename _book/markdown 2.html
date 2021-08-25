@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 10 Writing academic papers with RMarkdown | An(other) introduction to R</title>
+  <meta name="description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 10 Writing academic papers with RMarkdown | An(other) introduction to R" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 10 Writing academic papers with RMarkdown | An(other) introduction to R" />
+  
+  <meta name="twitter:description" content="This is a gentle introduction to R and the basic usage of some tidyverse packages (dplyr, tidyr, ggplot2, forcats, stringr) for data manipulation and visualization." />
+  
+
+<meta name="author" content="Felix Lennert" />
+
+
+<meta name="date" content="2021-08-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="visualization.html"/>
+<link rel="next" href="functionalprogramming.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<link href="libs/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/str_view-0.1.0/str_view.css" rel="stylesheet" />
+<script src="libs/str_view-binding-1.4.0/str_view.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">An intro to R, RStudio, and the tidyverse</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Prologue</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-outline"><i class="fa fa-check"></i><b>1.1</b> Course outline</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#why-r"><i class="fa fa-check"></i><b>1.2</b> Why R</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="index.html"><a href="index.html#reproducibility"><i class="fa fa-check"></i><b>1.2.1</b> Reproducibility</a></li>
+<li class="chapter" data-level="1.2.2" data-path="index.html"><a href="index.html#its-free-and-community-based"><i class="fa fa-check"></i><b>1.2.2</b> It’s free and community-based</a></li>
+<li class="chapter" data-level="1.2.3" data-path="index.html"><a href="index.html#jobs"><i class="fa fa-check"></i><b>1.2.3</b> Jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#further-links"><i class="fa fa-check"></i><b>1.3</b> Further links</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#last-but-not-least"><i class="fa fa-check"></i><b>1.4</b> Last but not least</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introrstudio.html"><a href="introrstudio.html"><i class="fa fa-check"></i><b>2</b> Getting started with RStudio</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introrstudio.html"><a href="introrstudio.html#installing-r"><i class="fa fa-check"></i><b>2.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.2" data-path="introrstudio.html"><a href="introrstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>2.2</b> Installing RStudio</a></li>
+<li class="chapter" data-level="2.3" data-path="introrstudio.html"><a href="introrstudio.html#setting-up-rstudio"><i class="fa fa-check"></i><b>2.3</b> Setting up RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="introrstudio.html"><a href="introrstudio.html#some-remarks-on-your-daily-workflow"><i class="fa fa-check"></i><b>2.4</b> Some remarks on your daily workflow</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introrstudio.html"><a href="introrstudio.html#rstudio-projects"><i class="fa fa-check"></i><b>2.4.1</b> RStudio Projects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts-and-rmarkdown"><i class="fa fa-check"></i><b>2.5</b> R scripts and RMarkdown</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="introrstudio.html"><a href="introrstudio.html#r-scripts"><i class="fa fa-check"></i><b>2.5.1</b> R scripts</a></li>
+<li class="chapter" data-level="2.5.2" data-path="introrstudio.html"><a href="introrstudio.html#rmarkdown"><i class="fa fa-check"></i><b>2.5.2</b> RMarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="introrstudio.html"><a href="introrstudio.html#further-links-1"><i class="fa fa-check"></i><b>2.6</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intror.html"><a href="intror.html"><i class="fa fa-check"></i><b>3</b> Intro to R</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="intror.html"><a href="intror.html#installing-packages"><i class="fa fa-check"></i><b>3.1</b> Installing packages</a></li>
+<li class="chapter" data-level="3.2" data-path="intror.html"><a href="intror.html#basic-arithmetic-operations"><i class="fa fa-check"></i><b>3.2</b> Basic arithmetic operations</a></li>
+<li class="chapter" data-level="3.3" data-path="intror.html"><a href="intror.html#vectors"><i class="fa fa-check"></i><b>3.3</b> Vectors</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="intror.html"><a href="intror.html#atomic-vectors"><i class="fa fa-check"></i><b>3.3.1</b> Atomic vectors</a></li>
+<li class="chapter" data-level="3.3.2" data-path="intror.html"><a href="intror.html#working-with-atomic-vectors"><i class="fa fa-check"></i><b>3.3.2</b> Working with atomic vectors</a></li>
+<li class="chapter" data-level="3.3.3" data-path="intror.html"><a href="intror.html#lists"><i class="fa fa-check"></i><b>3.3.3</b> Lists</a></li>
+<li class="chapter" data-level="3.3.4" data-path="intror.html"><a href="intror.html#augmented-vectors"><i class="fa fa-check"></i><b>3.3.4</b> Augmented vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="intror.html"><a href="intror.html#further-links-2"><i class="fa fa-check"></i><b>3.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="workingwithdata.html"><a href="workingwithdata.html"><i class="fa fa-check"></i><b>4</b> Working with data</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#reading-in-data-sets"><i class="fa fa-check"></i><b>4.1</b> Reading in data sets</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="workingwithdata.html"><a href="workingwithdata.html#the-working-directory-in-r"><i class="fa fa-check"></i><b>4.1.1</b> The working directory in R</a></li>
+<li class="chapter" data-level="4.1.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readrs-general-functions"><i class="fa fa-check"></i><b>4.1.2</b> <code>readr</code>’s general functions…</a></li>
+<li class="chapter" data-level="4.1.3" data-path="workingwithdata.html"><a href="workingwithdata.html#and-their-additional-arguments"><i class="fa fa-check"></i><b>4.1.3</b> …and their additional arguments</a></li>
+<li class="chapter" data-level="4.1.4" data-path="workingwithdata.html"><a href="workingwithdata.html#column-types"><i class="fa fa-check"></i><b>4.1.4</b> Column types</a></li>
+<li class="chapter" data-level="4.1.5" data-path="workingwithdata.html"><a href="workingwithdata.html#rds-and-.rdatafiles"><i class="fa fa-check"></i><b>4.1.5</b> <code>.rds</code> and <code>.RData</code>files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write-data"><i class="fa fa-check"></i><b>4.2</b> Write data</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="workingwithdata.html"><a href="workingwithdata.html#write_csv"><i class="fa fa-check"></i><b>4.2.1</b> <code>write_csv()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="workingwithdata.html"><a href="workingwithdata.html#write_rds"><i class="fa fa-check"></i><b>4.2.2</b> <code>write_rds()</code></a></li>
+<li class="chapter" data-level="4.2.3" data-path="workingwithdata.html"><a href="workingwithdata.html#save"><i class="fa fa-check"></i><b>4.2.3</b> <code>save()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="workingwithdata.html"><a href="workingwithdata.html#alternative-ways-to-read-in-and-write-data"><i class="fa fa-check"></i><b>4.3</b> Alternative ways to read in and write data</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="workingwithdata.html"><a href="workingwithdata.html#haven"><i class="fa fa-check"></i><b>4.3.1</b> <code>haven</code></a></li>
+<li class="chapter" data-level="4.3.2" data-path="workingwithdata.html"><a href="workingwithdata.html#readxl"><i class="fa fa-check"></i><b>4.3.2</b> <code>readxl</code></a></li>
+<li class="chapter" data-level="4.3.3" data-path="workingwithdata.html"><a href="workingwithdata.html#vroom"><i class="fa fa-check"></i><b>4.3.3</b> <code>vroom</code></a></li>
+<li class="chapter" data-level="4.3.4" data-path="workingwithdata.html"><a href="workingwithdata.html#further-readings"><i class="fa fa-check"></i><b>4.3.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="workingwithdata.html"><a href="workingwithdata.html#tidy-data"><i class="fa fa-check"></i><b>4.4</b> Tidy data</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="workingwithdata.html"><a href="workingwithdata.html#in-theory"><i class="fa fa-check"></i><b>4.4.1</b> In theory</a></li>
+<li class="chapter" data-level="4.4.2" data-path="workingwithdata.html"><a href="workingwithdata.html#in-practice"><i class="fa fa-check"></i><b>4.4.2</b> In practice</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="workingwithdata.html"><a href="workingwithdata.html#further-links-3"><i class="fa fa-check"></i><b>4.5</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="wrangling.html"><a href="wrangling.html"><i class="fa fa-check"></i><b>5</b> Manipulation with <code>dplyr</code></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="wrangling.html"><a href="wrangling.html#working-with-the-main-verbs"><i class="fa fa-check"></i><b>5.1</b> Working with the main “verbs”</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="wrangling.html"><a href="wrangling.html#select"><i class="fa fa-check"></i><b>5.1.1</b> <code>select()</code></a></li>
+<li class="chapter" data-level="5.1.2" data-path="wrangling.html"><a href="wrangling.html#filter"><i class="fa fa-check"></i><b>5.1.2</b> <code>filter()</code></a></li>
+<li class="chapter" data-level="5.1.3" data-path="wrangling.html"><a href="wrangling.html#mutate"><i class="fa fa-check"></i><b>5.1.3</b> <code>mutate()</code></a></li>
+<li class="chapter" data-level="5.1.4" data-path="wrangling.html"><a href="wrangling.html#summarize-and-group_by"><i class="fa fa-check"></i><b>5.1.4</b> <code>summarize()</code> and <code>group_by</code></a></li>
+<li class="chapter" data-level="5.1.5" data-path="wrangling.html"><a href="wrangling.html#arrange"><i class="fa fa-check"></i><b>5.1.5</b> <code>arrange()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="wrangling.html"><a href="wrangling.html#introducing-joins"><i class="fa fa-check"></i><b>5.2</b> Introducing <code>joins</code></a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="wrangling.html"><a href="wrangling.html#multiple-types-of-units-are-in-the-same-table"><i class="fa fa-check"></i><b>5.2.1</b> Multiple types of units are in the same table</a></li>
+<li class="chapter" data-level="5.2.2" data-path="wrangling.html"><a href="wrangling.html#one-unit-is-in-multiple-tables"><i class="fa fa-check"></i><b>5.2.2</b> One unit is in multiple tables</a></li>
+<li class="chapter" data-level="5.2.3" data-path="wrangling.html"><a href="wrangling.html#left_join-and-right_join"><i class="fa fa-check"></i><b>5.2.3</b> <code>left_join()</code> and <code>right_join()</code></a></li>
+<li class="chapter" data-level="5.2.4" data-path="wrangling.html"><a href="wrangling.html#inner_join"><i class="fa fa-check"></i><b>5.2.4</b> <code>inner_join()</code></a></li>
+<li class="chapter" data-level="5.2.5" data-path="wrangling.html"><a href="wrangling.html#full_join"><i class="fa fa-check"></i><b>5.2.5</b> <code>full_join()</code></a></li>
+<li class="chapter" data-level="5.2.6" data-path="wrangling.html"><a href="wrangling.html#semi_join"><i class="fa fa-check"></i><b>5.2.6</b> <code>semi_join()</code></a></li>
+<li class="chapter" data-level="5.2.7" data-path="wrangling.html"><a href="wrangling.html#anti_join"><i class="fa fa-check"></i><b>5.2.7</b> <code>anti_join()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="wrangling.html"><a href="wrangling.html#further-links-4"><i class="fa fa-check"></i><b>5.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="stringregex.html"><a href="stringregex.html"><i class="fa fa-check"></i><b>6</b> String manipulation with <code>stringr</code> and <code>regular expressions</code></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="stringregex.html"><a href="stringregex.html#basic-manipulations"><i class="fa fa-check"></i><b>6.1</b> Basic manipulations</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="stringregex.html"><a href="stringregex.html#changing-the-case-of-the-words"><i class="fa fa-check"></i><b>6.1.1</b> Changing the case of the words</a></li>
+<li class="chapter" data-level="6.1.2" data-path="stringregex.html"><a href="stringregex.html#determining-a-strings-length"><i class="fa fa-check"></i><b>6.1.2</b> Determining a string’s length</a></li>
+<li class="chapter" data-level="6.1.3" data-path="stringregex.html"><a href="stringregex.html#extracting-particular-characters"><i class="fa fa-check"></i><b>6.1.3</b> Extracting particular characters</a></li>
+<li class="chapter" data-level="6.1.4" data-path="stringregex.html"><a href="stringregex.html#concatenating-strings"><i class="fa fa-check"></i><b>6.1.4</b> Concatenating strings</a></li>
+<li class="chapter" data-level="6.1.5" data-path="stringregex.html"><a href="stringregex.html#repetition"><i class="fa fa-check"></i><b>6.1.5</b> Repetition</a></li>
+<li class="chapter" data-level="6.1.6" data-path="stringregex.html"><a href="stringregex.html#removing-unnecessary-whitespaces"><i class="fa fa-check"></i><b>6.1.6</b> Removing unnecessary whitespaces</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="stringregex.html"><a href="stringregex.html#regular-expressions"><i class="fa fa-check"></i><b>6.2</b> Regular expressions</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="stringregex.html"><a href="stringregex.html#literal-characters"><i class="fa fa-check"></i><b>6.2.1</b> Literal characters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="stringregex.html"><a href="stringregex.html#metacharacters"><i class="fa fa-check"></i><b>6.2.2</b> Metacharacters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="stringregex.html"><a href="stringregex.html#more-advanced-string-manipulation"><i class="fa fa-check"></i><b>6.3</b> More advanced string manipulation</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="stringregex.html"><a href="stringregex.html#detect-matches"><i class="fa fa-check"></i><b>6.3.1</b> Detect matches</a></li>
+<li class="chapter" data-level="6.3.2" data-path="stringregex.html"><a href="stringregex.html#mutating-strings"><i class="fa fa-check"></i><b>6.3.2</b> Mutating strings</a></li>
+<li class="chapter" data-level="6.3.3" data-path="stringregex.html"><a href="stringregex.html#extracting-text"><i class="fa fa-check"></i><b>6.3.3</b> Extracting text</a></li>
+<li class="chapter" data-level="6.3.4" data-path="stringregex.html"><a href="stringregex.html#split-vectors"><i class="fa fa-check"></i><b>6.3.4</b> Split vectors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="stringregex.html"><a href="stringregex.html#further-links-5"><i class="fa fa-check"></i><b>6.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="workwithfactors.html"><a href="workwithfactors.html"><i class="fa fa-check"></i><b>7</b> Factors with <code>forcats</code></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="workwithfactors.html"><a href="workwithfactors.html#creating-a-factor"><i class="fa fa-check"></i><b>7.1</b> Creating a factor</a></li>
+<li class="chapter" data-level="7.2" data-path="workwithfactors.html"><a href="workwithfactors.html#some-basic-operations"><i class="fa fa-check"></i><b>7.2</b> Some basic operations</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="workwithfactors.html"><a href="workwithfactors.html#reordering-factors"><i class="fa fa-check"></i><b>7.2.1</b> Reordering factors</a></li>
+<li class="chapter" data-level="7.2.2" data-path="workwithfactors.html"><a href="workwithfactors.html#modifying-levels"><i class="fa fa-check"></i><b>7.2.2</b> Modifying levels</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="workwithfactors.html"><a href="workwithfactors.html#further-links-6"><i class="fa fa-check"></i><b>7.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="descriptives.html"><a href="descriptives.html"><i class="fa fa-check"></i><b>8</b> Describing data sets</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="descriptives.html"><a href="descriptives.html#basic-descriptives"><i class="fa fa-check"></i><b>8.1</b> Basic descriptives</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="descriptives.html"><a href="descriptives.html#grouped-descriptives"><i class="fa fa-check"></i><b>8.1.1</b> Grouped descriptives</a></li>
+<li class="chapter" data-level="8.1.2" data-path="descriptives.html"><a href="descriptives.html#modifying-the-skim-output"><i class="fa fa-check"></i><b>8.1.2</b> Modifying the <code>skim()</code> output</a></li>
+<li class="chapter" data-level="8.1.3" data-path="descriptives.html"><a href="descriptives.html#further-descriptives"><i class="fa fa-check"></i><b>8.1.3</b> Further descriptives</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="descriptives.html"><a href="descriptives.html#communicating-results"><i class="fa fa-check"></i><b>8.2</b> Communicating results</a>
+<ul>
+<li class="chapter" data-level="8.2.1" data-path="descriptives.html"><a href="descriptives.html#tables-with-knitrkable-and-kableextra"><i class="fa fa-check"></i><b>8.2.1</b> Tables with <code>knitr::kable()</code> and <code>kableExtra</code></a></li>
+<li class="chapter" data-level="8.2.2" data-path="descriptives.html"><a href="descriptives.html#use-case-reporting-skimr-results"><i class="fa fa-check"></i><b>8.2.2</b> Use case: reporting <code>skimr</code> results</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="descriptives.html"><a href="descriptives.html#further-links-7"><i class="fa fa-check"></i><b>8.3</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualization.html"><a href="visualization.html"><i class="fa fa-check"></i><b>9</b> Visualizations with <code>ggplot2</code></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualization.html"><a href="visualization.html#the-layered-grammar-of-graphics"><i class="fa fa-check"></i><b>9.1</b> The “layered grammar of graphics”</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="visualization.html"><a href="visualization.html#the-layers"><i class="fa fa-check"></i><b>9.1.1</b> The layers</a></li>
+<li class="chapter" data-level="9.1.2" data-path="visualization.html"><a href="visualization.html#making-them-publishable"><i class="fa fa-check"></i><b>9.1.2</b> Making them “publishable”</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="visualization.html"><a href="visualization.html#exporting-graphics"><i class="fa fa-check"></i><b>9.2</b> Exporting graphics</a></li>
+<li class="chapter" data-level="9.3" data-path="visualization.html"><a href="visualization.html#further-readings-1"><i class="fa fa-check"></i><b>9.3</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="markdown.html"><a href="markdown.html"><i class="fa fa-check"></i><b>10</b> Writing academic papers with <code>RMarkdown</code></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="markdown.html"><a href="markdown.html#introduction"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="markdown.html"><a href="markdown.html#further-resources"><i class="fa fa-check"></i><b>10.2</b> Further resources</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="functionalprogramming.html"><a href="functionalprogramming.html"><i class="fa fa-check"></i><b>11</b> Functional programming and iterations</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#flow-control"><i class="fa fa-check"></i><b>11.1</b> Flow control</a></li>
+<li class="chapter" data-level="11.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functions"><i class="fa fa-check"></i><b>11.2</b> Functions</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#writing-your-own-functions"><i class="fa fa-check"></i><b>11.2.1</b> Writing your own functions</a></li>
+<li class="chapter" data-level="11.2.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#an-example-roulette"><i class="fa fa-check"></i><b>11.2.2</b> An example: Roulette</a></li>
+<li class="chapter" data-level="11.2.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#functional-programming-with-tidyverse-functions"><i class="fa fa-check"></i><b>11.2.3</b> Functional programming with <code>tidyverse</code> functions</a></li>
+<li class="chapter" data-level="11.2.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-readings-2"><i class="fa fa-check"></i><b>11.2.4</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="functionalprogramming.html"><a href="functionalprogramming.html#iteration"><i class="fa fa-check"></i><b>11.3</b> Iteration</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="functionalprogramming.html"><a href="functionalprogramming.html#for-loops"><i class="fa fa-check"></i><b>11.3.1</b> <code>for</code> loops</a></li>
+<li class="chapter" data-level="11.3.2" data-path="functionalprogramming.html"><a href="functionalprogramming.html#purrrmap"><i class="fa fa-check"></i><b>11.3.2</b> purrr::map()</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="functionalprogramming.html"><a href="functionalprogramming.html#further-links-8"><i class="fa fa-check"></i><b>11.4</b> Further links</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>12</b> References</a></li>
+<li class="chapter" data-level="13" data-path="exercises.html"><a href="exercises.html"><i class="fa fa-check"></i><b>13</b> Exercises</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="exercises.html"><a href="exercises.html#chapter-2"><i class="fa fa-check"></i><b>13.1</b> Chapter 2</a></li>
+<li class="chapter" data-level="13.2" data-path="exercises.html"><a href="exercises.html#chapter-3"><i class="fa fa-check"></i><b>13.2</b> Chapter 3</a></li>
+<li class="chapter" data-level="13.3" data-path="exercises.html"><a href="exercises.html#chapter-4"><i class="fa fa-check"></i><b>13.3</b> Chapter 4</a></li>
+<li class="chapter" data-level="13.4" data-path="exercises.html"><a href="exercises.html#chapter-5"><i class="fa fa-check"></i><b>13.4</b> Chapter 5</a></li>
+<li class="chapter" data-level="13.5" data-path="exercises.html"><a href="exercises.html#chapter-6"><i class="fa fa-check"></i><b>13.5</b> Chapter 6</a></li>
+<li class="chapter" data-level="13.6" data-path="exercises.html"><a href="exercises.html#chapter-7"><i class="fa fa-check"></i><b>13.6</b> Chapter 7</a></li>
+<li class="chapter" data-level="13.7" data-path="exercises.html"><a href="exercises.html#chapter-8"><i class="fa fa-check"></i><b>13.7</b> Chapter 8</a></li>
+<li class="chapter" data-level="13.8" data-path="exercises.html"><a href="exercises.html#chapter-9"><i class="fa fa-check"></i><b>13.8</b> Chapter 9</a></li>
+<li class="chapter" data-level="13.9" data-path="exercises.html"><a href="exercises.html#chapter-10"><i class="fa fa-check"></i><b>13.9</b> Chapter 10</a></li>
+<li class="chapter" data-level="13.10" data-path="exercises.html"><a href="exercises.html#chapter-11"><i class="fa fa-check"></i><b>13.10</b> Chapter 11</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">An(other) introduction to R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="markdown" class="section level1" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Writing academic papers with <code>RMarkdown</code></h1>
+<div id="introduction" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Introduction</h2>
+<p>When it comes to communicating results, RStudio comes with the <code>knitr</code> package and <code>RMarkdown</code>. It is practical insofar as it allows you to combine both your code and its results, and the text you write to accompany it. Several output formats are supported, for instance PDF, docx, slideshows, HTML, etc. <code>RMarkdown</code> files have the suffix <code>.Rmd</code>.</p>
+<p>I have prepared a basic example RMD document and the corresponding PDF (knit using <code>tinytex</code>), HTML, and MS WORD versions. You can download the <a href="https://www.dropbox.com/s/0kixct6k5jz0ib9/example-rmd.zip?dl=0">zip file from my Dropbox</a>. I invite you to have a look at the documents and how the RMD file translates to the different output formats.</p>
+</div>
+<div id="further-resources" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Further resources</h2>
+<ul>
+<li>The vignette for <a href="https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html"><code>kableExtra</code></a></li>
+<li>The <a href="https://cran.r-project.org/web/packages/ymlthis/vignettes/yaml-fieldguide.html">YAML fieldguide</a></li>
+<li>A comprehensive introduction <a href="https://rstudio.github.io/visual-markdown-editing/#/intro">to the new visual editor</a></li>
+<li>An <a href="https://www.nature.com/articles/d41586-019-01796-1">introduction to  formulas</a></li>
+<li>A <a href="https://latex.codecogs.com/eqneditor/editor.php">formula editor</a></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="visualization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="functionalprogramming.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["introduction-to-r.pdf", "introduction-to-r.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

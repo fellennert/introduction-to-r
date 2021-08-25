@@ -350,7 +350,7 @@ On the other hand, we can also use a handy function from `tidyr` called `separat
 
 ```{r}
 ger_car_manufacturer_longer_sep_cyl <- ger_car_manufacturer_longer %>% # first, take the tibble
-  separate(ger_car_manufacturer_longer, cylinders, into = c("cylinders", "drop_it"), sep = " ") %>% # and then split the column "cylinders" into two
+  separate(cylinders, into = c("cylinders", "drop_it"), sep = " ") %>% # and then split the column "cylinders" into two
   select(-drop_it) # you will learn about this in the lesson on dplyr  # and then drop one column from the tibble
 ```
 
@@ -439,3 +439,4 @@ Here, the final variant of creating tibbles is introduced as well: you can apply
 
 * Hadley on [tidy data](https://vita.had.co.nz/papers/tidy-data.pdf)  
 * The two `pivot_*()` functions lie at the heart of `tidyr`. [This article](https://www.storybench.org/pivoting-data-from-columns-to-rows-and-back-in-the-tidyverse/) from the Northeastern University's School of Journalism explains it in further detail.
+* You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("tidyr")`, `introverse::show_topics("magrittr")`, `introverse::show_topics("tibble")`, and `introverse::show_topics("readr")` will give you overviews of the respective package's functions, and `get_help("name of function")` will help you with the respective function.

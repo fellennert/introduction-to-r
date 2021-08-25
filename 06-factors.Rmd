@@ -166,3 +166,4 @@ election_data_w_fct %>%
 * The chapter in [R4DS](https://r4ds.had.co.nz/factors.html)
 * If you want to learn more about factors, consider reading [this paper](https://peerj.com/preprints/3163/)
 * Another [tutorial](https://www.r-bloggers.com/2020/06/working-with-factors-in-r-tutorial-forcats-package/)
+* You can also consult the `introverse` package if you need help with the packages covered here -- `introverse::show_topics("forcats")` will give you an overview of the `forcats` package's functions, and `get_help("name of function")` will help you with the respective function.
